@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.EventMapper">
+	
+	<!--  添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="eventId" parameterType="Event">
+		insert into event(eventName,eventCount,type,status, activeCode,activeNum,createTime) 
+		values(#{eventName},#{eventCount},#{type},#{status},#{activeCode},#{activeNum},CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from event where eventId=#{id}
+	</delete>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="Event">
+		update event b
+		set 
+			<if test="eventName!=null">
+			b.eventName=#{eventName},
+			</if>
+			<if test="eventCount!=null">
+			b.eventCount=#{eventCount},
+			</if>
+			<if test="type!=null">
+			b.type=#{type},
+			</if>
+			b.status=#{status}
+		where b.eventId=#{eventId}
+	</update>
+	
+	<!-- 根据品牌id查询品牌 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="Event">
+		select *
+		from event
+		where eventId=#{eventId}
+	</select>
+	
+	<!-- 更新激活次数 -->
+	<update id="updateActiveNumById" parameterType="java.lang.Integer">
+		UPDATE event SET activeNum = activeNum + 1 
+		WHERE eventId = #{eventId}
+			 AND activeNum != eventCount
+	</update>
+	
+	<!-- 根据活动类型查询活动列表 -->
+	<select id="listEvents" resultType="Event">
+		SELECT * FROM event 
+		WHERE type = #{type}
+			AND status != ${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_DELETE}
+		ORDER BY createTime DESC
+	</select>
+	
+	<!-- 根据类型和当前时间查询活动 -->
+	<select id="listEventsByTypeAndTime" resultType="Event">
+		select distinct e.*
+		from event e inner join coupon_config cc on cc.eventId=e.eventId
+		where e.type = #{type}
+			  and e.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_NORMAL}
+			  and CURRENT_TIMESTAMP between cc.startTime and cc.endTime
+	</select>
+	
+	<!-- 根据激活码查询记录个数 -->
+	<select id="listCountByActiveCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM event
+		WHERE activeCode = #{activeCode}
+	</select>
+	
+	
+	<select id="getEventByActiveCode" parameterType="java.lang.String" resultType="Event">
+		select *
+		from event
+		where activeCode = #{activeCode}
+	</select>
+	<sql id="eventField">
+		couponEvent.eventId,
+		couponEvent.eventName,
+		couponEvent.eventCount,
+		couponEvent.type,
+		couponEvent.status,
+		couponEvent.activeCode,
+		couponEvent.activeNum,
+		couponEvent.createTime,
+		couponEvent.updateTime 
+	</sql>
+	<sql id="eventCouponConfigFiled">
+		couponConfig.couponConfigId,
+		couponConfig.eventId as couponConfig_eventId,
+		couponConfig.allowance,
+		couponConfig.limitCharge,
+		couponConfig.startTime,
+		couponConfig.endTime,
+		couponConfig.couponCount
+	</sql>
+	<resultMap type="com.ytoxl.module.uhome.uhomebase.dataobject.Event" id="eventMap">
+		<id property="eventId"  column="eventId"/>
+		<result property="eventName"  column="eventName"/>
+		<result property="eventCount"  column="eventCount"/>
+		<result property="type"  column="type"/>
+		<result property="status"  column="status"/>
+		<result property="activeCode"  column="activeCode"/>
+		<result property="activeNum"  column="activeNum"/>
+		<result property="createTime"  column="createTime"/>
+		<result property="updateTime"  column="updateTime"/>
+		<collection property="couponConfigList" resultMap="couponConfigMap" column="eventId"></collection>
+	</resultMap>
+	<resultMap type="com.ytoxl.module.uhome.uhomebase.dataobject.CouponConfig" id="couponConfigMap">
+		<id property="couponConfigId"  column="couponConfigId"/>
+		<result property="eventId"  column="couponConfig_eventId"/>
+		<result property="allowance"  column="allowance"/>
+		<result property="limitCharge"  column="limitCharge"/>
+		<result property="startTime"  column="startTime"/>
+		<result property="endTime"  column="endTime"/>
+		<result property="couponCount"  column="couponCount"/>
+	</resultMap>
+	<!-- 根据商品productSkuId查询该商品可参与的活动(不包括全场)-->
+	<select id="getEventByProductSkuId" parameterType="map" resultMap="eventMap">
+  		SELECT <include refid="eventField"/>,<include refid="eventCouponConfigFiled"/>
+  		FROM event couponEvent,event_range eventRange,coupon_config couponConfig 
+  		WHERE couponEvent.eventId=eventRange.eventId 
+  		AND couponEvent.eventId=couponConfig.eventId 
+  		AND eventRange.outId in
+  		(
+			SELECT p.planId FROM plan_product pp 
+				INNER JOIN plan p ON p.planId=pp.planId 
+				INNER JOIN product pro ON pro.productId=pp.productId 
+			  	INNER JOIN product_sku ps ON pro.productId=ps.productId 
+			  	WHERE ps.productSkuId=#{productSkuId} 
+			  	AND pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS} 
+			  	AND p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  	AND CURRENT_TIMESTAMP BETWEEN p.startTime AND p.endTime  
+		) 
+		AND eventRange.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.EventRange@TYPE_PLAN} 
+		AND couponEvent.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_NORMAL} 
+		AND  CURRENT_TIMESTAMP BETWEEN couponConfig.startTime and couponConfig.endTime
+  	</select>
+  	
+  	<select id="getCurrentEventByAllPlans" parameterType="map" resultMap="eventMap">
+  		SELECT <include refid="eventField"/>,<include refid="eventCouponConfigFiled"/>
+	  		FROM event couponEvent,event_range eventRange,coupon_config couponConfig 
+	  		WHERE couponEvent.eventId=eventRange.eventId 
+	  		AND couponEvent.eventId=couponConfig.eventId 
+			AND eventRange.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.EventRange@TYPE_ALLPLAN} 
+			AND couponEvent.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_NORMAL} 
+			AND CURRENT_TIMESTAMP BETWEEN couponConfig.startTime and couponConfig.endTime 
+		UNION ALL 
+		SELECT <include refid="eventField"/>,<include refid="eventCouponConfigFiled"/>
+	  		FROM event couponEvent,coupon_config couponConfig 
+	  		WHERE couponEvent.eventId=couponConfig.eventId 
+	  		AND couponEvent.type!=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@TYPE_COMMON}
+			AND couponEvent.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_NORMAL} 
+			AND CURRENT_TIMESTAMP BETWEEN couponConfig.startTime and couponConfig.endTime
+  	</select>
+</mapper>

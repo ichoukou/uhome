@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="ua-window">
+<head>
+    <meta charset="utf-8"/>
+    <title>确认订单信息</title>
+    <link rel="stylesheet" type="text/css" href="../../web-resource/css/pages/shopping-cart.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" media="all">
+</head>
+<body>
+    <div class="m-w980p">
+        <!--面包屑-->
+        <div class="crumbs"><a href="#">直销商城 ></a><a href="#">个人中心 ></a>我的订单</div>
+        <!--面包屑 end-->
+        <div class="m-rel">
+            <div class="cs-tel">客服热线  <span>021-64703131</span></div>
+        </div>
+        <div class="cart-wrap m-mt5p">
+            <div class="step-status m-fr"><span class="step-1 original">1.我的购物车</span><span class="step-2">2.确认订单信息</span><span>3.成功提交订单</span></div>
+            <div class="order-show">
+                <div class="has-login">
+                    <div class="order-tit">收货信息</div>
+                    <div class="receipt">
+                        <p><label><input type="radio" name="address">上海 上海市 徐汇区 桂林路396号1号楼106（翁小龙 收）187523581223</label><a href="">修改本地址</a></p>
+                        <p><label><input type="radio" name="address" checked>上海 上海市 徐汇区 桂林路396号1号楼106（翁小龙 收）187523581223</label><a href="">修改本地址</a></p>
+                        <div class="btn cf"><a class="btn-c" href="#" id="useNew"><span>使用新地址</span></a><a class="btn-e" href="#"><span>取消</span></a></div>
+                        <div class="address-wrap" id="addressWrap" style="display: none;">
+                            <div class="line">
+                                <div class="tit"><i>*</i>省、市、区：</div>
+                                <div class="info"><select name="" id="province" style="width:200px;"></select></div>
+                            </div>
+                            <div class="line">
+                                <div class="tit"><i>*</i>邮编：</div>
+                                <div class="info"><input type="text"></div>
+                            </div>
+                            <div class="line">
+                                <div class="tit"><i>*</i>街道地址：</div>
+                                <div class="info"><textarea name="" id="" cols="30" rows="10" class="textarea">桂林路396号1号楼106</textarea></div>
+                            </div>
+                            <div class="line">
+                                <div class="tit"><i>*</i>收货人姓名：</div>
+                                <div class="info"><input type="text"></div>
+                            </div>
+                            <div class="line">
+                                <div class="tit">固定电话：</div>
+                                <div class="info"><input type="text" style="width: 56px;"><input type="text" style="width: 115px;"><input type="text" style="width: 56px;">手机和电话请至少填写一个，电话的格式（区号-电话号码-分机）</div>
+                            </div>
+                            <div class="line">
+                                <div class="tit"><i>*</i>移动电话：</div>
+                                <div class="info"><input type="text">购物成功后，该手机号码可作为账号登录##网；密码为手机号后六位</div>
+                            </div>
+                            <div class="line">
+                                <div class="tit">设为默认：</div>
+                                <div class="info"><span><label><input type="checkbox">设置为默认地址</label></span>设置后系统将在购买时自动选中该收货地址</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--未登录时显示-->
+                <div class="un-login">
+                    <div class="line cf"><a class="btn-a" href="javascript:;"><span>登录</span></a><div class="mt"><a href="javascript:;" class="quick">快速注册</a></div></div>
+                    <div class="line cf"><a class="btn-a" href="javascript:;"><span>填写收货信息</span></a><div class="mt">温馨提示：未注册用户，可直接填写收货地址快速购物。</div></div>
+                </div>
+                <!--未登录时显示 end-->
+                <div class="order-tit">支付方式</div>
+                <div class="pay-way">
+                    <ul>
+                        <li><label><input type="radio" checked><img src="../../web-resource/images/uploadfolder/zhifubao.jpg" alt=""></label></li>
+                    </ul>
+                </div>
+                <div class="order-tit">发票信息</div>
+                <div class="invoice-info cf">
+                    <ul>
+                        <li>
+                            <div class="radio"><label><input type="radio" name="invoice" value="1" checked>暂时不需要发票</label></div>
+                        </li>
+                        <li>
+                            <div class="radio"><label><input type="radio" name="invoice" value="2" id="hasInvoice">需要发票</label></div>
+                            <div id="invoice-detail">
+                                <table>
+                                    <tr>
+                                        <td width="72">发票类型：</td>
+                                        <td><label><input type="radio" checked>普通发票</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>发票抬头：</td>
+                                        <td><span class="inv"><label><input type="radio" name="taitou">个人</label></span><span class="inv"><label><input type="radio" name="taitou" checked>单位</label></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">单位名称：</td>
+                                        <td>
+                                            <p class="unit-name"><input type="text">*</p>
+                                            <p class="tip">温馨提示：您所填写的所有内容都将被系统自动打印到发票上，所以请不要填写和发票抬头无关的信息。
+                                                受品牌商客观因素影响，发票可能会发生延迟；如果延迟请见谅。</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>发票内容：</td>
+                                        <td><label><input type="radio" checked>明细</label></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="show">
+                    <div class="order-list-hd m-mt8p">
+                        <span class="c1">商品信息</span>
+                        <span class="c2">商品名称</span>
+                        <span class="c3">积分</span>
+                        <span class="c4">单价（元）</span>
+                        <span class="c5">数量</span>
+                        <span class="c6">金额</span>
+                        <span class="c7"></span>
+                    </div>
+                    <div class="order-brand m-mt20p" id="235">
+                        <div class="order-brand-top">特卖品牌： 酷才</div>
+                        <div class="order-brand-main">
+                            <table>
+                                <tbody>
+                                <tr id="1256" data-item="235">
+                                    <td width="67"></td>
+                                    <td width="78"><img src="../../web-resource/images/uploadfolder/1.jpg" alt=""></td>
+                                    <td width="260"><a href="#" class="order-link">美国  酷才  原装珐琅质炖煮锅</a><p class="order-detail">颜色：蓝色  尺寸：27CM</p></td>
+                                    <td width="95">20</td>
+                                    <td width="105">100.00 <p class="origina">178.00</p></td>
+                                    <td width="152">3</td>
+                                    <td width="120"><span class="order-price">200.00</span></td>
+                                    <td width="83"></td>
+                                </tr>
+                                <tr id="6347" data-item="235">
+                                    <td width="67"></td>
+                                    <td width="78"><img src="../../web-resource/images/uploadfolder/1.jpg" alt=""></td>
+                                    <td width="260"><a href="#" class="order-link">美国  酷才  原装珐琅质炖煮锅</a><p class="order-detail">颜色：蓝色  尺寸：27CM</p></td>
+                                    <td width="95">20</td>
+                                    <td width="105">100.00 <p class="origina">178.00</p></td>
+                                    <td width="152">2</td>
+                                    <td width="120"><span class="order-price">200.00</span></td>
+                                    <td width="83"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="order-brand m-mt20p" id="236">
+                        <div class="order-brand-top">特卖品牌： lagaer</div>
+                        <div class="order-brand-main">
+                            <table>
+                                <tbody>
+                                <tr id="3320" data-item="236">
+                                    <td width="67"></td>
+                                    <td width="78"><img src="../../web-resource/images/uploadfolder/1.jpg" alt=""></td>
+                                    <td width="260"><a href="#" class="order-link">美国  酷才  原装珐琅质炖煮锅</a><p class="order-detail">颜色：蓝色  尺寸：27CM</p></td>
+                                    <td width="95">20</td>
+                                    <td width="105">100.00 <p class="origina">178.00</p></td>
+                                    <td width="152">1</td>
+                                    <td width="120"><span class="order-price">200.00</span></td>
+                                    <td width="83"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="m-mt15p">*温馨提示：订单提交后将为你保留30分钟，30分钟后未能成功付款的订单；将视为自动放弃，订单将自动关闭。</p>
+            <div class="cf m-mt20p">
+                <div class="sum-price m-fr"><p class="pro-sum"><span>商品总额：</span><var>￥780.00</var></p><p class="transport-sum"><span>运费：</span><var>￥0.00</var></p></div>
+            </div>
+            <div class="cf m-mt20p">
+                <div class="m-fl"><a class="btn-d" href="#"><span>返回修改购物车</span></a></div>
+                <div class="m-fr"><p class="cf"><a class="btn-b" href="#"><span>提交订单</span></a></p><p>请选择需要结算的商品</p></div>
+            </div>
+            <div class="submit-order">
+                <div class="hd">正在跳转到支付页面...</div>
+                <div class="bd">
+                    <ul>
+                        <li>
+                            <div class="col1">您的订单号为：1551321354153153</div>
+                            <div class="col2">支付方式为：网银支付（中国工商银行）</div>
+                            <div class="col3">待支付金额：￥588.00元</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="btn cf"><div class="m-fl">无法跳转到支付页面？ 您可以</div><a class="btn-c" href="#"><span>重新提交订单</span></a></div>
+            </div>
+        </div>
+    </div>
+    <!--footer.jsp放置在这-->
+    <script type="text/javascript" src="../../web-resource/js/jquery/jquery.1.8.1.js"></script>
+    <script type="text/javascript" src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+    <script type="text/javascript" src="../../web-resource/js/plugin/select/jquery.linkagesel-min.js"></script>
+    <script type="text/javascript" src="../../web-resource/js/plugin/select/district-all.js"></script>
+    <script type="text/javascript" src="../../web-resource/js/pages/confirm_order.js"></script>
+</body>
+</html>

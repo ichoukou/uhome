@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ytoxl.module.uhome.uhomereport.mapper.ReportProductSkuOptionValueMapper">
+	
+	<!-- 查询该商品的规格数据-->
+	<select id="listProductSkuOptionValue" parameterType="integer" resultType="ReportProductSkuOptionValue">
+		select skop.rank AS skuType,skop.skuOptionName, 
+		IFNULL(psov.overrideSkuOptionValue,sov.skuOptionValue) AS skuOptionValue
+		FROM sku_option skop
+		JOIN sku_option_value sov ON skop.skuOptionId = sov.skuOptionId
+		JOIN product_sku_option_value psov ON psov.skuOptionValueId = sov.skuOptionValueId
+		WHERE psov.productSkuId =#{productSkuId}
+	</select>
+</mapper>

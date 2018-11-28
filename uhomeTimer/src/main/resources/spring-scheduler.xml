@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+  
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+    	<property name="triggers">
+			<list>
+				<ref local="order2CancelTrigger" />
+				<ref local="order2FinishTrigger" /> 
+				<ref local="autoSendMailTrigger"/>
+				<ref local="autoDelMailTrigger"/>
+				<ref local="saveBrandSubscribeMailQueueTrigger"/><!-- 插入品牌预约邮件队列 -->
+				<ref local="savePlanSubscribeMailQueueTrigger"/> <!-- 插入即将上线预约邮件队列 -->
+				<ref local="saveSpecialSellerSubscribeMailQueueTrigger"/> <!-- 插入特卖预约邮件队列 -->
+<!-- 				<ref local="deleteOverdueCouponTrigger"/>  -->
+			</list>
+		</property>
+		<property name="autoStartup" value="true" />
+		<property name="startupDelay" value="30" />
+    </bean>
+   
+	<!-- 订单取消  -->
+    <bean id="order2CancelTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="30分钟更改订单状态为取消" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="orderService4TimerImpl" />
+				<property name="targetMethod" value="updateStatusToCanceled" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="30分钟更改订单状态为取消" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.order2CancelTrigger}</value>
+		</property>
+	</bean>
+	<!-- 订单完成 -->
+    <bean id="order2FinishTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="15天已发货订单状态变为已完成" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="orderService4TimerImpl" />
+				<property name="targetMethod" value="updateStatusToFinished" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="15天已发货订单状态变为已完成" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.order2FinishTrigger}</value>
+		</property>
+	</bean>
+	
+	<!-- 定时任务发送邮件 -->
+	<bean id="autoSendMailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="每30分钟发送邮件" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="sendMail4TimerServiceImpl" />
+				<property name="targetMethod" value="autoSendMail" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="每30分钟发送邮件" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.autoSendMailTrigger}</value>
+		</property>
+	</bean>
+	
+	<!-- 定时任务删除已经发送的邮件 -->
+	<bean id="autoDelMailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="每1分钟删除发送邮件" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="sendMail4TimerServiceImpl" />
+				<property name="targetMethod" value="autoDeleteMail" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="每1分钟删除发送邮件" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.autoDelMailTrigger}</value>
+		</property>
+	</bean>
+
+	<!-- 插入品牌预约邮件队列 -->
+	<bean id="saveBrandSubscribeMailQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="每天插入品牌预约邮件队列" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="sendMail4TimerServiceImpl" />
+				<property name="targetMethod" value="saveBrandSubscribeMailQueue" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="每天插入品牌预约邮件队列" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.saveBrandSubscribeMailQueueTrigger}</value>
+		</property>
+	</bean>
+	
+	<!-- 插入即将上线预约邮件队列 -->
+	<bean id="savePlanSubscribeMailQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="每天插入即将上线特卖预约邮件队列" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="sendMail4TimerServiceImpl" />
+				<property name="targetMethod" value="savePlanSubscribeMailQueue" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="每天插入即将上线特卖预约邮件队列" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.savePlanSubscribeMailQueueTrigger}</value>
+		</property>
+	</bean>
+	
+	<!-- 插入品牌特卖邮件队列 -->
+	 <bean id="saveSpecialSellerSubscribeMailQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="每周四插入品牌特卖预约邮件队列" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="sendMail4TimerServiceImpl" />
+				<property name="targetMethod" value="saveSpecialSellerSubscribeMailQueue" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="每周四插入品牌特卖预约邮件队列" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.saveSpecialSellerSubscribeMailQueueTrigger}</value>
+		</property>
+	</bean>
+	
+	<!-- 已过期优惠券明细表记录删除 -->
+	<!-- <bean id="deleteOverdueCouponTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="每天删除已过期优惠券明细表记录" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="coupon4TimerServiceImpl" />
+				<property name="targetMethod" value="deleteOverdueCoupon" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="每天删除已过期优惠券明细表记录" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.deleteOverdueCouponTrigger}</value>
+		</property>
+	</bean> -->
+</beans>

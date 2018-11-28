@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="supplier" extends="uhome-default" namespace="/admin/supplier">
+    	<action name="supplier-*" class="com.ytoxl.uhomemanage.web.action.content.SupplierAction" 
+    		method="{1}">
+    	   <result name="searchSuppliers">/WEB-INF/pages/supplier/searchSuppliers.jsp</result>
+    	   <!-- <result name="redirectSuggests" type="redirectAction">${nextAction}</result> -->
+    	</action>
+	</package>
+</struts>

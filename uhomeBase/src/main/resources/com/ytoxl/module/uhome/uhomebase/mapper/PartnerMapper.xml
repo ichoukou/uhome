@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.PartnerMapper">
+	<sql id="select_partner">
+		select * from partner
+	</sql>
+	<select id="get" parameterType="java.lang.Integer" resultType="Partner">
+		select * 
+		from partner 
+		where partnerId = #{partnerId}
+	</select>
+	<select id="getPartnerModelByUnionId" parameterType="java.lang.String" resultType="Partner">
+		<include refid="select_partner"/>
+		<where>
+			unionId=#{unionId}
+		</where>
+	</select>
+	
+</mapper>

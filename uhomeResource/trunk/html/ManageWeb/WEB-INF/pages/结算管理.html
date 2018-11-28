@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>结算管理</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/reportForms.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+    <script src="../../web-resource/js/plugin/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p m-mt10p">
+	<div class="body-nav">
+    <ul class="m-clear">
+      <li><a>商家月结报表</a></li>
+      <li><a>商品类报表管理</a></li>
+      <li><a>特卖对账</a></li>
+      <li><a class="current-chose">结算管理</a></li>
+    </ul>
+  </div>
+  <div class="report-tab">
+  	<ul class="m-clear">
+  		<li class="cur"><a href="javascript:;">待一次对账</a></li>
+  		<li><a href="javascript:;">待二次对账</a></li>
+  		<li><a href="javascript:;">对账结束</a></li>
+  	</ul>
+  </div>
+  <form class="m-clear m-mt10p">
+    <div class="m-fl">
+    	<span>特卖时间：</span><input type="text" class="Wdate" onfocus="WdatePicker()" />
+    	<span>至</span>
+    	<input type="text" class="Wdate" onfocus="WdatePicker()" />
+    	<select class="m-sel">
+      		<option>选择特卖活动</option>
+          <option>特卖活动</option>
+          <option>特卖活动</option>
+          <option>特卖活动</option>
+          <option>特卖活动</option>
+      </select>
+      <select class="m-sel">
+      		<option>所属商家</option>
+          <option>所属商家</option>
+          <option>所属商家</option>
+          <option>所属商家</option>
+          <option>所属商家</option>
+      </select>
+      <input type="text" class="txt-input input-marks" data-default="输入活动名称，商家名称进行搜索"/>
+      <input type="button" class="m-btn" value="查询"/>
+    </div>
+	</form>
+	<!--一次对账-->
+	<div class="m-mt10p">
+		<table class="tab-control tab-report">
+      <thead>
+        <tr>
+          <th width="20%">特卖活动名称</th>
+          <th width="16%">特卖时间</th>
+          <th width="18%">所属商家</th>
+          <th width="18%">申请时间</th>
+          <th width="17%">对账状态</th>
+          <th width="11%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<tr>
+      		<td rowspan="1000">阿迪达斯男装专场</td>
+      		<td rowspan="1000">2013.8.23-2013.9.23</td>
+      		<td>阿迪达斯</td>
+      		<td>2013.9.23 14:25</td>
+      		<td>已申请</td>
+      		<td><input type="button" class="m-btn-done" value="完成" /></td>
+      	</tr>
+      	<tr>
+      		<td>Clot SH</td>
+      		<td>2013.9.23 14:25</td>
+      		<td>已申请</td>
+      		<td><span class="c-green">已完成</span></td>
+      	</tr>
+      	<tr>
+      		<td>Clot SH</td>
+      		<td>2013.9.23 14:24</td>
+      		<td>未申请</td>
+      		<td></td>
+      	</tr>
+      	<tr>
+      		<td>Clot SH</td>
+      		<td>2013.9.23 15:23</td>
+      		<td>未申请</td>
+      		<td></td>
+      	</tr>
+      </tbody>
+    </table>
+	</div>
+	
+	<!--二次对账-->
+	<div class="m-mt10p">
+		<table class="tab-control tab-report">
+      <thead>
+        <tr>
+          <th width="20%">特卖活动名称</th>
+          <th width="16%">特卖时间</th>
+          <th width="18%">所属商家</th>
+          <th width="12%">申请时间</th>
+          <th width="12%">一次对账时间</th>
+          <th width="11%">一次对账状态</th>
+          <th width="11%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<tr>
+      		<td rowspan="1000">阿迪达斯男装专场</td>
+      		<td rowspan="1000">2013.8.23-2013.9.23</td>
+      		<td>阿迪达斯</td>
+      		<td>2013.9.23 11:07</td>
+      		<td>2013.9.23 11:08</td>
+      		<td>一次对账结束</td>
+      		<td><input type="button" class="m-btn-done" value="完成" /></td>
+      	</tr>
+      	<tr>
+      		<td>Clot SH</td>
+      		<td>2013.9.23 13:21</td>
+      		<td>2013.9.23 11:08</td>
+      		<td>一次对账结束</td>
+      		<td><input type="button" class="m-btn-done" value="完成" /></td>
+      	</tr>
+      	<tr>
+      		<td>Clot SH</td>
+      		<td>2013.9.23 12:12</td>
+      		<td>2013.9.23 11:08</td>
+      		<td>一次对账结束</td>
+      		<td><input type="button" class="m-btn-done" value="完成" /></td>
+      	</tr>
+      	<tr>
+      		<td>Clot SH</td>
+      		<td>2013.9.23 23:12</td>
+      		<td>2013.9.23 11:08</td>
+      		<td>一次对账结束</td>
+      		<td><input type="button" class="m-btn-done" value="完成" /></td>
+      	</tr>
+      </tbody>
+    </table>
+	</div>
+	<!--商家结算-->
+	<div class="m-mt10p">
+		<table class="tab-control tab-report">
+      <thead>
+        <tr>
+          <th width="40%">特卖活动名称</th>
+          <th width="40%">特卖时间</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<tr>
+      		<td>阿迪达斯男装专场</td>
+      		<td>2013.8.23-2013.9.23</td>
+      		<td><input type="button" class="m-btn-done" value="申请结算" /></td>
+      	</tr>
+      	<tr>
+      		<td>阿迪达斯男装专场</td>
+      		<td>2013.8.23-2013.9.23</td>
+      		<td><input type="button" class="m-btn-done" value="收款确认" /></td>
+      	</tr>
+      	<tr>
+      		<td>阿迪达斯男装专场</td>
+      		<td>2013.8.23-2013.9.23</td>
+      		<td><span class="c-green">结算成功</span></td>
+      	</tr>
+      </tbody>
+    </table>
+	</div>
+	<!--分页插件 start -->
+	<div class="pagination pagination-right">
+	    共<span class="items-all">36</span>条
+	    第<span class="page-all">10</span>页
+	    <a href="#"><span class="disable alldis"></span></a>
+	    <a href="#"><span class="current">1</span></a>
+	    <a href="#"><span>2</span></a>
+	    <a href="#"><span>3</span></a>
+	    <a href="#"><span>4</span></a>
+	    <span class="etc">...</span>
+	    <a href="#"><span>10</span></a>
+	    <a href="#" ><span class="next"></span></a>
+	    <span>共<i>1</i>页<i>1</i>条 到
+	    	<input type="text" class="goto-num" value="1" onfocus="this.value='';" />页
+	    </span>
+	    <span class="goto">转到</span>
+	</div>
+	<!--分页插件 end -->
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+</body>
+</html>

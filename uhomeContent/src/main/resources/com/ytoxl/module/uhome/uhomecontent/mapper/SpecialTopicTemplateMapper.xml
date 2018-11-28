@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.SpecialTopicTemplateMapper">
+
+	<select id="searchSpecialTopicTemplate" resultType="SpecialTopicTemplate" parameterType="map">
+		SELECT s.* FROM 
+		<include refid="listSpecialTopic"/>
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<select id="searchSpecialTopicTemplateCount" resultType="integer" parameterType="map">
+		SELECT COUNT(s.specialTopicTempletId) FROM
+		<include refid="listSpecialTopic"/>
+	</select>
+	<sql id="listSpecialTopic">
+		(SELECT specialTopicTempletId,name,createTime,isPublish,startTime,endTime FROM special_topic_templet ORDER BY createTime DESC) s
+	</sql>
+	
+	<insert id="add" parameterType="SpecialTopicTemplate" useGeneratedKeys="true" keyProperty="specialTopicTempletId">
+		INSERT INTO special_topic_templet(name,createTime,updateTime,isPublish,startTime,endTime) 
+		VALUES (#{name},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1,#{startTime},#{endTime})
+	</insert>
+	
+	<update id="update" parameterType="SpecialTopicTemplate">
+		UPDATE special_topic_templet
+		 <trim prefix="SET" suffixOverrides=","> 
+			<if test="name != null and name != '' ">
+				name = #{name},
+			</if>
+			<if test="isPublish != '' and isPublish != null">
+				isPublish = #{isPublish},
+			</if>
+			<if test="startTime != '' and startTime != null">
+				startTime = #{startTime},
+			</if>
+			<if test="endTime != '' and endTime != null">
+				endTime = #{endTime},
+			</if>
+		</trim>
+		WHERE specialTopicTempletId = #{specialTopicTempletId}
+	</update>
+	
+	<select id="get"  parameterType="integer" resultType="SpecialTopicTemplate">
+		SELECT 
+		t.`name`,t.isPublish,t.createTime,t.updateTime
+		FROM special_topic_templet t
+		WHERE t.specialTopicTempletId = #{specialTopicTempletId}
+	</select>
+	
+	<select id="searchOverdueSpecialTopicTemplateCount" resultType="integer" parameterType="integer">
+		select  count(*) as overdue from  special_topic_templet where 
+			startTime  &lt;= now() 
+		and endTime  &gt;= now() 
+		and  specialTopicTempletId = #{specialTopicTempletId}
+		 
+	</select>
+	
+</mapper>

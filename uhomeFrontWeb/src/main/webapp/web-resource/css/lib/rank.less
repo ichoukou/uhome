@@ -1,0 +1,66 @@
+@charset "utf-8";
+/**
+ * Created by JetBrains PhpStorm.
+ * User: jVan
+ * Date: 13-3-5
+ * Time: 下午12:54
+ * Description: 
+ */
+.rank-wrap{
+  padding:4px 0px;
+  .rank{
+    float: left;
+	font-family:arial;
+	.m-fl{line-height:20px;}
+    .action{
+      float: left;
+    }
+    span{
+      float: left;
+      padding: 0 3px;
+      border: 1px solid #dddddd;
+      margin-right:10px;
+      &.cur-up{
+        .up{
+          width: 11px;
+          height: 11px;
+          background: url("../../images/rank/rank.gif") no-repeat;
+          background-position: 0 -33px;
+        }
+      }
+      &.cur-down{
+        .down{
+          width: 11px;
+          height: 11px;
+          background: url("../../images/rank/rank.gif") no-repeat;
+        }
+      }
+      a{
+        display: inline-block;
+        margin-left: 2px;
+        vertical-align: middle;
+      }
+      .up{
+        width: 11px;
+        height: 11px;
+	overflow:hidden;
+        background: url("../../images/rank/rank.gif") no-repeat;
+        background-position: 0 -11px;
+      }
+      .down{
+        width: 11px;
+        height: 11px;
+	overflow:hidden;
+        background: url("../../images/rank/rank.gif") no-repeat;
+        background-position: 0 -22px;
+      }
+    }
+  }
+ .result{
+   float: right;
+   span{
+     color: #f96619;
+     margin: 0 3px;
+   }
+ }
+}

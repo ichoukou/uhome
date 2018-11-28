@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="coupon" extends="uhome-default" namespace="/admin/coupon">
+		<action name="coupon-*" class="com.ytoxl.uhomemanage.web.action.coupon.CouponAction" method="{1}">
+			<result name="searchCoupons">/WEB-INF/pages/coupon/searchCoupons.jsp</result>
+			<result name="editCommonCoupon">/WEB-INF/pages/coupon/editCommonCoupon.jsp</result>
+			<result name="editWechatCoupon">/WEB-INF/pages/coupon/editWechatCoupon.jsp</result>
+			<result name="editCouponPackage">/WEB-INF/pages/coupon/editCouponPackage.jsp</result>
+			<result name="getEventRanges">/WEB-INF/pages/coupon/getEventRanges.jsp</result>
+			<result name="excel" type="stream">  
+                 <param name="contentType">application/vnd.ms-excel</param>  
+                 <param name="inputName">excelStream</param>  
+                 <param name="contentDisposition">filename=${fileName}report.xls</param>  
+                 <param name="bufferSize">1024</param>  
+             </result>  
+		</action>
+	</package>
+</struts>

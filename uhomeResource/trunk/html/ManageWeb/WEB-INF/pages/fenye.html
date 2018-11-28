@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shopping header</title>
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <style>
+    	.main{width:1000px;margin:0 auto;}
+    	.prv{display:none;width:960px;height:200px;border:2px solid #ccc;}
+    	.show{display:block;}
+    </style>
+</head>
+
+<body>
+	<div class="main">
+		<div class="prv show">第一页
+		</div>
+		<div class="prv">第二页
+		</div>
+		<div class="prv">第三页
+		</div>
+		<div class="page">
+			<a class="prev">上一页</a>
+			<a class="next">下一页</a>
+		</div>
+	</div>
+	<script>
+		$(function(){
+			//初始化，隐藏上一页按钮
+			$(".prev").hide();
+			$(".prev").on("click",function(){
+				var this_first = $(".show").prev(".prv")[0];
+				if(this_first){
+					$(".show").removeClass("show").prev().addClass("show");
+				}
+				this_first = $(".show").prev(".prv")[0];
+				if(!this_first){
+					$(".prev").hide();
+				}
+				$(".next").show();
+			});
+			$(".next").on("click",function(){
+				var this_last = $(".show").next(".prv")[0];
+				if(this_last){
+					$(".show").removeClass("show").next().addClass("show");
+				}
+				this_last = $(".show").next(".prv")[0];
+				if(!this_last){
+					$(".next").hide();
+				}
+				$(".prev").show();
+			});
+		});
+	</script>
+</body>
+</html>

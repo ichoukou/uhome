@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>专题页面</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/special.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+    <script src="../../web-resource/js/plugin/artdialog/artDialog.plugins.min.js"></script>
+    <script src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="body-nav">
+    <ul class="m-clear">
+      <li><a>广告页面</a></li>
+      <li><a>站内信</a></li>
+      <li><a>网站地图</a></li>
+      <li><a>SEO信息</a></li>
+      <li><a>友情链接</a></li>
+      <li><a class="current-chose">专题模板</a></li>
+    </ul>
+  </div>
+  <form class="m-clear m-mt10p">
+    <div class="m-fl">
+    	<input type="button" class="m-btn J-editSpecial" value="新增专题" />
+    </div>
+    <!--右侧显示分页控件 start-->
+    <div class="m-fr curr-num">
+      <label>当前显示： </label>
+      <select class="m-sel">
+          <option>20条</option>
+          <option>50条</option>
+          <option>100条</option>
+          <option>200条</option>
+          <option>500条</option>
+      </select>
+    </div>
+    <!--右侧显示分页控件 end-->
+	</form>
+	<!--100%表格样式-->
+	<div class="m-mt10p">
+		<table id="tab" class="tab-control">
+      <thead>
+        <tr>
+          <th width="30%">专题名称</th>
+          <th width="30%">专题创建时间</th>
+          <th width="20%">状态</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">十一活动专题</span></td>
+      		<td>2013-10-10</td>
+      		<td>已发布</td>
+      		<td>
+      			<a class="c-blue J-editSpecial" href="javascript:;">编辑</a>
+      			<a class="c-blue" href="#">查看广告位</a>
+      			<a class="c-blue" href="#">预览</a>
+      			<a class="c-blue" href="javascript:;">发布</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">冬季活动</span></td>
+      		<td>2013-10-10</td>
+      		<td>已发布</td>
+      		<td>
+      			<a class="c-blue J-editSpecial" href="javascript:;">编辑</a>
+      			<a class="c-blue" href="#">查看广告位</a>
+      			<a class="c-blue" href="#">预览</a>
+      			<a class="c-blue" href="javascript:;">发布</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">夏季狂欢</span></td>
+      		<td>2013-10-10</td>
+      		<td>已发布</td>
+      		<td>
+      			<a class="c-blue J-editSpecial" href="javascript:;">编辑</a>
+      			<a class="c-blue" href="#">查看广告位</a>
+      			<a class="c-blue" href="#">预览</a>
+      			<a class="c-blue" href="javascript:;">发布</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">秋季狂欢</span></td>
+      		<td>2013-10-10</td>
+      		<td>未发布</td>
+      		<td>
+      			<a class="c-blue J-editSpecial" href="javascript:;">编辑</a>
+      			<a class="c-blue" href="#">查看广告位</a>
+      			<a class="c-blue" href="#">预览</a>
+      			<a class="c-blue" href="javascript:;">发布</a>
+      		</td>
+      	</tr>
+      </tbody>
+    </table>
+	</div>
+	<!--分页插件 start -->
+	<div class="pagination pagination-right">
+	    共<span class="items-all">36</span>条
+	    第<span class="page-all">10</span>页
+	    <a href="#"><span class="disable alldis"></span></a>
+	    <a href="#"><span class="current">1</span></a>
+	    <a href="#"><span>2</span></a>
+	    <a href="#"><span>3</span></a>
+	    <a href="#"><span>4</span></a>
+	    <span class="etc">...</span>
+	    <a href="#"><span>10</span></a>
+	    <a href="#" ><span class="next"></span></a>
+	    <span>共<i>1</i>页<i>1</i>条 到
+	    	<input type="text" class="goto-num" value="1" onfocus="this.value='';" />页
+	    </span>
+	    <span class="goto">转到</span>
+	</div>
+	<!--分页插件 end -->
+	<div class="addSpecial m-hide">
+		<span class="c-red">*</span><span>专题名称：</span><input type="text" class="txt-input" />
+	</div>
+</div>
+<script>
+$(function(){
+	//添加专题
+	$('.J-editSpecial').on("click",function(){
+	  var html = $(".addSpecial").get(0);
+	  $.dialog({
+	    lock: true,
+	    padding: "10px 30px",
+	    title:"新增专题活动",
+	    content:html,
+	    fixed: true,
+	    cancel: true,
+	    cancelValue:"取  消",
+	    ok:function(){},
+	    okValue:"提  交"
+	  });
+	});
+})
+</script>
+
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+</body>
+</html>

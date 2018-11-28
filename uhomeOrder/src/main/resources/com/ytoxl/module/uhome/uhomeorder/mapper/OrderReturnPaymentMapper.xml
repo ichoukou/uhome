@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderReturnPaymentMapper">
+
+  <insert id="add" parameterType="OrderReturnPayment" keyProperty="orderReturnPaymentId" useGeneratedKeys="true">
+		INSERT INTO order_return_payment
+            (orderReturnId,documentNo,status,paymentAmount,account,accountInfo,payTime,ipAddress,returnReason,createTime,closingCostAmount)
+		VALUES ( #{orderReturnId},
+		         #{documentNo},
+		         #{status},
+		         #{paymentAmount},
+		         #{account},
+		         #{accountInfo},
+		         #{payTime},
+		         #{ipAddress},
+		         #{returnReason},
+		         CURRENT_TIMESTAMP,
+		         #{closingCostAmount}
+		          )             
+  </insert>
+
+  <!-- 删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_return_payment WHERE orderReturnPaymentId = #{orderReturnPaymentId}
+  </delete>
+  
+  <!-- 根据址库编码修改地址库信息 -->
+  <update id="update" parameterType="OrderReturnPayment">
+		UPDATE order_return_payment
+		SET 
+		  orderReturnId = #{orderReturnId},
+		  documentNo = #{documentNo},
+		  status = #{status},
+		  paymentAmount = #{paymentAmount},
+		  account = #{account},
+		  accountInfo = #{accountInfo},
+		  payTime = #{payTime}
+	      account = #{ipAddress},
+		  accountInfo = #{returnReason},
+		  closingCostAmount = #{closingCostAmount}
+		WHERE orderReturnPaymentId = #{orderReturnPaymentId}
+  </update>
+
+  <select id="get" parameterType="integer" resultType="OrderReturnPayment">
+        SELECT
+		  *
+		FROM order_return_payment
+		where orderReturnPaymentId = #{orderReturnPaymentId}
+  </select>
+  
+  <!-- 通过退货订单id 查找退货订单付款信息 -->
+  <select id="getOrderReturnPaymentByOrderReturnId" parameterType="integer" resultType="OrderReturnPayment">
+  		select *
+  		from order_return_payment
+  		where orderReturnId = #{orderReturnId}
+  </select>
+
+	<!-- 确认退款 -->
+  <select id="updateStatus" parameterType="OrderReturnPayment">
+  		update order_return_payment
+  		set
+  			status=#{status},
+  			payTime=CURRENT_TIMESTAMP,
+  			ipAddress=#{ipAddress}
+		where orderReturnPaymentId = #{orderReturnPaymentId}
+  </select>
+  
+  <!-- 更新退货订单的退款金额 -->
+  <select id="updateOrderReturnPayAmount" parameterType="OrderReturnPayment">
+  		update order_return_payment
+  		set 
+  		   paymentAmount=#{paymentAmount}
+  		where orderReturnPaymentId = #{orderReturnPaymentId} 
+  </select>
+  
+
+</mapper>

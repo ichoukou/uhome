@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.GlobalLogMapper">
+	
+	<!--  添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="logId" parameterType="GlobalLog">
+		insert into global_log(logContent,logType,logLevel,logCreateTime, logTime) 
+		values(#{logContent},#{logType},#{logLevel},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+	</insert>
+	
+</mapper>

@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.PlanMapper">
+	<!-- 添加一条数据 -->
+	<insert id="add" parameterType="Plan" useGeneratedKeys="true" keyProperty="planId">
+		insert into plan
+		(brandId,productCategoryId,name,type,startTime,endTime,imageUrl,coverImageUrl,planBannerImageUrl,status,createTime)
+		values
+		(#{brandId},#{productCategoryId},#{name},#{type},#{startTime},#{endTime},#{imageUrl},#{coverImageUrl},#{planBannerImageUrl},#{status},CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from plan where planId=#{id}
+	</delete>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="Plan">
+		UPDATE plan
+		<set>
+			<if test="brandId!=null and brandId!=''">brandId=#{brandId},</if>
+			<if test="productCategoryId!=null and productCategoryId!=''">productCategoryId=#{productCategoryId},</if>
+			<if test="name!=null and name!=''">name=#{name},</if>
+			<if test="type!=null and type!=''">type=#{type},</if>
+			<if test="startTime!=null and startTime!=''">startTime=#{startTime},</if>
+			<if test="endTime!=null and endTime!=''">endTime=#{endTime},</if>
+			<if test="imageUrl!=null and imageUrl!=''">imageUrl=#{imageUrl},</if>
+			<if test="coverImageUrl!=null and coverImageUrl!=''">coverImageUrl=#{coverImageUrl},</if>
+			<if test="planBannerImageUrl!=null and planBannerImageUrl!=''">planBannerImageUrl=#{planBannerImageUrl},</if>
+			<if test="status!=null and status!=''">status=#{status}</if>
+		</set> 
+		WHERE planId=#{planId}
+	</update>
+	
+	<!-- 批量更新排期状态 -->
+	<update id="updateStatusByPlanIds">
+		UPDATE plan
+		SET status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+		WHERE planId IN
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	
+	<!-- 根据id查询排期数据 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="Plan">
+		select a.*,IF(CURRENT_TIMESTAMP &lt; a.endTime, '0', '1') AS expireFlag
+		from plan a
+		where planId = #{id}
+	</select>
+    
+    <!-- 根据商品id查询商品当前时所在的排期 -->
+    <select id="getCurrentPlanByProductId" parameterType="int" resultType="Plan">
+    	SELECT *
+			FROM plan 
+		WHERE planId IN (SELECT planId FROM plan_product WHERE productId = #{productId})
+		AND status IN (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE},
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE})
+		AND CURRENT_TIMESTAMP BETWEEN startTime AND endTime
+		ORDER BY startTime ASC LIMIT 1
+    </select>
+    
+    <!-- 根据商品id查询当前日期之后的最后一个排期 -->
+    <select id="getLastPlanByProductId" parameterType="int" resultType="Plan">
+	    SELECT *
+			FROM plan 
+		WHERE planId IN (SELECT planId FROM plan_product WHERE productId = #{productId})
+		AND status IN (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE},
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE})
+		AND startTime > CURRENT_TIMESTAMP
+		ORDER BY startTime DESC LIMIT 1
+    </select>
+	
+	<!-- 根据当前时间和类型(特卖、秒杀)查询所有排期 -->
+	<select id="getPlanListByCurrentTimeAndType" resultType="Plan">
+		select * 
+		from plan p 
+		where type=#{type} and
+		      CURRENT_TIMESTAMP between p.startTime and p.endTime
+	</select>
+	
+	<!-- select p.* from plan p where p.type=? and p.status=?  -->
+
+	<!-- 根据当前时间查询所有排期 -->
+	<select id="getPlanListByCurrentTime" resultType="Plan">
+		select p.*,b.name,b.brandId 
+		from plan p,brand b
+		where p.type=#{type} and CURRENT_TIMESTAMP between p.startTime and p.endTime
+	</select>
+	
+	<!-- 根据当前时间、类型(特卖、秒杀)、状态查询所有的排期 -->
+	<select id="getPlanListByCurrentTimeAndTypeAndStatus" resultType="Plan">
+		select p.*
+		from plan p
+		where p.type=#{type} and 
+			  p.status=#{status}
+			  <if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER">
+			  	and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			  </if> 
+			  <if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL">
+			  	and (DATE_FORMAT(CURRENT_TIMESTAMP,"%Y-%m-%d") 
+						BETWEEN DATE_FORMAT(startTime,"%Y-%m-%d") 
+						and DATE_FORMAT(endTime,"%Y-%m-%d"))
+			  </if>
+	</select>
+	
+	<!-- 根据排期id查询所有在排期内的商品 并按折扣从小到大排序 -->
+	<select id="getPlanProductListByPlanId" resultType="Product">
+		select  pro.brandId,
+				pro.productCategoryId,
+				pro.sellerId,
+				pro.name,
+				pro.imageUrls,
+				pro.secKillPrice,
+				pro.salePrice,
+				pro.marketPrice,
+				pro.isImport,
+				pro.rank,
+				pro.status,
+				pro.keyWord,
+				pro.rebate,
+				pro.sellStartTime,
+				pro.sellEndTime,
+				pro.createTime
+		from product pro inner join plan_product pp on pro.productId=pp.productId
+		where pp.planId=#{planId}
+		and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		order by pro.rebate asc
+	</select>
+	
+	<!-- 根据排期id查询所有在排期内的秒杀商品 -->
+	<select id="getPlanSecKillProductByPlanId" resultType="Product">
+		select pro.* 
+		from product pro 
+		where pro.productId =(select productId from plan_product where planId=#{planId})
+			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+	</select>
+	
+	<!-- 通过planId 查询排期商品的sku -->
+	<select id="getPlanSecKillProductSkuByPlanId" resultType="ProductSku">
+		select ps.* 
+		from product_sku ps 
+		where ps.productSkuId
+			  in(
+			  select pp.productSkuId
+			  from plan_product pp
+			  where pp.planId=#{plan}
+			  	)
+			  and ps.isDelete=${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+	</select>
+	
+	<!-- sql运行异常  2013-02-25 18:32:24 分成2个方法 -->
+	<!-- 根据当前时间、类型(特卖、秒杀)、状态是 已经发布的 预告的排期 当前时间加7天时间的预告  <=  > -->
+	<select id="getPlanListNoticeByCurrentTimeAndType" resultType="Plan">
+		select p.* 
+		from plan p 
+		where p.type=#{type}
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  <if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL">
+			  and (
+			  	    p.startTime between CURRENT_TIMESTAMP 
+			  	    and (date_add(CURRENT_TIMESTAMP, interval ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@NOTICE} day))
+			  	    ) 
+			  </if>
+			  <if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER">
+			  	and (p.startTime &lt;= (date_add(CURRENT_TIMESTAMP, interval ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@NOTICE} day))) 
+			    and (p.startTime &gt; CURRENT_TIMESTAMP) 
+			  </if> 
+		order by p.startTime asc 
+	</select>
+	
+	<!-- 根据当前时间、类型(秒杀)、状态是 已经发布的 预告的排期 当前时间加7天时间的预告 -->
+	<select id="getPlanListSecKillNoticeByCurrentTime" resultType="Plan">
+		select  p.planId 		as `planId`,
+				p.brandId		as `brand.brandId`,
+				p.name			as `name`,
+				p.type			as `type`,
+				p.startTime		as `startTime`,
+				p.endTime		as `endTime`,
+				p.imageUrl		as `imageUrl`,
+				p.status		as `status`,
+				p.createTime	as `createTime`,
+				p.updateTime	as `updateTime` 
+		from plan p 
+		where p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  and (
+			  	    p.startTime between CURRENT_TIMESTAMP 
+			  	    and (date_add(CURRENT_TIMESTAMP, interval ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@NOTICE} day))
+			  	   )
+		order by p.endTime asc, p.createTime desc  
+		limit 7
+	</select>
+	
+	<!-- 根据当前时间、类型(特卖)、状态是 已经发布的 预告的排期 当前时间加7天时间的预告 -->
+	<select id="getPlanListSpecialSellerNoticeByCurrentTime" resultType="Plan">
+		select  p.planId 		as `planId`,
+				p.brandId		as `brand.brandId`,
+				p.name			as `name`,
+				p.type			as `type`,
+				p.startTime		as `startTime`,
+				p.endTime		as `endTime`,
+				p.imageUrl		as `imageUrl`,
+				p.coverImageUrl as `coverImageUrl`,
+				p.status		as `status`,
+				p.createTime	as `createTime`,
+				p.updateTime	as `updateTime` 
+		from plan p 
+		where p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  and (p.startTime &lt;= (date_add(CURRENT_TIMESTAMP, interval ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@NOTICE} day))) 
+			  and (p.startTime &gt; CURRENT_TIMESTAMP)
+		order by p.startTime asc
+	</select>
+	
+	<!-- 根据当前时间 已经发布的 预告的排期  当前时间加4天时间的预告-->
+	<select id="getPlanListBrandNoticeByCurrentTime" resultType="Plan">
+		select  p.planId 		as `planId`,
+				p.brandId		as `brand.brandId`,
+				p.name			as `name`,
+				p.type			as `type`,
+				p.startTime		as `startTime`,
+				p.endTime		as `endTime`,
+				p.imageUrl		as `imageUrl`,
+				p.status		as `status`,
+				p.createTime	as `createTime`,
+				p.updateTime	as `updateTime` 
+		from plan p 
+		where p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  and (p.startTime &lt;= (date_add(CURRENT_TIMESTAMP, interval ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@THREE_DAY_FROM_TODAY} day))) 
+			  and (p.startTime &gt; CURRENT_TIMESTAMP)
+		order by p.startTime asc
+	</select>
+	
+	<!-- 明天的秒杀 排期 列表 -->
+	<select id="getTomorrowSecKillPlanList" resultType="Plan">
+		select p.* 
+		from plan p 
+		where p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  and (
+			 	DATE_FORMAT(date_add(CURRENT_TIMESTAMP, interval ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TOMORROW} day),"%Y-%m-%d") 
+						BETWEEN DATE_FORMAT(startTime,"%Y-%m-%d") 
+						and DATE_FORMAT(endTime,"%Y-%m-%d")	
+			 	  )
+			  		
+	<!-- 
+	 date_add(CURRENT_TIMESTAMP, interval ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TOMORROW} day)
+		between p.startTime and p.endTime
+	 -->
+	</select>
+	
+	<!-- 最新上线的品牌   按排期时间排序 -->
+	<select id="getPlanListLastOnlineSpecialSeller" resultType="Plan">
+		select  p.planId 		as `planId`,
+				p.brandId		as `brand.brandId`,
+				p.name			as `name`,
+				p.type			as `type`,
+				p.startTime		as `startTime`,
+				p.endTime		as `endTime`,
+				p.imageUrl		as `imageUrl`,
+				p.status		as `status`,
+				p.createTime	as `createTime`,
+				p.updateTime	as `updateTime`
+		from plan p
+		where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} and 
+			  p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER} and
+			  (CURRENT_TIMESTAMP between p.startTime and p.endTime)
+		order by p.startTime desc 
+	</select>
+	
+	<!-- 最受欢迎的品牌 按每个品牌下本次排期的所有商品pv排序 -->
+	<select id="getPlanListMostPopular" resultType="Plan">
+		select distinct t.*
+		from(
+			select 	p.planId 		as `planId`,
+					p.brandId		as `brand.brandId`,
+					p.name			as `name`,
+					p.type			as `type`,
+					p.startTime		as `startTime`,
+					p.endTime		as `endTime`,
+					p.imageUrl		as `imageUrl`,
+					p.status		as `status`,
+					p.createTime	as `createTime`,
+					p.updateTime	as `updateTime`
+			from plan_product pp right join plan p on p.planId=pp.planId
+				   left join product pro on pp.productId=pro.productId
+			where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} and 
+				  p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER} and
+				   	  	  CURRENT_TIMESTAMP between p.startTime and p.endTime
+			<!-- group by pro.brandId -->
+			order by pro.hits desc
+			) t
+	</select>
+	
+	<!-- 按品牌的折扣最低排序 -->
+	<select id="getPlanListLowestDiscount" resultType="Plan">
+		select distinct t.*
+		from(
+			select  p.planId 		as `planId`,
+					p.brandId		as `brand.brandId`,
+					p.name			as `name`,
+					p.type			as `type`,
+					p.startTime		as `startTime`,
+					p.endTime		as `endTime`,
+					p.imageUrl		as `imageUrl`,
+					p.status		as `status`,
+					p.createTime	as `createTime`,
+					p.updateTime	as `updateTime`
+			from plan_product pp right join plan p on p.planId=pp.planId
+				   left join product pro on pp.productId=pro.productId
+			where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} and 
+				  p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER} and
+				   	  	  CURRENT_TIMESTAMP between p.startTime and p.endTime
+			order by pro.rebate asc
+			) t
+	</select>
+	
+	<!-- 通过Category Id 查询最新上线的品牌   按排期时间排序  -->
+	<select id="getPlanListLastOnlineByCategoryId" resultType="Plan">
+		select  p.planId 			as `planId`,
+				p.brandId			as `brand.brandId`,
+				p.productCategoryId as `productCategory.productCategoryId`,
+				p.name				as `name`,
+				p.type				as `type`,
+				p.startTime			as `startTime`,
+				p.endTime			as `endTime`,
+				p.imageUrl			as `imageUrl`,
+				p.status			as `status`,
+				p.createTime		as `createTime`,
+				p.updateTime		as `updateTime`
+		from plan p
+		where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} and 
+			  p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER} and
+			  (CURRENT_TIMESTAMP between p.startTime and p.endTime) and
+			  p.productCategoryId=#{categoryId}
+		order by p.startTime desc 
+	</select>
+	
+	<!-- 通过Category Id 查询 最受欢迎的品牌 按每个品牌下本次排期的所有商品pv排序 -->
+	<select id="getPlanListMostPopularByCategoryId" resultType="Plan">
+		select distinct t.*
+		from(
+			select 	p.planId 			as `planId`,
+					p.brandId			as `brand.brandId`,
+					p.productCategoryId as `productCategory.productCategoryId`,
+					p.name				as `name`,
+					p.type				as `type`,
+					p.startTime			as `startTime`,
+					p.endTime			as `endTime`,
+					p.imageUrl			as `imageUrl`,
+					p.status			as `status`,
+					p.createTime		as `createTime`,
+					p.updateTime		as `updateTime`
+			from plan_product pp right join plan p on p.planId=pp.planId
+				   left join product pro on pp.productId=pro.productId
+			where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} and 
+				  p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER} and
+				   	  	  CURRENT_TIMESTAMP between p.startTime and p.endTime and
+				  p.productCategoryId=#{categoryId}
+			<!-- group by pro.brandId -->
+			order by pro.hits desc
+			) t
+	</select>
+	
+	<!--  通过Category Id 查询 按品牌的折扣最低排序 -->
+	<select id="getPlanListLowestDiscountByCategoryId" resultType="Plan">
+		select distinct t.*
+		from(
+			select  p.planId 			as `planId`,
+					p.brandId			as `brand.brandId`,
+					p.productCategoryId as `productCategory.productCategoryId`,
+					p.name				as `name`,
+					p.type				as `type`,
+					p.startTime			as `startTime`,
+					p.endTime			as `endTime`,
+					p.imageUrl			as `imageUrl`,
+					p.status			as `status`,
+					p.createTime		as `createTime`,
+					p.updateTime		as `updateTime`
+			from plan_product pp right join plan p on p.planId=pp.planId
+				   left join product pro on pp.productId=pro.productId
+			where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} and 
+				  p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER} and
+				   	  	  CURRENT_TIMESTAMP between p.startTime and p.endTime and
+		   	  	  p.productCategoryId=#{categoryId}
+			order by pro.rebate asc
+			) t
+	</select>
+	
+	<!-- 查询排期where条件 -->
+	<sql id="searchPlansCondition">
+		<where>
+			<if test="productCategoryId!=null and productCategoryId!=''">
+				a.productCategoryId = #{productCategoryId}
+			</if>
+			<choose>
+				<when test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+				AND (DATE_FORMAT(#{startTime},'%Y-%m-%d') BETWEEN DATE_FORMAT(a.startTime,'%Y-%m-%d') AND DATE_FORMAT(a.endTime,'%Y-%m-%d')
+						 OR DATE_FORMAT(a.startTime,'%Y-%m-%d') &gt; STR_TO_DATE(#{startTime},'%Y-%m-%d'))
+				AND (DATE_FORMAT(#{endTime},'%Y-%m-%d') BETWEEN DATE_FORMAT(a.startTime,'%Y-%m-%d') AND DATE_FORMAT(a.endTime,'%Y-%m-%d')
+						OR DATE_FORMAT(a.endTime,'%Y-%m-%d') &lt; STR_TO_DATE(#{endTime},'%Y-%m-%d'))
+				</when>
+				<otherwise>
+				AND (DATE_FORMAT(NOW(),'%Y-%m') BETWEEN DATE_FORMAT(a.startTime,'%Y-%m') AND DATE_FORMAT(a.endTime,'%Y-%m')
+						OR DATE_FORMAT(a.startTime,'%Y-%m') &gt; DATE_FORMAT(NOW(),'%Y-%m'))
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="status == @com.ytoxl.module.uhome.uhomebase.dataobject.Plan@SPECIAL_SELLER_INPROGRESS">
+					AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+					AND NOW() BETWEEN a.startTime AND a.endTime
+				</when>
+				<when test="status == @com.ytoxl.module.uhome.uhomebase.dataobject.Plan@RELEASE">
+					AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+					AND NOW() &lt; a.startTime
+				</when>
+				<when test="status == @com.ytoxl.module.uhome.uhomebase.dataobject.Plan@UNRELEASE">
+					AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE}
+					AND NOW() &lt;= a.endTime
+				</when>
+				<when test="status == @com.ytoxl.module.uhome.uhomebase.dataobject.Plan@EXPRIE">
+					AND (NOW() &gt; a.endTime OR a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_OFF_SHELF})
+				</when>
+			</choose>
+		</where>
+	</sql>
+	
+	<!-- order by 子句  -->
+	<sql id="orderBy">
+		<if test="sort != null and sort != ''">
+			ORDER BY ${sort}	
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+	</sql>
+	
+	<!-- 后台搜索查询特卖排期 -->
+	<select id="searchSpecialSellerPlans" parameterType="map" resultType="Plan">
+	  	SELECT 	a.planId, a.name, b.name AS `brand.name`,
+	  			a.startTime, a.endTime, a.status
+			FROM (SELECT * 
+					FROM plan 
+				WHERE type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+					AND status != ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_DELETE}
+				) a INNER JOIN brand b ON a.brandId = b.brandId
+		<include refid="searchPlansCondition"/>
+		<include refid="orderBy"/>
+	</select>
+		
+	<!-- 后台搜索查询秒杀排期 -->
+	<select id="searchSecKillPlans" parameterType="map" resultType="Plan">
+		SELECT 	a.planId, b.name AS `brand.name`, d.name AS `seckillPlanProduct.product.name`,
+				a.startTime, a.endTime, a.status
+			FROM (SELECT * 
+					FROM plan 
+				WHERE type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+					AND status != ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_DELETE}
+				) a
+		INNER JOIN brand b ON a.brandId = b.brandId
+		INNER JOIN plan_product c ON a.planId = c.planId
+		INNER JOIN product d ON c.productId = d.productId
+		<include refid="searchPlansCondition"/>
+		<include refid="orderBy"/>
+	</select>
+	
+	<!-- 查询产品类别及排期个数 -->
+	<select id="listProductCategoryAndPlanNum" parameterType="map" resultType="ProductCategory">
+	    SELECT a.*, COUNT(b.planId) AS planNum
+			FROM product_category a
+		LEFT JOIN (
+			SELECT * FROM(
+				SELECT * FROM plan 
+				WHERE type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+		  			AND status != ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_DELETE}
+					) a
+		  	<include refid="searchPlansCondition"/>
+			) b ON a.productCategoryId = b.productCategoryId
+	  	WHERE a.parentId = 0 
+		GROUP BY a.productCategoryId 
+		ORDER BY rank
+	</select>
+	
+	<!-- 查询所有子类别 及排期个数-->
+	<select id="listChildProductCategoryAndPlanNum" parameterType="map" resultType="ProductCategory">
+		SELECT a.*, COUNT(b.planId) AS planNum
+			FROM product_category a
+		LEFT JOIN (
+			SELECT * FROM(
+				SELECT * FROM plan 
+				WHERE type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+		  			AND status != ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_DELETE}
+					) a
+		  	<include refid="searchPlansCondition"/>
+			) b ON a.productCategoryId = b.productCategoryId
+		WHERE a.parentId != 0 
+		GROUP BY a.productCategoryId 
+		ORDER BY rank
+	</select>
+	
+	<!-- 后台搜索查询特卖排期总数 -->
+	<select id="searchSpecialSellerPlansCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(a.planId)
+			FROM plan a
+		WHERE a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			AND a.status IN (
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE}
+			) 
+			<if test="productCategoryId!=null and productCategoryId!=''">
+				AND a.productCategoryId = #{productCategoryId}
+			</if>
+			<choose>
+				<when test="searchTime!=null and searchTime!=''">
+				AND DATE_FORMAT(STR_TO_DATE(#{searchTime},'%Y-%m'),'%Y-%m') 
+							BETWEEN DATE_FORMAT(a.startTime,'%Y-%m') AND DATE_FORMAT(a.endTime,'%Y-%m')
+				</when>
+				<otherwise>
+				AND DATE_FORMAT(NOW(),'%Y-%m') BETWEEN DATE_FORMAT(a.startTime,'%Y-%m') AND DATE_FORMAT(a.endTime,'%Y-%m')
+				</otherwise>
+			</choose>
+	</select>
+	
+	<!-- 后台搜索查询秒杀排期总数 -->
+	<select id="searchSecKillPlansCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(a.planId)
+			FROM plan a
+		WHERE a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+			AND a.status IN (
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE}
+			) 
+			<if test="productCategoryId!=null and productCategoryId!=''">
+				AND a.productCategoryId = #{productCategoryId}
+			</if>
+			<choose>
+			<when test="searchTime!=null and searchTime!=''">
+			AND DATE_FORMAT(STR_TO_DATE(#{searchTime},'%Y-%m'),'%Y-%m') 
+						BETWEEN DATE_FORMAT(a.startTime,'%Y-%m') AND DATE_FORMAT(a.endTime,'%Y-%m')
+			</when>
+			<otherwise>
+			AND DATE_FORMAT(NOW(),'%Y-%m') BETWEEN DATE_FORMAT(a.startTime,'%Y-%m') AND DATE_FORMAT(a.endTime,'%Y-%m')
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 前台品牌特卖查询  通过排期id查询 所有的商品 -->
+	<select id="searchProductList4Front" resultType="Product">
+		select distinct pro.*
+		from product pro inner join plan_product pp on pro.productId=pp.productId
+						 inner join plan p on p.planId=pp.planId 
+		where pp.planId=#{planId}
+			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS} 
+			  and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  <choose>
+			  	<when test="sort!=null and sort!=''">
+			  		order by ${sort} 
+				  	<if test="dir!=null and dir!=''">
+						${dir}
+				  	</if>
+			  	</when>
+			  	<otherwise>
+			  		order by pp.rank desc,pro.hits desc
+			  	</otherwise>
+			  </choose> 
+		limit #{start},#{limit} 
+	</select>
+	
+	<!-- 前台品牌特卖查询  通过排期id查询 所有商品的总数 -->
+	<select id="searchProductList4FrontCount" resultType="java.lang.Integer">
+	   select count(distinct pro.productId)
+	   from product pro inner join plan_product pp on pro.productId=pp.productId
+	   					inner join plan p on p.planId=pp.planId 
+		where pp.planId=#{planId}
+			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS} 
+			  and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+	</select>
+	
+	<!-- 按销售数量排序 -->
+	<select id="searchProductList4FrontBySalesQuantity" resultType="Product">
+		select pro.*
+		from product pro inner join plan_product pp on pro.productId=pp.productId 
+			 left join product_sku ps on pro.productId=ps.productId
+			 inner join plan p on p.planId=pp.planId 
+		where pp.planId=#{planId}
+			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+			  and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} 
+			  <choose>
+			  	<when test="sort!=null and sort!=''">
+			  		group by pro.productId
+					order by sum(${sort})
+					<if test="dir!=null and dir!=''">
+						${dir}
+					</if>
+			  	</when>
+			  	<otherwise>
+			  		order by pp.rank desc,pro.hits desc
+			  	</otherwise>
+			  </choose>
+		limit #{start},#{limit}  
+	</select>
+	<!-- 按销售数量排序  显示有货商品-->
+	<select id="searchProductList4FrontBySalesQuantityAndStore" resultType="Product">
+		select pro.*
+		from product pro inner join plan_product pp on pro.productId=pp.productId 
+			 left join product_sku ps on pro.productId=ps.productId
+			 inner join plan p on p.planId=pp.planId 
+		where pp.planId=#{planId}
+			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+			  and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} 
+			  group by pro.productId having sum(ps.inventory)>0
+			  <choose>
+			  	<when test="sort!=null and sort!=''">
+					order by sum(${sort})
+					<if test="dir!=null and dir!=''">
+						${dir}
+					</if>
+			  	</when>
+			  	<otherwise>
+			  		order by pp.rank desc,pro.hits desc
+			  	</otherwise>
+			  </choose>
+		limit #{start},#{limit}  
+	</select>
+	
+	<!-- 前台品牌特卖查询  通过排期id查询 有货的商品 -->
+	<select id="searchProductList4FrontStore" resultType="Product">
+		select distinct pro.*
+		from product pro inner join plan_product pp on pro.productId=pp.productId
+						 left join product_sku ps on pro.productId=ps.productId
+						 inner join plan p on p.planId=pp.planId 
+		where pp.planId=#{planId}
+			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS} 
+			  and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			  group by pro.productId having sum(ps.inventory)>0
+			  <choose>
+			  	<when test="sort!=null and sort!=''">
+			  		order by ${sort} 
+				  	<if test="dir!=null and dir!=''">
+						${dir}
+				  	</if>
+			  	</when>
+			  	<otherwise>
+			  		order by pp.rank desc,pro.hits desc
+			  	</otherwise>
+			  </choose> 
+		limit #{start},#{limit} 
+	</select>
+	
+		<!-- 前台品牌特卖查询  通过排期id查询 有货商品的总数 -->
+	<select id="searchProductList4FrontStoreCount" resultType="java.lang.Integer">
+	   select count(*) from(
+		   select count(distinct pro.productId)
+		   from product pro inner join plan_product pp on pro.productId=pp.productId
+		   					 left join product_sku ps on pro.productId=ps.productId
+		   					inner join plan p on p.planId=pp.planId 
+			where pp.planId=#{planId}
+				  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS} 
+				  and CURRENT_TIMESTAMP between p.startTime and p.endTime
+				  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+				  group by pro.productId having sum(ps.inventory)>0
+      ) as cou
+	</select>
+	<!-- 根据排期的id查询此排期中 折扣最低的商品信息 -->
+	<select id="getMinRebateProductByPlanId" resultType="Product">
+		select  pro.brandId,
+				pro.productCategoryId,
+				pro.sellerId,
+				pro.name,
+				pro.imageUrls,
+				pro.salePrice,
+				pro.marketPrice,
+				pro.status,
+				pro.rebate,
+				pro.sellStartTime,
+				pro.sellEndTime
+		from product pro inner join plan_product pp on pro.productId=pp.productId
+		where pp.planId=#{planId}
+		and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		order by pro.rebate asc
+		limit 1
+	</select>
+	
+	<!-- 根据品牌id查询最近一个已经发布的特卖排期 -->	
+	<select id="getNearPlanByBrandId" resultType="Plan">
+		select p.*
+		from plan p
+		where p.brandId=#{brandId}
+		and p.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+		and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+		order by p.endTime desc 
+		limit 1
+	</select>
+	
+	<!-- 前台品牌介绍   商品销售的历史记录 -->
+	<select id="searchPlanProductList4FrontByPlanId" resultType="Product">
+		select pro.* 
+		from product pro 
+		where pro.productId 
+			  in  
+			  (
+			   select pp.productId 
+			   from plan_product pp 
+			   where pp.planId=#{planId}
+			  )
+		and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		order by pro.rebate asc
+		limit #{start},#{limit}
+	</select>
+	
+	<select id="searchPlanProductList4FrontByPlanIdCount" resultType="java.lang.Integer">
+		select count(pro.productId) 
+		from product pro 
+		where pro.productId 
+			  in  
+			  (
+			   select pp.productId 
+			   from plan_product pp 
+			   where pp.planId=#{planId}
+			  )
+		and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+	</select>
+	
+	<!-- 根据品牌ID集合查询当天开售的特卖排期(品牌定阅邮件发送) -->
+	<select id="listTodaySpecialSellerPlansByBrandIds" resultType="Plan">
+		SELECT a.*, 
+			b.brandId AS `brand.brandId`,
+			b.name AS `brand.name`,
+			b.logoImageUrl AS `brand.logoImageUrl`,
+			MIN(c.rebate) AS minRebate
+		 FROM plan a INNER JOIN brand b ON a.brandId = b.brandId
+		 LEFT JOIN (SELECT a.*, b.rebate FROM plan_product a INNER JOIN product b ON a.productId = b.productId) c ON a.planId = c.planId
+		WHERE DATE_FORMAT(a.startTime, '%Y-%m-%d') = DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d')
+			AND a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			AND a.brandId IN 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		GROUP BY a.planId
+	</select>
+	
+	<!-- 根据排期id集合查询当天开售的特卖排期(即将上线定阅邮件发送) -->
+	<select id="listTodaySpecialSellerPlansByPlanIds" resultType="Plan">
+		SELECT a.*, 
+			b.brandId AS `brand.brandId`,
+			b.name AS `brand.name`,
+			b.logoImageUrl AS `brand.logoImageUrl`,
+			MIN(c.rebate) AS minRebate
+		 FROM plan a INNER JOIN brand b ON a.brandId = b.brandId
+		 LEFT JOIN (SELECT a.*, b.rebate FROM plan_product a INNER JOIN product b ON a.productId = b.productId) c ON a.planId = c.planId
+		WHERE DATE_FORMAT(a.startTime, '%Y-%m-%d') = DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d')
+			AND a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			AND a.planId IN 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		GROUP BY a.planId
+	</select>
+
+	
+	<select id="listAllPlans" resultType="Plan">
+		select * from plan where type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+		and status in (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_OFF_SHELF})
+		order by planId desc;
+	</select>
+	<!-- 根据品牌id和当前时间查找正在排期和即将发布的排期 -->
+	<select id="listPlansByBrandIdAndEndTime" parameterType="java.lang.Integer" resultType="Plan">
+		select p.* from brand b,plan p 
+		where b.brandId=p.brandId 
+		  and p.brandId=#{brandId} 
+		  and p.endTime >= CURRENT_TIMESTAMP 
+		  and p.status in (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_OFF_SHELF})
+	</select>
+	
+	<!-- 通过商家ID获取所有发布和下架的排期 -->
+	<select id="listPlansBySellerId" parameterType="map" resultType="Plan">
+		select DISTINCT(pl.planId),
+				pl.`name` 
+				from plan pl LEFT 
+				JOIN plan_product plpr
+				on pl.planId = plpr.planId
+				LEFT JOIN product pro
+				on pro.productId = plpr.productId
+				LEFT JOIN seller sell 
+				on sell.sellerId = pro.sellerId
+				where 1 = 1
+				<if test="sellerId != '' and sellerId != null">
+					and sell.sellerId = #{sellerId} 
+				</if>
+				<if test="time != '' and time != null">
+					and DATE_FORMAT(pl.startTime,'%Y-%m') = #{time} 
+				</if>
+	</select>
+	
+
+	
+	<!-- 根据 id查询排期名称 -->
+	<select id="getNamesByPlanIds" resultType="java.lang.String">
+		SELECT GROUP_CONCAT(name) FROM plan WHERE planId IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 查询可以参加优惠活动的排期 -->
+	<select id="listPlans4EventRange" resultType="Plan">
+		SELECT planId, name, startTime, endTime FROM plan 
+		WHERE type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			AND status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			AND (#{startTime} BETWEEN startTime AND endTime 
+				OR #{endTime} BETWEEN startTime AND endTime
+				OR (startTime BETWEEN #{startTime} AND #{endTime} 
+					AND endTime BETWEEN #{startTime} AND #{endTime}))
+	</select>
+
+</mapper>

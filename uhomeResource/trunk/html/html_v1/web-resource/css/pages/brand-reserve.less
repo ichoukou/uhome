@@ -1,0 +1,60 @@
+@charset "utf-8";
+/**
+ * Created by JetBrains PhpStorm.
+ * User: jVan
+ * Date: 13-3-12
+ * Time: 下午3:12
+ * Description: 品牌预约
+ */
+@import '../lib/global.less';
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../lib/crumbs.less';
+.reserve-wrap{
+  border: 1px solid #d2d2d2;
+  .hd{
+    padding-left: 10px;
+    border-bottom: 1px solid #d2d2d2;
+    h2{
+      float: left;
+    }
+    span{
+      float: left;
+      margin: 5px 0 0 5px;
+    }
+    label{
+      float: right;
+      margin: 5px 10px 0 0;
+      input{
+        vertical-align: -2px;
+        margin-right: 5px;
+      }
+    }
+  }
+  .bd{
+    padding: 30px 0 30px 6px;
+    border-bottom: 1px solid #d2d2d2;
+    li{
+      float: left;
+      display: inline;
+      margin-right: 10px;
+      a{
+        display: block;
+        padding: 10px 0;
+        position: relative;
+        border: 1px solid #d2d2d2;
+        input{
+          position: absolute;
+          right: 0;
+          bottom: 0;
+        }
+      }
+    }
+  }
+  .dy{
+    .data-frame{
+      float: right;
+      margin: 15px 10px 20px 0;
+    }
+  }
+}

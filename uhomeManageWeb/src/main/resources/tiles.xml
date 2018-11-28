@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ 
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="basicSetting.**" template="/WEB-INF/pages/layout/wmsLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/pages/basicSetting/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/pages/basicSetting/footer.jsp" />	
+		<put-attribute name="container" value="/WEB-INF/pages/basicSetting/{1}.jsp" />
+	</definition>
+	<definition name="stockout.**" template="/WEB-INF/pages/layout/wmsLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/pages/basicSetting/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/pages/basicSetting/footer.jsp" />	
+		<put-attribute name="container" value="/WEB-INF/pages/stockout/{1}.jsp" />
+	</definition>
+</tiles-definitions>

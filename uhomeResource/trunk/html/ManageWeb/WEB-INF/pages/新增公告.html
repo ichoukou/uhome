@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>新增公告</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/announcement.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/formvalidator/formValidatorRegex.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/formvalidator/formValidator-4.1.3.js"  language="javascript"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="body-nav">
+    <ul class="m-clear">
+      <li><a>广告页面</a></li>
+      <li><a>站内信</a></li>
+      <li><a>网站地图</a></li>
+      <li><a>SEO信息</a></li>
+      <li><a>友情链接</a></li>
+      <li><a class="current-chose">公告栏</a></li>
+      <li><a>专题模板</a></li>
+    </ul>
+  </div>
+  <div class="title">新增公告</div>
+  <form id="form1">
+  <table class="tab-a">
+  	<tr>
+  		<td width="50"><span class="c-red">*</span>标题：</td>
+  		<td colspan="2"  width="420"><input type="text" class="txt-input txt-input-w" id="title" /></td>
+  		<td><span id="titleTip"></span></td>
+  	</tr>
+  	<tr>
+  		<td><span class="c-red">*</span>类型：</td>
+  		<td width="220">
+  			<select class="m-sel" id="type">
+  				<option>请选择</option>
+  				<option value="1">活动资讯</option>
+  				<option value="2">网站公告</option>
+  			</select>
+  		</td>
+  		<td colspan="2"><span id="typeTip"></span></td>
+  	</tr>
+  	<tr>
+  		<td><span class="c-red">*</span>来源：</td>
+  		<td><input type="text" class="txt-input" id="source" /></td>
+  		<td colspan="2"><span id="sourceTip"></span></td>
+  	</tr>
+  	<tr valign="top">
+  		<td><span class="c-red">*</span>内容：</td>
+  		<td colspan="3">
+  			<!--此处为文本编辑器 start-->
+  			<textarea></textarea>
+  			<!--此处为文本编辑器 end-->
+  		</td>
+  	</tr>
+  	<tr>
+  		<td></td>
+  		<td colspan="3">
+  			<input type="submit" class="m-btn" value="保存" />
+  			<input type="button" class="m-btn" value="取消" />
+  		</td>
+  	</tr>
+  </table>
+  </form>
+</div>
+<!--end body-->
+<script>
+	$.formValidator.initConfig({formID:"form1",theme:"Default",errorFocus:false,wideWord:false,submitOnce:true,onError:function(){}});
+	$("#title").formValidator({onShow:"你输入标题",onFocus:"你输入标题"}).inputValidator({min:1,max:50,onError:"你输入1-50个字符的标题"});
+	$("#type").formValidator({onShow:"请选公告类型",onFocus:"请选公告类型"}).inputValidator({min:1,onError: "请选公告类型！"});
+	$("#source").formValidator({onShow:"你输入来源",onFocus:"你输入来源"}).inputValidator({min:1,max:12,onError:"你输入1-12个字符的来源"});
+	//$("#summary").formValidator({onShowText:"你输入品牌简介"}).inputValidator({min:3,max:200,onError:"你输的品牌简介长度不正确,请确认"});
+</script>
+</html>

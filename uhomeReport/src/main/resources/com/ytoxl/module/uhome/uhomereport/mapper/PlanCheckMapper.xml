@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomereport.mapper.PlanCheckMapper">
+
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="planCheckId" parameterType="PlanCheck">
+		insert into `plan_check`(`planId`,`sellerId`,`feedbackCount`,`feedbackTime`,`feedbackStatus`,`userId`,`createTime`,`isConfirm`) values 
+		(#{planId},#{sellerId},#{feedbackCount},#{feedbackTime},#{feedbackStatus},#{userId},#{createTime},#{isConfirm});
+	</insert>
+
+    <!-- 查询待对账的商家 -->
+    <select id="searchPlanCheckByPlanId" resultType="PlanCheck">
+	select * , (
+		select count(*) from (select *  from 
+		(select temp.planId as tempPlanId,temp.name,temp.startTime,temp.endTime, temp.companyName,planCheck.* from 
+		(select distinct plan.name,plan.startTime,plan.endTime, seller.companyName,seller.sellerId,plan.planId
+			from plan plan , plan_product planProduct , seller seller , product product  
+			where plan.planId = planProduct.planId
+			and  planProduct.productId = product.productId
+			and  product.sellerId = seller.sellerId and plan.status in (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_OFF_SHELF})
+ 			and  plan.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			<if test="planId!=null and planId!=''">and plan.planId  = #{planId}</if>
+	 		<if test="startTime!=null and startTime!=''">AND DATE_FORMAT(plan.startTime,'%Y-%m-%d') &gt;= #{startTime}   </if> 
+			<if test="endTime!=null and endTime!=''">AND DATE_FORMAT(plan.endTime,'%Y-%m-%d') &lt;= #{endTime}</if>
+			<if test="sellerId!=null and sellerId!=''">and seller.sellerId= #{sellerId}</if>
+			<if test="name!=null and name!=''">and (plan.name like  concat('%',#{name},'%') or seller.companyName like concat('%',#{name},'%'))</if>
+			
+			 ) temp 
+			left join plan_check planCheck
+			on temp.sellerId = planCheck.sellerId
+			and temp.planId = planCheck.planId ) midTemp
+			where 
+			<if test="feedbackCount!=null and feedbackCount!=''">
+  			<choose>
+		  		<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_ONE">
+	  				     midTemp.feedbackCount is null 
+	  				  or midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_ONE_CHECK}
+				</when>
+				<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_TWO">
+	  			  	   midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_TWO_CHECK }
+ 	  			  and  midTemp.feedbackStatus is not null 
+ 	  			  	   
+	  			</when>
+	 			<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_FINISH">
+	  			 	   (midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_TWO_CHECK }
+	  			 	 and  midTemp.feedbackStatus =${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCSTATUS_FINISH }  )
+	  			</when>
+ 			</choose>
+  			</if> 
+  			order by midTemp.tempPlanId desc 
+ 			limit #{start},#{limit}
+  			 ) t  
+			where t.tempPlanId = midTemp.tempPlanId ) as sellerNum ,
+							(select feedbackTime from plan_Check 
+							where feedbackCount=${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_ONE_CHECK} 
+							and sellerId=midTemp.sellerId 
+							and planId = midTemp.planId) as oneFeedbackTime
+		
+    from (select temp.planId as tempPlanId,temp.name,temp.startTime,temp.endTime, temp.companyName,planCheck.* from 
+			(select distinct plan.name,plan.startTime,plan.endTime, seller.companyName,seller.sellerId,plan.planId
+			from plan plan , plan_product planProduct , seller seller , product product  
+			where plan.planId = planProduct.planId
+			and  planProduct.productId = product.productId
+			and  product.sellerId = seller.sellerId and plan.status in (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_OFF_SHELF})
+ 			and  plan.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			<if test="planId!=null and planId!=''">and plan.planId  = #{planId}</if>
+	 		<if test="startTime!=null and startTime!=''">AND DATE_FORMAT(plan.startTime,'%Y-%m-%d') &gt;= #{startTime}   </if> 
+			<if test="endTime!=null and endTime!=''">AND DATE_FORMAT(plan.endTime,'%Y-%m-%d') &lt;= #{endTime}</if>
+			<if test="sellerId!=null and sellerId!=''">and seller.sellerId= #{sellerId}</if>
+			<if test="name!=null and name!=''">and (plan.name like  concat('%',#{name},'%') or seller.companyName like  concat('%',#{name},'%'))</if>
+			 ) temp 
+			left join plan_check planCheck
+			on temp.sellerId = planCheck.sellerId
+			and temp.planId = planCheck.planId ) midTemp
+			where
+			<if test="feedbackCount!=null and feedbackCount!=''">
+  			<choose>
+		  		<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_ONE">
+	  				     midTemp.feedbackCount is null 
+	  				  or midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_ONE_CHECK}
+				</when>
+				<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_TWO">
+	  			  	   midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_TWO_CHECK }
+	  			  and  midTemp.feedbackStatus is not null 
+	  			  	   
+	  			</when>
+	 			<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_FINISH">
+	  			 	   (midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_TWO_CHECK }
+	  			 	 and  midTemp.feedbackStatus =${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCSTATUS_FINISH }  )
+	  			</when>
+ 			</choose>
+  			</if>
+ 		order by midTemp.tempPlanId desc 
+ 		limit #{start},#{limit}
+    </select>
+    
+    
+      <select id="searchPlanCheckByPlanIdCount" parameterType="map" resultType="integer">
+		select count(*) from (select temp.planId as tempPlanId,temp.name,temp.startTime,temp.endTime, temp.companyName,planCheck.* from 
+			(select distinct plan.name,plan.startTime,plan.endTime, seller.companyName,seller.sellerId,plan.planId
+			from plan plan , plan_product planProduct , seller seller , product product  
+			where plan.planId = planProduct.planId
+			and  planProduct.productId = product.productId
+			and  product.sellerId = seller.sellerId and plan.status in (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_OFF_SHELF})
+ 			and  plan.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			<if test="planId!=null and planId!=''">and plan.planId  = #{planId}</if>
+	 		<if test="startTime!=null and startTime!=''">AND DATE_FORMAT(plan.startTime,'%Y-%m-%d') &gt;= #{startTime}   </if> 
+			<if test="endTime!=null and endTime!=''">AND DATE_FORMAT(plan.endTime,'%Y-%m-%d') &lt;= #{endTime}</if>
+			<if test="sellerId!=null and sellerId!=''">and seller.sellerId= #{sellerId}</if>
+			<if test="name!=null and name!=''">and (plan.name like  concat('%',#{name},'%') or seller.companyName  like  concat('%',#{name},'%'))</if>
+			 ) temp 
+			left join plan_check planCheck
+			on temp.sellerId = planCheck.sellerId
+			and temp.planId = planCheck.planId ) midTemp
+			where
+			<if test="feedbackCount!=null and feedbackCount!=''">
+  			<choose>
+		  		<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_ONE">
+	  				     midTemp.feedbackCount is null 
+	  				  or midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_ONE_CHECK}
+				</when>
+				<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_TWO">
+	  			  	   midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_TWO_CHECK }
+	  			  and  midTemp.feedbackStatus is not null 
+	  			</when>
+	 			<when test="feedbackCount==@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_FINISH">
+	  			 	   (midTemp.feedbackCount = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCCOUNT_TWO_CHECK }
+	  			 	 and  midTemp.feedbackStatus =${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCSTATUS_FINISH }  )
+	  			</when>
+ 			</choose>
+  			</if>
+ 			order by midTemp.tempPlanId desc 
+    </select>
+    
+     <update id="updateStatusByPlanCheckId" parameterType="map">
+    	UPDATE plan_check SET feedbackStatus = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCSTATUS_FINISH },feedbackTime= now() ,userId = #{userId}
+    	 WHERE planCheckId = #{planCheckId}
+    </update>
+    
+ 
+     <select id="getPlanCheckByPlanCheckId" resultType="PlanCheck" parameterType="int">
+	   SELECT * from  plan_check  WHERE  planCheckId = #{planCheckId}
+    </select>
+    
+    
+    
+      <select id="getSellerPlanCheckBySellerId" resultType="PlanCheck" parameterType="map">
+	   	SELECT p.* FROM 
+		<include refid="searchSellerPlanCheckInfo"/>
+		LIMIT #{start},#{limit}
+    </select>
+    
+    <select id="searchSellerPlanCheckCount" parameterType="map" resultType="integer">
+		SELECT COUNT(p.name) FROM 
+		<include refid="searchSellerPlanCheckInfo"/>
+	</select>
+    
+    <sql id="searchSellerPlanCheckInfo">
+	   (SELECT pq.name,pq.planId,pq.startTime,pq.endTime,pcheck.feedbackCount,pcheck.feedbackStatus,pcheck.isConfirm,pcheck.planCheckId FROM plan pq 
+			LEFT JOIN plan_product planp ON pq.planId = planp.planId 
+			LEFT JOIN product p ON planp.productId = p.productId
+			LEFT JOIN plan_check pcheck ON pq.planId = pcheck.planId AND pcheck.feedbackCount = 
+			${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_TWO}
+			WHERE p.sellerId = #{sellerId} AND pq.status IN (
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_OFF_SHELF}
+			) AND TO_DAYS(NOW()) - TO_DAYS(pq.endTime) > 15 AND pq.type =  ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			 GROUP BY pq.planId 
+		) p
+    </sql>
+    
+     <update id="updateFeedBackStatusByPlanIdAndSellerId" parameterType="map">
+    	UPDATE plan_check SET feedbackStatus = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@STATUS_FEEDBACKCSTATUS_NO }
+    	 WHERE planId = #{planId} AND sellerId = #{sellerId} AND feedbackCount = 
+		${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@FEEDBACKCCOUNT_TWO}
+    </update>
+  
+    <insert id="addPlanCheck" parameterType="PlanCheck" useGeneratedKeys="true" keyColumn="planCheckId">
+    	insert into plan_check (planId,sellerId,feedbackCount,feedbackStatus,createTime,feedbackTime) 
+    	values (#{planId},#{sellerId},#{feedbackCount},#{feedbackStatus},#{createTime},#{feedbackTime})
+    </insert>
+    
+    <update id="updateIsConfirmByPlanCheckId" parameterType="int">
+    	UPDATE plan_check SET isConfirm = ${@com.ytoxl.module.uhome.uhomereport.dataobject.PlanCheck@PAYMENT_ISCONFIRM}
+    	 WHERE planCheckId = #{planCheckId}
+    </update>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.SeoConfigMapper">
+
+
+  <!-- 添加一条记录 -->
+  <insert id="add" parameterType="SeoConfig" keyProperty="seoConfigId" useGeneratedKeys="true">
+         insert into seo_config
+         		(seoConfigId,title,keyWords,description,urlKey,urlMean,creatTime)
+         values ( #{seoConfigId},
+         		  #{title},
+         		  #{keyWords},
+         		  #{description},
+         		  #{urlKey},
+         		  #{urlMean},
+         		  CURRENT_TIMESTAMP)
+  </insert>
+
+    <!-- 更新SEO记录 -->
+    <update id="update" parameterType="SeoConfig">
+		update seo_config
+		set 
+		  title = #{title},
+		  keyWords = #{keyWords},
+		  description = #{description},
+		  urlKey = #{urlKey},
+		  urlMean = #{urlMean},
+		  creatTime = CURRENT_TIMESTAMP
+		where seoConfigId = #{seoConfigId}
+  </update>
+  
+  <!-- 删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		delete from seo_config where seoConfigId = #{seoConfigId}
+  </delete>
+  
+  <!-- 根据seoConfigId查询一条数据 -->
+   <select id="get" parameterType="integer" resultType="SeoConfig">
+        select * from seo_config
+		where seoConfigId = #{seoConfigId}
+  </select>
+    <!-- 根据keyUrl查询一条数据 -->
+   <select id="getSeoConfigByUrlKey" resultType="SeoConfig">
+        select * from seo_config
+		where urlKey = #{urlKey}
+  </select>
+  
+  <!-- 查询所有数据 -->
+	<select id="searchSeoConfigs" parameterType="map" resultType="SeoConfig">
+		select
+				seoConfigId,
+				title,
+				keyWords,  
+				description,  
+				urlKey,
+				creatTime,
+				urlMean
+		from seo_config 
+		group by seoConfigId
+		order by creatTime desc
+		limit #{start},#{limit}
+	</select>
+
+	<!-- 根据分页查询商家数量 -->
+	<select id="searchSeoConfigCount" parameterType="map" resultType="Integer">
+		select
+		count(seoConfigId)
+		from seo_config
+	</select>
+<!-- 查询所有数据 -->
+	<select id="listSeoConfigs" resultType="SeoConfig">
+		select * from seo_config
+	</select>
+</mapper>

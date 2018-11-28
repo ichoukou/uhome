@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    <struts>
+    	<!-- 品牌详情 -->
+    	<package name="brand" namespace="/brand" extends="uhome-default">
+    		<!-- old -->
+    		<action name="brandDetail" class="com.ytoxl.uhomefront.web.action.brand.BrandAction" method="brandDetail">
+    			<result name="brandDetail">/WEB-INF/pages/brand/brandDetail.jsp</result>
+    		</action>
+    		<!-- old -->
+    		<action name="brands" class="com.ytoxl.uhomefront.web.action.brand.BrandAction" method="brands">
+    			<result name="brands">/WEB-INF/pages/brand/brands.jsp</result>
+    		</action>
+    	</package>
+    </struts>

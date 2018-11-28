@@ -1,0 +1,5 @@
+当前插件版本为：
+My97 DatePicker 4.8 Beta3
+
+官网：
+http://www.my97.net/dp/license.asp

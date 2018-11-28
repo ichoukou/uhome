@@ -1,0 +1,42 @@
+@charset "utf-8";
+/**
+ * Created by JetBrains PhpStorm.
+ * User: jVan
+ * Date: 13-3-1
+ * Time: 上午10:06
+ * Description: search
+ */
+/*数据录入框*/
+.data-frame{
+  float: left;
+  height: 27px;
+  line-height: 27px;
+  border-radius: 5px;
+  border: 1px solid #a19b99;
+  a{
+    float: left;
+    width: 70px;
+    height: 27px;
+    line-height: 27px;
+    border-radius: 0 5px 5px 0;
+    color: #ffffff;
+    text-align: center;
+    vertical-align: 2px;
+    background: url("../../images/search/so-bg.gif") left top repeat-x;
+    &.highlight{
+      background: url("../../images/search/so-bg.gif") left -27px repeat-x;
+    }
+  }
+  input{
+    float: left;
+    display: inline;
+    padding: 6px 0 7px 5px;
+    border: 0;
+    border-radius: 5px 0 0 5px;
+    width: 140px;
+    color: #b2b2b2;
+  }
+}
+@media screen and (min--moz-device-pixel-ratio:0) {
+  .data-frame input{padding: 5px 0 6px 5px;}
+}

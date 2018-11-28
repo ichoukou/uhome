@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ytoxl.module.uhome.uhomereport.mapper.ProductReturnReportMapper">
+	<!-- 查询退货商品 -->
+	<sql id="getProductReturn">
+		SELECT s.companyName As sellerName,b.`name` AS brandName,
+		pc.`name`
+		AS categoryName,
+		p.`name` AS productName,ps.skuCode AS skuCode,
+		SUM(ori.num) AS retCount,SUM(ori.refundAmount) AS retAmount
+		FROM
+		product_sku ps
+		JOIN product p
+		ON ps.productId =p.productId
+		JOIN brand b
+		ON p.brandId = b.brandId
+		JOIN seller s
+		ON p.sellerId = s.sellerId
+		JOIN product_category pc
+		ON p.productCategoryId = pc.productCategoryId
+		JOIN order_item oi
+		ON ps.productSkuId = oi.productSkuId
+		JOIN order_return_item ori
+		ON oi.orderItemId = ori.orderItemId
+		JOIN order_return_payment orp
+		ON ori.orderReturnId = orp.orderReturnId
+	</sql>
+	
+	<!-- 退货商品查询条件 -->
+	<sql id="where">
+		WHERE orp.status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+		<if test="sellerId!='' and sellerId!=null">
+			AND p.sellerId = #{sellerId}
+		</if>
+		<if test="brandId!='' and brandId!=null">
+			AND p.brandId = #{brandId}
+		</if>
+		<if test="productCategoryId!='' and productCategoryId!=null">
+			AND p.productCategoryId = #{productCategoryId}
+		</if>
+		<if test="stime!=null and stime!=''">
+			AND DATE_FORMAT(orp.payTime,'%Y-%m-%d') >= #{stime}
+		</if>
+		<if test="etime!=null and etime!=''">
+			<![CDATA[
+				AND DATE_FORMAT(orp.payTime,'%Y-%m-%d') <= #{etime}
+			]]>
+		</if>
+	</sql>
+	
+	<!-- 退货商品分组条件 -->
+	<sql id="groupBy">
+		GROUP BY ps.productSkuId
+	</sql>
+	
+	<!-- 退货商品排序 -->
+	<sql id="orderBy">
+		ORDER BY p.sellerId,p.brandId
+	</sql>
+	
+	<!-- 查询退货商品总记录数 -->
+	<select id="searchProductReturnCount" parameterType="map" resultType="integer">
+		SELECT COUNT(*) FROM (
+		<include refid="getProductReturn" />
+		<include refid="where"/>
+		<include refid="groupBy"/>
+		) opr
+	</select>
+
+	<!-- 分页查询退货商品明细 -->
+	<select id="searchProductReturnReport" parameterType="map"
+		resultType="ProductReturnReport">
+		SELECT opr.* FROM (
+		<include refid="getProductReturn" />
+		<include refid="where"/>
+		<include refid="groupBy"/>
+		<include refid="orderBy"/>
+		) opr 
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<!-- 报表导出 -->
+	<select id="listProductReturnReport" parameterType="map" resultType="ProductReturnReport">
+		<include refid="getProductReturn" />
+		<include refid="where"/>
+		<include refid="groupBy"/>
+		<include refid="orderBy"/>
+	</select>
+</mapper>

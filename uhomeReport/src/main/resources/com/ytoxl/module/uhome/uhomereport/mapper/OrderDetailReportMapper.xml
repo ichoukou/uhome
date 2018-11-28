@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomereport.mapper.OrderDetailReportMapper">
+
+	
+
+	<!-- 根据订单时间获取订单信息 -->
+  <select id="searchOrderByCreateTime" parameterType="map" resultType="OrderDetailReport">
+		select head.orderid as orderId,head.orderNo as orderNo,item.productname as productName,item.num as num,
+		CASE WHEN item.rebatePrice is null 
+		THEN  item.closingCost*item.num 
+		ElSE  item.rebatePrice  END as  closingCost,
+		head.status as status,head.createTime  as createTime 
+		from order_head head,order_item item 
+		where  head.orderid = item.orderid
+	<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+	and DATE_FORMAT(head.createTime,'%Y-%m-%d') BETWEEN   #{beginTime} and #{endTime}
+	</if>
+	order by head.orderNo
+	<if test="dir != null and dir != ''">
+		${dir}	
+	</if>
+	 limit #{start},#{limit}
+  </select>
+  <select id="searchOrderByCreateTimeCount" parameterType="map" resultType="java.lang.Integer">
+		select count(head.orderId)
+		from order_head head,order_item item 
+		where  head.orderid = item.orderid
+	<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+	and DATE_FORMAT(head.createTime,'%Y-%m-%d') BETWEEN   #{beginTime} and #{endTime}
+	</if>
+	order by head.orderNo
+	<if test="dir != null and dir != ''">
+		${dir}	
+	</if>
+  </select>
+ 
+  
+  
+</mapper>

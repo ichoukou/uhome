@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.SupplierMapper">
+
+  <!-- 增加供应商 -->
+  <insert id="add" parameterType="Supplier" keyProperty="supplierId" useGeneratedKeys="true">
+		insert into supplier(
+		            brandName,
+		            companyName,
+		            contactName,
+		            telephone,
+			        type,
+			        `describe`,
+			        createTime   
+					 ) 
+				values ( 
+					#{brandName},  
+					#{companyName},  
+					#{contactName},  
+					#{telephone},
+					#{type},
+					#{describe},
+					CURRENT_TIMESTAMP
+				)                    
+  </insert>
+  
+  <!-- 更新供应商 -->
+  <update id="update" parameterType="Supplier">
+		update supplier 
+		<set>	
+			<if test="brandName!=null and brandName!=''">
+				brandName=#{brandName},
+			</if>
+			<if test="companyName!=null and companyName!=''">
+				companyName=#{companyName},
+			</if>
+			<if test="contactName!=null and contactName!=''">
+				contactName=#{contactName},
+			</if>
+			<if test="telephone!=null and telephone!=''">
+				telephone=#{telephone},
+			</if>
+			<if test="type!=null and type!=''">
+				type=#{type},
+			</if>
+			<if test="describe!=null and describe!=''">
+				describe=#{describe},
+			</if>
+		</set>
+		where  supplierId = #{supplierId}
+  </update>
+  
+    <!-- 删除供应商 -->
+	<delete id="del" parameterType="java.lang.Integer" >
+		delete from supplier 
+		where  supplierId = #{supplierId}
+	</delete>
+	
+	<!-- 查询获取该供应商的信息 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="Integer">
+		select *
+			from supplier 
+		where  supplierId = #{supplierId}
+	</select>
+	
+	<!-- 根据分页查询商家数量 -->
+	<select id="searchSupplierCount" parameterType="map" resultType="Integer">
+		select
+		count(supplier.supplierId)
+		from supplier 
+	</select>
+	
+    <!-- 根据分页查询供应商-->
+	<select id="searchSupplier" parameterType="map" resultType="Supplier">
+		select      su.*
+			from supplier su
+			<include refid="searchSuppliersCondition" />
+			order by su.createTime DESC
+			limit #{start},#{limit} 
+	</select>
+	
+    <!-- 供应商分页查询条件 -->
+    <sql id="searchSuppliersCondition">
+		<where>
+			<if test="type!=null and type!=''">su.type = #{type}</if>
+			<if test="name!=null and name!=''">
+			    and	(   
+			        su.brandName like CONCAT('%',#{name},'%' )
+				    or su.companyName like CONCAT('%',#{name},'%' )
+				    or su.contactName like CONCAT('%',#{name},'%' )
+			     )
+			</if>
+		</where>
+   </sql>
+</mapper>

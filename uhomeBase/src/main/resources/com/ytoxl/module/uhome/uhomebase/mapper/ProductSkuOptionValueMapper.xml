@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.ProductSkuOptionValueMapper">
+	
+	<insert id="add" parameterType="ProductSkuOptionValue"  keyProperty="productSkuOptionValueId" useGeneratedKeys="true">
+		INSERT INTO product_sku_option_value
+			(productSkuId,  skuOptionValueId, overrideSkuOptionValue)
+		VALUES
+		 	(#{productSkuId}, #{skuOptionValueId}, #{overrideSkuOptionValue})
+	</insert>
+	
+	<insert id="addBatch" keyProperty="productSkuOptionValueId" useGeneratedKeys="true">
+		INSERT INTO product_sku_option_value
+			(productSkuId,  skuOptionValueId, overrideSkuOptionValue)
+		VALUES
+		<foreach item="productSkuOptionValue" index="index" collection="list" separator=",">
+			(#{productSkuId}, #{productSkuOptionValue.skuOptionValueId}, #{productSkuOptionValue.overrideSkuOptionValue})
+		</foreach>
+	</insert>
+  
+  	<!-- 根据productSkuId查询商品SKU信息 -->
+  	<select id="listProductSkuOptionValuesByProductSkuId" parameterType="java.lang.Integer" resultType="ProductSkuOptionValue">
+  		SELECT
+  			a.productSkuOptionValueId,
+			a.productSkuId,
+			a.skuOptionValueId,
+			a.overrideSkuOptionValue,
+			b.skuOptionValue 	AS `skuOptionValue.skuOptionValue`,
+			b.skuOptionValueId 	AS `skuOptionValue.skuOptionValueId`,
+			c.skuOptionName 	AS `skuOptionValue.skuOption.skuOptionName`,
+			c.skuOptionId		AS	`skuOptionValue.skuOptionId`
+		FROM product_sku_option_value a, sku_option_value b, sku_option c
+		WHERE a.skuOptionValueId = b.skuOptionValueId
+				AND b.skuOptionId = c.skuOptionId
+				AND a.productSkuId = #{productSkuId}
+		ORDER BY c.rank		
+  	</select>
+  	
+  	<!-- 根据productSkuId删除SKU选项值信息 -->
+	<delete id="delProductSkuOptionValueByProductSkuId" parameterType="java.lang.Integer">
+		DELETE FROM product_sku_option_value 
+		WHERE productSkuId = #{productSkuId}
+	</delete>
+	
+	<!-- 根据productId删除数据 -->
+	<select id="delProductSkuOptionValueByProductId" parameterType="java.lang.Integer">
+		DELETE FROM product_sku_option_value 
+		WHERE productSkuId IN (SELECT productSkuId FROM product_sku WHERE productId = #{productId})
+	</select>
+  
+  
+</mapper>

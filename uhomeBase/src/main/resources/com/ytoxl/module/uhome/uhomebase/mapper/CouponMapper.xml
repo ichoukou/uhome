@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.CouponMapper">
+	
+	<!--  添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="couponId" parameterType="Coupon">
+		insert into coupon(couponNo,isActive,activeTime,wxuFlag,couponConfigId) 
+		values(#{couponNo},#{isActive},#{activeTime},#{wxuFlag},#{couponConfigId})
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from coupon where couponId=#{id}
+	</delete>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="Coupon">
+		update coupon c
+		set 
+			<if test="couponNo!=null">
+			c.couponNo=#{couponNo},
+			</if>
+			c.isActive=#{isActive},
+			c.activeTime=#{activeTime},
+			<if test="wxuFlag!=null">
+			c.wxuFlag=#{wxuFlag},
+			</if>
+			<if test="packageId!=null">
+			c.packageId=#{packageId},
+			</if>
+			c.couponConfigId=#{couponConfigId}
+		where c.couponId=#{couponId}
+	</update>
+	
+	<!-- 根据优惠券id查询优惠券信息 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="Coupon">
+		select *
+		from coupon
+		where couponId=#{couponId}
+	</select>
+	
+	<!-- 根据优惠券号查询优惠券信息 -->
+	<select id="getCouponByCouponNo" parameterType="java.lang.String" resultType="Coupon">
+		select *
+		from coupon
+		where couponNo=#{couponNo}
+	</select>
+	
+		<!-- 根据微信用户标识和微信包标识查询对应优惠券信息 -->
+	<select id="searchCoupon" parameterType="map" resultType="Coupon">
+		select *
+		from coupon
+		where wxuFlag=#{wxuFlag} and packageId=#{packageId} and isActive = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@ACTIVE_STATUS_OFF}
+	</select>
+	
+	<!-- 根据优惠券号集合查询优惠券 -->
+	<select id="listCountByCouponNos" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM coupon 
+		WHERE couponNo IN 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 批量成生优惠券 -->
+	<insert id="insertBatch">
+		INSERT INTO coupon (couponNo, isActive, wxuFlag, packageId, couponConfigId) 
+		VALUES 
+		<foreach item="coupon" index="index" collection="list" separator=",">
+			(#{coupon.couponNo}, #{coupon.isActive}, #{coupon.wxuFlag}, #{coupon.packageId}, #{coupon.couponConfigId})
+		</foreach>
+	</insert>
+	
+	<!-- order by 子句-->
+  	<sql id="orderBy">
+  		<if test="sort != null and sort != ''">
+			ORDER BY ${sort}	
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+  	</sql>
+  	
+  	<!-- 查询条件 -->
+  	<sql id="where">
+  		<where>
+			<if test="status!=null and status!=''">
+			<choose>
+				<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_USED_NO">
+				f.endTime &gt;= NOW() 
+				AND (d.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0} OR d.couponStatus IS NULL)
+				</when>
+				<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_USED_YES">
+				AND d.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_1}
+				</when>
+				<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_EXPIRED">
+				AND f.endTime &lt; NOW() AND (d.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0} OR d.couponStatus IS NULL)
+				</when>
+				<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_DELETE">
+				AND d.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_7} 
+				</when>
+			</choose>
+			</if>
+			<if test="isActive!=null and isActive!=''">AND a.isActive = #{isActive}</if>
+			<if test="keyWords!=null and keyWords!=''">
+			AND (d.username like concat('%',#{keyWords},'%') OR f.eventName like concat('%',#{keyWords},'%') 
+				OR a.couponNo like concat('%',#{keyWords},'%'))
+			</if>
+		</where>
+  	</sql>
+	
+	<!-- 分页查询优惠券 -->
+	<select id="searchCoupons" parameterType="map" resultType="Coupon">
+		SELECT a.couponNo, a.isActive, 
+			d.username AS `userCoupon.username`, d.couponStatus AS `userCoupon.couponStatus`,
+			f.allowance AS `couponConfig.allowance`, 
+			f.limitCharge AS `couponConfig.limitCharge`, 
+			f.eventName AS `event.eventName`,
+			f.startTime AS `couponConfig.startTime`, 
+			f.endTime AS `couponConfig.endTime`, 
+			f.couponCount AS `couponConfig.couponCount`
+		FROM  (
+			SELECT b.`couponConfigId`, b.allowance, b.limitCharge, c.eventName, b.startTime, b.endTime, b.couponCount
+			FROM coupon_config b 
+			INNER JOIN event c ON b.eventId = c.eventId
+			<where>
+				<if test="startTime!=null and startTime!=''">b.startTime = #{startTime}</if>
+				<if test="allowance!=null and allowance!=''">AND b.allowance = #{allowance}</if>
+			</where>
+			ORDER BY b.startTime DESC, c.eventId DESC
+			) f 
+		INNER JOIN (SELECT couponId, couponNo, couponConfigId, isActive FROM coupon ORDER BY couponId DESC) a ON a.couponConfigId = f.couponConfigId
+		LEFT JOIN user_coupon d ON a.couponId = d.couponId
+		<include refid="where"/>
+		LIMIT #{start}, #{limit}
+	</select>
+	
+	<!-- 查询优惠券数量 -->
+	<select id="searchCouponsCount" parameterType="map" resultType="java.lang.Integer">
+		<choose>
+			<when test="(startTime==null or startTime=='') 
+					and (allowance==null or allowance=='')
+					and (status==null or status=='')
+					and (keyWords==null or keyWords=='')">
+			select count(couponId) from coupon
+			<where>
+				<if test="isActive!=null and isActive!=''">isActive = #{isActive}</if>
+			</where>
+			</when>
+			<when test="(startTime==null or startTime=='') 
+					and (allowance==null or allowance=='')
+					and (keyWords==null or keyWords=='')
+					and (status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_USED_YES
+						or status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_DELETE)
+					">
+			SELECT COUNT(a.couponId)
+				FROM  coupon a
+			LEFT JOIN user_coupon d ON a.couponId  = d.couponId
+			<where>
+				<if test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_USED_YES">
+				d.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_1}
+				</if>
+				<if test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@STATUS_DELETE">
+				AND d.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_7} 
+				</if>
+				<if test="isActive!=null and isActive!=''">AND a.isActive = #{isActive}</if>
+			</where>
+			</when>
+			<when test="(status==null or status=='')
+					and (keyWords==null or keyWords=='')">
+			SELECT COUNT(a.couponId)
+			FROM  (
+				SELECT  
+				b.`couponConfigId`
+				FROM coupon_config b 
+				<where>
+					<if test="startTime!=null and startTime!=''">b.startTime = #{startTime}</if>
+					<if test="allowance!=null and allowance!=''">AND b.allowance = #{allowance}</if>
+				</where>
+				) f 
+			INNER JOIN coupon a ON a.couponConfigId = f.couponConfigId
+			<where>
+				<if test="isActive!=null and isActive!=''">a.isActive = #{isActive}</if>
+			</where>
+			</when>
+			<otherwise>
+			SELECT COUNT(a.couponId)
+			FROM  (
+				SELECT  
+				b.`couponConfigId`,
+				b.allowance, 
+				c.eventName,
+				b.endTime
+				FROM coupon_config b 
+				INNER JOIN event c ON b.eventId = c.eventId
+				<where>
+					<if test="startTime!=null and startTime!=''">b.startTime = #{startTime}</if>
+					<if test="allowance!=null and allowance!=''">AND b.allowance = #{allowance}</if>
+				</where>
+				) f 
+			INNER JOIN coupon a ON a.couponConfigId = f.couponConfigId
+			LEFT JOIN user_coupon d ON a.couponId = d.couponId
+			<include refid="where"/>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 根据eventId查询优惠券信息 -->
+	<select id="listCoupons" parameterType="int" resultType="Coupon">
+		SELECT 	c.eventName AS `event.eventName`,
+				a.couponNo, 
+				b.allowance AS `couponConfig.allowance`, 
+				b.limitCharge AS `couponConfig.limitCharge`,
+				CONCAT(DATE_FORMAT(b.startTime,'%Y-%m-%d'),'至',DATE_FORMAT(b.endTime,'%Y-%m-%d')) AS eventTime
+			FROM coupon a 
+		INNER JOIN coupon_config b ON a.couponConfigId = b.couponConfigId
+		INNER JOIN event c ON b.eventId = c.eventId 
+		WHERE c.eventId = #{eventId}
+	</select>
+	
+	<!-- 删除已过期优惠券明细表记录 -->
+	<delete id="deleteOverdueCoupons" parameterType="int">
+		DELETE FROM coupon
+		WHERE couponId IN (
+			SELECT t.couponId FROM(SELECT a.couponId FROM coupon a
+					INNER JOIN coupon_config b ON a.couponConfigId = b.couponConfigId
+				WHERE b.endTime &lt; NOW() LIMIT #{num}) t
+		)
+	</delete>
+	
+	<!-- 删除未激活的优惠券 -->
+	<delete id="deleteNotActiveCoupons" parameterType="int">
+		DELETE FROM coupon
+		WHERE isActive = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Coupon@ACTIVE_STATUS_OFF}
+			AND couponConfigId IN (SELECT couponConfigId FROM coupon_config WHERE eventId = #{eventId})
+	</delete>
+
+</mapper>

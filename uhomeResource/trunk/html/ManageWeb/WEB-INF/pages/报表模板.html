@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>报表模板</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/reportForms.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+    <script src="../../web-resource/js/plugin/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="body-nav">
+    <ul class="m-clear">
+      <li><a>销售排行榜</a></li>
+      <li><a>会员注册情况</a></li>
+      <li><a class="current-chose">商家月结报表</a></li>
+    </ul>
+  </div>
+  <div class="report-tab">
+  	<ul class="m-clear">
+  		<li class="cur"><a href="javascript:;">每日销售明细表</a></li>
+  		<li><a href="javascript:;">商家销售管理</a></li>
+  		<li><a href="javascript:;">商品销售明细</a></li>
+  		<li><a href="javascript:;">分类销售明细</a></li>
+  		<li><a href="javascript:;">会员销售管理</a></li>
+  		<li><a href="javascript:;">退货商品管理</a></li>
+  		<li><a href="javascript:;">商家管理</a></li>
+  		<li><a href="javascript:;">销售区域统计</a></li>
+  		<li><a href="javascript:;">订单信息</a></li>
+  	</ul>
+  </div>
+  <form class="m-clear m-mt10p">
+    <div class="m-fl">
+    	<span>商家：</span>
+      <input type="text" class="txt-input txt-input-80" />
+      <span>品牌：</span>
+      <input type="text" class="txt-input txt-input-80" />
+      <span>商品品类：</span>
+      <select class="m-sel">
+      		<option>请选择品类</option>
+          <option>服装箱包</option>
+          <option>母婴用品</option>
+          <option>家居用品</option>
+          <option>美容护肤</option>
+      </select>
+      <input type="text" class="Wdate" onfocus="WdatePicker()" /> 至 <input type="text" class="Wdate" onfocus="WdatePicker()" />
+      <input type="button" class="m-btn" value="查询"/>
+      <input type="button" class="m-btn outer" value="导出"/>
+    </div>
+    <!--右侧显示分页控件 start-->
+    <div class="m-fr curr-num">
+      <label>当前显示： </label>
+      <select class="m-sel">
+          <option>20条</option>
+          <option>50条</option>
+          <option>100条</option>
+          <option>200条</option>
+          <option>500条</option>
+      </select>
+    </div>
+    <!--右侧显示分页控件 end-->
+	</form>
+	<!--100%表格样式-->
+	<div class="m-mt10p">
+		<table class="tab-control">
+	<!--100%表格样式-->
+	<!--需要宽表格样式-->
+	<!--<div class="m-mt10p tab-over">
+		<table>-->
+	<!--需要宽表格样式-->
+      <thead>
+        <tr>
+          <th width="11%">订单编号</th>
+          <th width="11%">订单类型</th>
+          <th width="17%">订单完成时间</th>
+          <th width="11%">品牌</th>
+          <th width="17%">商品名称</th>
+          <th width="11%">单价</th>
+          <th width="11%">数量</th>
+          <th width="11%">金额</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<tr class="list-tr">
+      		<td>2145434</td>
+      		<td>销售订单</td>
+      		<td>2013-01-23 14:32:00</td>
+      		<td>真维斯</td>
+      		<td><a href="#">牛仔裤</a></td>
+      		<td><span class="coin">&yen;30.00</span></td>
+      		<td>2</td>
+      		<td><span class="coin">&yen;60.00</span></td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td>2145434</td>
+      		<td>销售订单</td>
+      		<td>2013-01-23 14:32:00</td>
+      		<td>真维斯</td>
+      		<td><a href="#">牛仔裤</a></td>
+      		<td><span class="coin">&yen;30.00</span></td>
+      		<td>2</td>
+      		<td><span class="coin">&yen;60.00</span></td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td>2145434</td>
+      		<td>销售订单</td>
+      		<td>2013-01-23 14:32:00</td>
+      		<td>真维斯</td>
+      		<td><a href="#">牛仔裤</a></td>
+      		<td><span class="coin">&yen;30.00</span></td>
+      		<td>2</td>
+      		<td><span class="coin">&yen;60.00</span></td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td>2145434</td>
+      		<td>销售订单</td>
+      		<td>2013-01-23 14:32:00</td>
+      		<td>真维斯</td>
+      		<td><a href="#">牛仔裤</a></td>
+      		<td><span class="coin">&yen;30.00</span></td>
+      		<td>2</td>
+      		<td><span class="coin">&yen;60.00</span></td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td>2145434</td>
+      		<td>销售订单</td>
+      		<td>2013-01-23 14:32:00</td>
+      		<td>真维斯</td>
+      		<td><a href="#">牛仔裤</a></td>
+      		<td><span class="coin">&yen;30.00</span></td>
+      		<td>2</td>
+      		<td><span class="coin">&yen;60.00</span></td>
+      	</tr>
+      </tbody>
+    </table>
+	</div>
+	<!--分页插件 start -->
+	<div class="pagination pagination-right">
+	    共<span class="items-all">36</span>条
+	    第<span class="page-all">10</span>页
+	    <a href="#"><span class="disable alldis"></span></a>
+	    <a href="#"><span class="current">1</span></a>
+	    <a href="#"><span>2</span></a>
+	    <a href="#"><span>3</span></a>
+	    <a href="#"><span>4</span></a>
+	    <span class="etc">...</span>
+	    <a href="#"><span>10</span></a>
+	    <a href="#" ><span class="next"></span></a>
+	    <span>共<i>1</i>页<i>1</i>条 到
+	    	<input type="text" class="goto-num" value="1" onfocus="this.value='';" />页
+	    </span>
+	    <span class="goto">转到</span>
+	</div>
+	<!--分页插件 end -->
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="help" extends="uhome-default" namespace="/help">
+        <!-- old 
+        <action name="help-*" class="com.ytoxl.uhomefront.web.action.content.HelpAction" method="{1}">
+        	<result name="viewHelp">/WEB-INF/pages/help/{1}.jsp</result>
+        </action>
+        -->
+        
+        <!-- new -->
+        <action name="help-*" class="com.ytoxl.uhomefront.web.action.content.HelpAction" method="viewHelp">
+        	<param name="help.helpId">{1}</param>
+        	<result name="viewHelp">/WEB-INF/pages/help/viewHelp.jsp</result>
+        </action>
+        
+        <!-- new -->
+        <action name="getContentByHelpId" class="com.ytoxl.uhomefront.web.action.content.HelpAction" method="getContentByHelpId">
+        
+        </action>
+         <!-- new -->
+        <action name="siteMap" class="com.ytoxl.uhomefront.web.action.content.SiteMapAction" method="siteMap">
+    			<result name="siteMap">/WEB-INF/pages/help/siteMap.jsp</result>
+   		</action>
+	</package>
+</struts>

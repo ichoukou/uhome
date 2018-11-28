@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.AdvMapper">
+
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="advertisementId"
+		parameterType="Advertisement">
+		insert into advertisement(
+		productId,
+		brandId,
+		advPositionId,
+		name,
+		linkUrl,
+		imageUrl,
+		rank ,
+		isDefault,
+		isLogin,
+		startTime,
+		endTime,
+		createTime,
+		updateTime)
+		values(
+		#{productId},
+		#{brandId},
+		#{advPositionId},
+		#{name},
+		#{linkUrl},
+		#{imageUrl},
+		#{rank},
+		#{isDefault},
+		#{isLogin},
+		IFNULL(#{startTime},'0000-00-00 00:00:00'),
+		IFNULL(#{endTime},'0000-00-00 00:00:00'),
+		CURRENT_TIMESTAMP,
+		CURRENT_TIMESTAMP
+		)
+	</insert>
+
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="Advertisement">
+		update advertisement
+		set
+				productId=#{productId},
+				brandId=#{brandId},
+				advPositionId=#{advPositionId},
+				name=#{name},
+				linkUrl=#{linkUrl},
+				imageUrl=#{imageUrl},
+				rank=#{rank},
+				isDefault=#{isDefault},
+				isLogin=#{isLogin},
+				startTime=#{startTime},
+				endTime=#{endTime},
+				updateTime=CURRENT_TIMESTAMP
+		where advertisementId=#{advertisementId}
+	</update>
+	<!-- 更新一条数据 -->
+	<update id="updateIsDefaultValue" parameterType="Advertisement">
+		update advertisement
+		set
+				isDefault=#{isDefault},
+				updateTime=CURRENT_TIMESTAMP
+		where advertisementId=#{advertisementId}
+	</update>
+
+	<!-- 根据位置查询有效广告 -->
+	<select id="listAvailableAdvsByPosition" parameterType="Advertisement"
+		resultType="Advertisement">
+		select
+		advertisementId,
+		productId,
+		brandId,
+		adv.advPositionId as advPositionId ,
+		adv.name as name,
+		linkUrl,
+		imageUrl,
+		rank ,
+		isDefault,
+		startTime,
+		endTime,
+		createTime,
+		updateTime,
+		advPosition.advpositionId as `advPosition.advpositionId`,
+		advPosition.advType as `advPosition.advType`,
+		advPosition.num as `advPosition.num`,
+		advPosition.name as `advPosition.name`,
+		advPosition.code as `advPosition.code`,
+		advPosition.height as `advPosition.height`,
+		advPosition.width as `advPosition.width`
+		from advertisement adv, adv_position advp
+		where
+		adv.advPositionId=advp.advpositionId and
+		advp.code=#{code} and
+		startTime &lt;= CURRENT_TIMESTAMP and
+		endTime > CURRENT_TIMESTAMP
+		order by rank 
+	</select>
+	<sql id="searchAdvsCondition">
+		<where>
+			adv.advPositionId=advPosition.advpositionId
+			<if test="code!=null and code!=''">
+				and advPosition.code=#{code}
+        </if>
+		</where>
+
+	</sql>
+	
+	<!-- 通过code 查询广告 -->
+	<select id="getAdvByPositionAndIsDefaultAndCode" parameterType="java.lang.String" resultType="Advertisement">
+		select
+			advertisementId,
+			productId,
+			brandId,
+			adv.name as name,
+			linkUrl,
+			imageUrl,
+			rank ,
+			isDefault,
+			startTime,
+			endTime,
+			createTime,
+			updateTime,
+			advp.advpositionId as `advPosition.advpositionId`,
+			advp.advType as `advPosition.advType`,
+			advp.num as `advPosition.num`,
+			advp.name as `advPosition.name`,
+			advp.code as `advPosition.code`,
+			advp.height as `advPosition.height`,
+			advp.width as `advPosition.width`
+		from advertisement adv, adv_position advp
+		where
+			adv.advPositionId=advp.advpositionId and
+			advp.code in (#{codes}) and
+			adv.isDefault=${@com.ytoxl.module.uhome.uhomecontent.dataobject.Advertisement@ISDEFAULT_TRUE}
+		order by rank 
+	</select>
+	
+	<!-- 根据分页查询广告 -->
+	<select id="searchAdvs" parameterType="map" resultType="Advertisement">
+		select
+		advertisementId ,
+		productId,
+		brandId,
+		adv.advPositionId as advPositionId ,
+		adv.name as name,
+		linkUrl,
+		imageUrl,
+		rank ,
+		isDefault,
+		startTime,
+		endTime,
+		createTime,
+		updateTime,
+		advPosition.advpositionId as `advPosition.advpositionId`,
+		advPosition.advType as `advPosition.advType`,
+		advPosition.num as `advPosition.num`,
+		advPosition.name as `advPosition.name`,
+		advPosition.code as `advPosition.code`,
+		advPosition.height as `advPosition.height`,
+		advPosition.width as `advPosition.width`
+		from advertisement adv, adv_position advPosition
+		<include refid="searchAdvsCondition" />
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+				</if>
+		</if>
+		limit #{start},#{limit}
+	</select>
+
+	<!-- 根据分页查询广告数量 -->
+	<select id="searchAdvsCount" parameterType="map" resultType="Integer">
+		select
+		count(advertisementId)
+		from advertisement adv, adv_position advPosition
+		<include refid="searchAdvsCondition" />
+	</select>
+
+	<!-- 根据id查询广告 -->
+	<select id="get" parameterType="integer" resultType="Advertisement">
+		select
+		advertisementId ,
+		productId,
+		brandId,
+		adv.advPositionId as advPositionId ,
+		adv.name as name,
+		linkUrl,
+		imageUrl,
+		rank ,
+		isDefault,
+		isLogin,
+		startTime,
+		endTime,
+		createTime,
+		updateTime,
+		advPosition.advpositionId as `advPosition.advpositionId`,
+		advPosition.advType as `advPosition.advType`,
+		advPosition.num as `advPosition.num`,
+		advPosition.name as `advPosition.name`,
+		advPosition.code as `advPosition.code`,
+		advPosition.height as `advPosition.height`,
+		advPosition.width as `advPosition.width`
+		from advertisement adv, adv_position advPosition
+		where
+		adv.advPositionId=advPosition.advpositionId and
+		adv.advertisementId=#{advertisementId}
+	</select>
+	<!-- 根据广告位和备用广告字段查询广告 -->
+	<select id="getAdvByPositionAndIsDefault" parameterType="Advertisement" resultType="Advertisement">
+		select
+		advertisementId ,
+		isDefault
+		from advertisement where advPositionId=#{advPositionId} and isDefault=#{isDefault}
+	</select>
+
+	<select id="updateIsDefault" parameterType="Advertisement">
+		update advertisement
+		set 
+			isDefault=#{isDefault}
+		where advertisementId=#{advertisementId}
+	</select>
+
+	<!-- 根据广告位 -->
+	<select id="listAdvPositons" parameterType="map" resultType="AdvPosition">
+		select
+		*
+		from adv_position 
+	</select>
+
+	<!-- 首页没有秒杀是  没有投放的广告  是默认广告-->
+	<select id="getHomeSecKillAdvList" resultType="Advertisement">
+		select * 
+		from advertisement adv 
+		where adv.advpositionId in(
+				select advp.advpositionId 
+				from adv_position advp
+				where advp.code in 
+				<foreach collection="list" open="(" separator="," close=")" index="index" item="item">
+					( #{item} )
+				</foreach>
+				)
+			  and adv.isDefault=${@com.ytoxl.module.uhome.uhomecontent.dataobject.Advertisement@ISDEFAULT_TRUE}
+	</select>
+	
+	<!-- 首页没有秒杀是 投放的广告 -->
+	<select id="getHomeSecKillAdvs" resultType="Advertisement">
+		select * 
+		from advertisement adv 
+		where adv.advpositionId in(
+				select advp.advpositionId 
+				from adv_position advp
+				where advp.code in 
+				<foreach collection="list" open="(" separator="," close=")" index="index" item="item">
+					( #{item} )
+				</foreach>
+				)
+			  and (CURRENT_TIMESTAMP between adv.startTime and adv.endTime)
+			  and adv.isDefault=${@com.ytoxl.module.uhome.uhomecontent.dataobject.Advertisement@ISDEFAULT_FALSE}
+	</select>
+	
+	<!-- 根据广告code获取所有在时间内的广告 -->
+	<select id="listAdvertisementByAdvCode" resultType="Advertisement">
+		select *
+		from advertisement adv
+		where adv.advpositionId in(
+			  select advp.advpositionId	
+			  from adv_position advp
+			  where advp.code in 
+				<foreach collection="list" open="(" separator="," close=")" index="index" item="item">
+					( #{item} )
+				</foreach>	
+			  )
+			  and (CURRENT_TIMESTAMP between adv.startTime and adv.endTime)
+			  order by rank
+	</select>
+	<!-- 根据广告code获取所有在时间内的广告 -->
+	<select id="listAdvertisementRightByAdvCode" resultType="Advertisement">
+		select 
+		   adv.*,
+		   ap.width as `advPosition.width`,
+		   ap.height as `advPosition.height`,
+		   ap.code as `advPosition.code`
+		from 
+		  advertisement adv join adv_position ap
+		  on adv.advpositionId = ap.advpositionId
+		where adv.advpositionId in(
+			  select advp.advpositionId
+			  from adv_position advp
+			  where advp.code in 
+				<foreach collection="list" open="(" separator="," close=")" index="index" item="item">
+					( #{item} )
+				</foreach>	
+			  )
+				and (CURRENT_TIMESTAMP between adv.startTime and adv.endTime)
+			  order by rank,adv.createTime
+	</select>
+	
+	<select id="listHomeBroadcastAdv" resultType="Advertisement">
+		SELECT name,linkUrl,rank,imageUrl,isLogin,advertisementId
+			FROM advertisement WHERE advertisementId IN ( 
+				SELECT  adv.advertisementId FROM
+		  		advertisement adv INNER JOIN (SELECT advp.advpositionId
+			  		FROM adv_position advp where advp.code = 
+			  			'${@com.ytoxl.module.uhome.uhomecontent.dataobject.AdvPosition@ADV_OPTION_012}'
+			  		 ) ap
+		  			ON adv.advpositionId = ap.advpositionId
+					WHERE CURRENT_DATE between adv.startTime and adv.endTime
+				ORDER BY adv.endTime DESC
+		) ORDER BY rank ASC LIMIT 5
+	</select>
+</mapper>

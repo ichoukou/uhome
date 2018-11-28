@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.MailQueueMapper">
+	
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="mailQueueId" parameterType="MailQueue">
+		insert into mail_queue(title,sender,receiver,content,sendTime,createTime,type)
+		values(#{title},#{sender},#{receiver},#{content},#{sendTime},CURRENT_TIMESTAMP,#{type})
+	</insert>
+	
+	<!-- 查询一条数据 -->
+	<select id="get" parameterType="MailQueue" resultType="MailQueue">
+		select mq.*
+		from mail_queue mq
+		where mailQueueId=#{mailQueueId}
+	</select>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="MailQueue">
+		update mail_queue
+		set title=#{title},
+			sender=#{sender},
+			receiver=#{receiver},
+			content=#{content},
+			status=#{status},
+			sendTime=#{sendTime}
+		where mailQueueId=#{mailQueueId}
+	</update>
+	
+	<!-- 删除一条模版 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from mail_queue where mailQueueId=#{id} 
+	</delete>
+	
+	<!-- 通过状态和发送时间读取要发送的邮件 -->
+	<select id="getMailQueuesByStatusAndSendTime" resultType="MailQueue">
+		select mq.*
+		from mail_queue mq
+		where mq.status=${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailQueue@STATUS_DEFAULT}
+			  and (CURRENT_TIMESTAMP between mq.sendTime and date_add(mq.sendTime, interval 12 HOUR))
+		order by mq.sendTime asc
+		limit #{num}
+	</select>
+	
+	<!-- 通过状态和发送时间读取要发送邮件的总数量  -->
+	<select id="getMailQueuesByStatusAndSendTimeCount" resultType="java.lang.Integer">
+		select count(*)
+		from mail_queue mq
+		where mq.status=${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailQueue@STATUS_DEFAULT}
+			  and (CURRENT_TIMESTAMP between mq.sendTime and date_add(mq.sendTime, interval 12 HOUR))
+	</select>
+	
+	<!-- 更新邮件队列发送状态 -->
+	<update id="updateMailQueueStatusByMailQueueId">
+		update mail_queue
+		set status=#{status}
+		where mailQueueId=#{mailQueueId}
+	</update>
+	
+	<!-- 根据状态查询邮件队列 -->
+	<select id="getMailQueuesByStatus" resultType="MailQueue">
+		select mq.*
+		from mail_queue mq
+		where mq.status=#{status}
+		order by mq.createTime asc
+		<if test="num!=null and num!=''">
+			limit #{num}
+		</if>
+	</select>
+	
+	<!-- 删除已经发送的邮件 -->
+	<delete id="deleteMails" parameterType="int">
+		DELETE FROM mail_queue
+		WHERE mailQueueId IN (
+			SELECT t.mailQueueId FROM(SELECT a.mailQueueId FROM mail_queue a
+				WHERE a.status = ${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailQueue@STATUS_SEND_SUCCESS}
+				LIMIT #{num}) t
+		)
+	</delete>
+	<!-- 删除已经退订的邮件 -->
+	<delete id="deleteMailsByUnSubscribe">
+		DELETE FROM mail_queue
+       	WHERE mail_queue.receiver =#{email}
+       		and mail_queue.type = #{type}
+	        and mail_queue.status = ${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailQueue@STATUS_DEFAULT}
+	</delete>
+	
+</mapper>

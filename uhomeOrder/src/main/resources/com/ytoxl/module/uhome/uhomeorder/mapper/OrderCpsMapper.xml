@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderCpsMapper">
+
+  <insert id="add" parameterType="OrderCps" keyProperty="orderCpsId" useGeneratedKeys="true">
+		INSERT INTO order_cps
+            (orderId,
+             commission,
+             unionId,
+             feedback,
+             mid,
+             link,
+             isNewCustom,
+  			 createTime)
+		VALUES (
+             #{orderId},
+             #{commission},
+             #{unionId},
+             #{feedback},
+             #{mid},
+             #{link},
+             #{isNewCustom},
+             CURRENT_TIMESTAMP)                  
+  </insert>
+   <!-- 根据orderId查询orderCps相关数据 -->
+  <select id="getOrderCpsByOrderId" parameterType="java.lang.Integer" resultType="OrderCps">
+  		select pa.hash as `hash`,pa.pushLink as `pushLink`,os.*
+  		from order_cps os 
+  		left join partner pa on pa.unionId=os.unionId
+  		where orderId=#{orderId}
+  </select>
+ 
+ <!-- 根据查询未推送的数据 -->
+ <select id="listOrderCpsByStatus" resultType="OrderCps">
+  		select pa.hash as `hash`,pa.pushLink as `pushLink`,os.*
+  		from order_cps os 
+  		left join partner pa on pa.unionId=os.unionId
+  		left join order_head oh on oh.orderId=os.orderId
+  		where os.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderCps@STATUS_DEFAULT}
+  		 and  oh.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND}
+  		order by createTime asc
+		limit #{num}
+  </select>
+   <!-- 获取推送数据的总数 -->
+  <select id="getOrderCpsByStatusCount" resultType="java.lang.Integer">
+		select count(*)
+		from order_cps os
+		left join order_head oh on oh.orderId=os.orderId
+		where os.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderCps@STATUS_DEFAULT}
+		and oh.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND}
+  </select>
+	
+	<!-- 更新邮件队列发送状态 -->
+	<update id="updateOrderCpsStatusByOrderCpsId">
+		update order_cps
+		set status=#{status}
+		where orderCpsId=#{orderCpsId}
+	</update>
+</mapper>

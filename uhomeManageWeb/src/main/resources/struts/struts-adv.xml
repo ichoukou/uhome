@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="adv" extends="uhome-default" namespace="/admin/adv">
+		<action name="adv_*"
+			class="com.ytoxl.uhomemanage.web.action.content.AdvAction" method="{1}">
+			<result name="searchAdvs">/WEB-INF/pages/adv/{1}.jsp</result>
+			<result name="addAdv" type="dispatcher">/WEB-INF/pages/adv/{1}.jsp</result>
+			<result name="saveAdv" type="redirectAction">${nextAction}</result>
+		</action>
+	</package>
+</struts>

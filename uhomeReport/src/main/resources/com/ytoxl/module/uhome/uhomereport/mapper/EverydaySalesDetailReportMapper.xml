@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="com.ytoxl.module.uhome.uhomereport.mapper.EverydaySalesDetailReportMapper">
+
+	<sql id="select">
+		(select sku.productSkuId as productSkuId,
+				sell.companyName as companyName,
+				brd.`name` as brandName,
+				cate.`name` as categoryName,
+				pro.`name` as productName,
+				sku.skuCode as skuCode,
+				sku.internationalCode as internationalCode,
+				pro.salePrice as salePrice,
+				pl.startTime as startTime,
+				pl.endTime as endTime,
+				DATE_FORMAT(pl.startTime,'%Y-%m-%d') startDay,
+				pl.type,
+				pl.planId,
+				sell.sellerId
+			from plan pl 
+			LEFT JOIN plan_product plpro on pl.planId = plpro.planId
+			LEFT JOIN product pro on plpro.productId = pro.productId
+			LEFT JOIN seller sell on pro.sellerId = sell.sellerId
+			LEFT JOIN brand brd on pro.brandId = brd.brandId
+			LEFT JOIN product_category cate on pro.productCategoryId = cate.productCategoryId
+			LEFT JOIN product_sku sku on plpro.productId = sku.productId) t
+	</sql>
+
+	<sql id="where">
+		<where>
+			t.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+			<if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+				and DATE_FORMAT(t.startTime,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
+			</if>
+			<if test="planId != '' and planId != null">
+				and t.planId = #{planId}
+			</if>
+			<if test="sellerId != '' and sellerId != null">
+				and t.sellerId = #{sellerId}
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderBy">
+		<if test="sort != null and sort != ''">
+			ORDER BY ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+	</sql>
+
+	<!-- 查询成功订单数量及总额 -->
+	<select id="searchEverydaySalesDetailReports" parameterType="map"
+		resultType="EverydaySalesDetailReport">
+		SELECT * FROM
+		<include refid="select" />
+		<include refid="where" />
+		<include refid="orderBy" />
+		LIMIT #{start},#{limit}
+	</select>
+
+	<!-- 查询成功订单数量及总额 -->
+	<select id="searchEverydaySalesDetailReportsCount" parameterType="map"
+		resultType="integer">
+		SELECT COUNT(*) FROM
+		<include refid="select" />
+		<include refid="where" />
+		<include refid="orderBy" />
+	</select>
+	
+	  <!-- 报表导出列表 -->
+  	<select id="listEverydaySalesDetailReports" parameterType="map" resultType="EverydaySalesDetailReport">
+   		SELECT *  FROM 
+   		<include refid="select"/>
+	  	<include refid="where"/>
+  		<include refid="orderBy"/>
+  	</select>	
+  	
+  	
+  	<!-- 查询每天订单的数量及总额 -->
+	<select id="searchEverydaySalesDetail" parameterType="map"
+		resultType="EverydaySalesDetailReport">
+		select DATE_FORMAT(head.createTime,'%Y-%m-%d') as day,
+				SUM(item.num) as salesNum, 
+				SUM(IFNULL(item.rebatePrice,item.closingCost*item.num)) as salesPrice 
+			from order_head head LEFT JOIN order_item item on head.orderId = item.orderId
+			where head.`status` in (${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND},
+							${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND},
+							${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED})  
+				and item.productSkuId = #{productSkuId} 
+				and DATE_FORMAT(head.createTime,'%Y-%m-%d %H:%i:%S') between #{startDate} and #{endDate}
+				GROUP BY DATE_FORMAT(head.createTime,'%Y-%m-%d')
+	</select>
+	
+	<!-- 查询尺寸和颜色 -->
+	<select id="searchColourAndSize" parameterType="map"
+		resultType="EverydaySalesDetailReport">
+		select skuopt.skuOptionId as skuOptionId,
+				skuoptval.skuOptionValue as skuOptionValue
+		from product_sku_option_value proskuoptval LEFT JOIN sku_option_value skuoptval on proskuoptval.skuOptionValueId = skuoptval.skuOptionValueId
+			LEFT JOIN sku_option skuopt on skuoptval.skuOptionId = skuopt.skuOptionId
+			where proskuoptval.productSkuId = #{productSkuId}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeInterface.mapper.OrderSearchMapper">
+	<resultMap type="com.ytoxl.module.uhome.uhomeInterface.model.duomai.OrderContent" id="contentResultMap">
+		<result property="feedback"  column="feedback"/>
+		<result property="order_time" column="order_time"/>
+		<result property="order_sn" column="order_sn"/>
+		<result property="orders_price" column="orders_price"/>
+		<result property="mid"  column="mid"/>		
+		<result property="is_new_custom" column="is_new_custom" />		
+		<result property="commission"  column="commission"/>		
+		<result property="status"  column="status"/>		
+		<collection property="details" column="{oh.orderId=oi.orderId}" resultMap="orderProductResultMap"></collection>
+	</resultMap>
+	<resultMap type="com.ytoxl.module.uhome.uhomeInterface.model.duomai.OrderProduct" id="orderProductResultMap">
+		<result property="goods_id" column="goods_id"/>
+		<result property="goods_ta" column="goods_ta"/>
+		<result property="goods_price" column="goods_price"/>
+		<result property="goods_name" column="goods_name"/>
+	</resultMap>
+	<select id="searchOrderContentByUnionIdSEtime" parameterType="map" resultMap="contentResultMap">
+		select 
+	        oc.feedback as feedback,
+			oc.ohCreateTime as order_time,
+			oc.ohOrderNo as order_sn,
+			op.paymentAmount as orders_price,
+			oc.mid as mid,
+			oc.commission as commission,
+			oc.ohStatus,
+			oi.productSkuId as goods_id,
+			oi.num as goods_ta,
+			oi.closingCost as goods_price,
+			oi.productName as goods_name
+		from 
+		(
+		  select 
+				ocs.*,
+				oh.`status` as ohStatus,
+				oh.createTime as ohCreateTime,
+				oh.orderNo as ohOrderNo 
+          from order_cps ocs 
+				join order_head oh on ocs.orderId = oh.orderId 
+		  <where>
+		        ocs.unionId=#{unionId}
+				and DATE_FORMAT(ocs.createTime,'%Y-%m-%d')  BETWEEN #{beginTime} and #{endTime}
+				and oh.`status` = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND}
+		  </where>	
+	      LIMIT #{start},#{limit} 
+		) oc 
+		join order_item oi on oc.orderId = oi.orderId
+	    join order_payment op on oc.orderId = op.orderId
+        order by oc.ohCreateTime 
+	</select>
+	<select id="searchOrderContentByUnionIdSEtimeCount" parameterType="map" resultType="java.lang.Integer">
+		select count(*) 
+		from order_cps oc join order_head oh on oc.orderId = oh.orderId 
+		<where>
+			oc.unionId=#{unionId}
+			and DATE_FORMAT(oc.createTime,'%Y-%m-%d') BETWEEN #{beginTime} and #{endTime}
+			and oh.`status` = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND}
+		</where>
+	</select>
+
+</mapper>	

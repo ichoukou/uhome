@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.NoticeMapper">
+
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="specialTopicAdvId"
+		parameterType="Notice">
+		INSERT INTO notice
+			(title,type,source,content,authorId,`status`,
+			 isTop,topTime,publishTime,createTime,updateTime)
+		VALUES
+			(#{title},#{type},#{source},#{content},#{authorId},
+			#{status},#{isTop},
+			'${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@DEFAULT_TIME}',
+			'${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@DEFAULT_TIME}',
+			CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+	</insert>
+
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="Notice">
+		UPDATE notice 
+		SET 
+			title=#{title},
+			type=#{type},
+			source=#{source},
+			content=#{content},
+			`status`=#{status},
+			updateTime=CURRENT_TIMESTAMP,
+			publishTime ='${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@DEFAULT_TIME}',
+			isTop=${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@TOP_NO},
+			topTime='${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@DEFAULT_TIME}'
+		WHERE noticeId=#{noticeId};
+	</update>
+	
+	<!-- 删除数据 -->
+  	<delete id="deleteNoticeByIds">
+		DELETE FROM notice WHERE noticeId IN
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+               #{item}
+        </foreach>
+  	</delete>
+	
+	<!-- 审核公告 -->
+	<update id="updateCheck">
+		UPDATE notice 
+		SET 
+			`status`=${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@CHECKED_YES},
+			checkerId = #{checkerId},
+			publishTime=CURRENT_TIMESTAMP,
+			updateTime=CURRENT_TIMESTAMP 
+		WHERE `status` =${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@CHECKED_NO}
+		AND noticeId IN
+		<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+               #{item}
+        </foreach>
+	</update>
+	
+	<!-- 公告置顶 -->
+	<update id="updateIsTop">
+		UPDATE notice 
+		SET 
+			isTop=#{isTop},
+			<choose>
+				<when test="isTop == @com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@TOP_YES">
+					topTime=CURRENT_TIMESTAMP,
+				</when>
+				<otherwise>
+					topTime='${@com.ytoxl.module.uhome.uhomecontent.dataobject.Notice@DEFAULT_TIME}',
+				</otherwise>
+			</choose>
+			updateTime=CURRENT_TIMESTAMP
+		WHERE noticeId=#{noticeId};
+	</update>
+	
+	<!-- 查询广告信息 -->
+	<sql id="listNotices">
+		SELECT
+			n.noticeId,
+			n.title,
+			n.type,
+			n.source,
+			n.authorId,
+			n.`status`,
+			n.isTop,
+			n.createTime,
+			n.publishTime
+		FROM notice n
+	</sql>
+	
+	<sql id="where">
+		<where>
+			<if test="title !=null and title !=''">
+			n.title LIKE concat('%',#{title},'%')
+			</if>
+			<if test="type !=null and type !=''">
+			AND n.type = #{type}
+			</if>
+			<if test="status !=null and status !=''">
+			AND n.`status` = #{status}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 数据排序 -->
+	<sql id="order">
+		ORDER BY n.isTop DESC,n.topTime DESC,n.createTime DESC
+	</sql>
+	
+	<!-- 根据公告id获取公告信息 -->
+	<select id="get" parameterType="integer" resultType="Notice">
+		SELECT 
+			n.noticeId,
+			n.title,
+			n.type,
+			n.source,
+			n.content,
+			n.authorId,
+			n.`status`,
+			n.isTop,
+			n.createTime,
+			n.publishTime 
+		FROM notice n
+		WHERE n.noticeId = #{noticeId}
+	</select>
+	
+
+	<!-- 分页查询广告 信息-->
+	<select id="searchNotices" parameterType="map"
+		resultType="Notice">
+		SELECT temp.* FROM (
+		<include refid="listNotices"/>
+		<include refid="where"/>
+		<include refid="order"/>
+		) temp 
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<!-- 查询广告 信息总数 -->
+	<select id="searchNoticesCount" parameterType="map" resultType="integer">
+		SELECT COUNT(*) FROM (
+		<include refid="listNotices"/>
+		<include refid="where"/>
+		) temp 
+	</select>
+	
+	<!-- 上一篇公告-->
+	<select id="nextNotice" parameterType="integer"
+		resultType="Notice">
+		SELECT temp.* 
+		FROM 
+			(<include refid="listNotices"/>
+				WHERE 
+					noticeId &lt; #{noticeId}
+				AND type = #{type}
+				AND status = #{status}
+				ORDER BY noticeId desc) temp 
+		LIMIT 0,1
+	</select>
+	
+	<!-- 下一篇公告-->
+	<select id="previousNotice" parameterType="integer"
+		resultType="Notice">
+		SELECT temp.* 
+		FROM 
+			(<include refid="listNotices"/>
+				WHERE 
+					noticeId &gt; #{noticeId}
+				AND type = #{type}
+				AND status = #{status}
+				ORDER BY noticeId asc) temp 
+		LIMIT 0,1
+	</select>
+	
+	<!-- 分页查询广告 信息-->
+	<select id="searchNoticeList" parameterType="map"
+		resultType="Notice">
+		SELECT temp.* 
+		FROM 
+			(<include refid="listNotices"/>
+			<include refid="where"/>
+			ORDER BY n.createTime DESC
+			) temp 
+		LIMIT #{start},#{limit}
+	</select>
+	
+</mapper>

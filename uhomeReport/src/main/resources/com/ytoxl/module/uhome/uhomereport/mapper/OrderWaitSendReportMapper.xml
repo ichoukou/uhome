@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ytoxl.module.uhome.uhomereport.mapper.OrderWaitSendReportMapper">
+	<!-- 查询待发货订单 -->
+	<sql id="getOrderWaitSend">
+		SELECT ps.productSkuId,opay.hasInvoice,s.companyName AS sellerName,b.`name` AS brandName,
+		oh.createTime AS orderCreateTime,opay.payTime AS orderPayTime,
+		oh.orderNo,ps.internationalCode,ps.skuCode,p.`name` AS productName,oi.num AS buyNum,
+		p.salePrice AS unitPrice,IF(oi.rebatePrice>=0,oi.closingCost*oi.num-rebatePrice,NULL) AS rebatePrice,
+		opost.postage,IFNULL(oi.rebatePrice,oi.closingCost*oi.num) AS paymentAmount,
+		oe.receiverName AS receiver,oe.regionId,radd.receiveAddress,
+		radd.postCode,radd.telephone,radd.mobile,opay.invoiceTitle
+		FROM order_item oi
+		JOIN product_sku ps ON ps.productSkuId = oi.productSkuId
+		JOIN order_head oh ON oh.orderId = oi.orderId
+		JOIN order_payment opay ON oi.orderId = opay.orderId
+		LEFT JOIN order_postage opost ON oh.orderId = opost.orderId
+		JOIN product p ON ps.productId = p.productId
+		JOIN seller s ON s.sellerId = p.sellerId
+		JOIN brand b ON b.brandId = p.brandId
+		JOIN order_express oe ON oe.orderId = oh.orderId
+		LEFT JOIN receiver_address radd ON radd.receiverAddressId = oe.receiverAddressId
+	</sql>
+	
+	<!-- 待发货订单查询条件 -->
+	<sql id="where">
+		WHERE oh.`status` = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND}
+		<if test="time!=null and time!=''">
+			AND DATE_FORMAT(oh.createTime,'%Y-%m-%d') = #{time}
+		</if>
+	</sql>
+	
+	
+	<!-- 待发货订单排序 -->
+	<sql id="orderBy">
+		ORDER BY oh.orderNo
+	</sql>
+	
+	<!-- 查询待发货订单总记录数 -->
+	<select id="getOrderWaitSendCount" parameterType="map" resultType="integer">
+		SELECT COUNT(*) FROM (
+		<include refid="getOrderWaitSend" />
+		<include refid="where"/>
+		) temp
+	</select>
+
+	<!-- 分页查询待发货订单 -->
+	<select id="searchOrderWaitSendReport" parameterType="map"
+		resultType="OrderWaitSendReport">
+		SELECT temp.* FROM (
+		<include refid="getOrderWaitSend" />
+		<include refid="where"/>
+		<include refid="orderBy"/>
+		) temp 
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<!-- 报表导出 -->
+	<select id="listOrderWaitSendReport" parameterType="map" resultType="OrderWaitSendReport">
+		<include refid="getOrderWaitSend" />
+		<include refid="where"/>
+		<include refid="orderBy"/>
+	</select>
+</mapper>

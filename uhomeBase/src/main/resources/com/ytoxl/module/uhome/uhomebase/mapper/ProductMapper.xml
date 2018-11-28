@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.ProductMapper">
+	
+	<!-- 插入一条商品信息 -->
+	<insert id="add" parameterType="Product" keyProperty="productId" useGeneratedKeys="true">
+		INSERT INTO product 
+			(
+				brandId,
+				productCategoryId,
+				sellerId,
+				name,
+				`describe`,
+				secKillDescribe,
+				imageUrls,
+				secKillPrice,
+				salePrice,
+				marketPrice,
+				isImport,
+				rank,
+				status,
+				keyWord,
+				rebate,
+				sellStartTime,
+				sellEndTime,
+				createTime
+			) VALUES (  
+				#{brandId},
+				#{productCategoryId},
+				#{sellerId},
+				#{name},
+				#{describe},
+				#{secKillDescribe},
+				#{imageUrls},
+				#{secKillPrice},
+				#{salePrice},
+				#{marketPrice},
+				#{isImport},
+				#{rank},
+				#{status},
+				#{keyWord},
+				#{rebate},
+				IFNULL(#{sellStartTime},'0000-00-00 00:00:00'),
+				IFNULL(#{sellEndTime},'0000-00-00 00:00:00'),
+				CURRENT_TIMESTAMP
+			)                    
+	</insert>
+	
+	<!-- 查询一条商品信息 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="Product">
+        SELECT * FROM product
+		WHERE productId = #{productId}
+  	</select>
+  	
+  	<!-- 修改商品信息 -->
+    <update id="update" parameterType="Product">
+		UPDATE product
+			SET
+				brandId = #{brandId},
+				productCategoryId = #{productCategoryId},
+				name = #{name},
+				`describe` = #{describe},
+				secKillDescribe = #{secKillDescribe},
+				imageUrls = #{imageUrls},
+				secKillPrice = #{secKillPrice},
+				salePrice = #{salePrice},
+				marketPrice = #{marketPrice},
+				isImport = #{isImport},
+				rank = #{rank},
+				status = #{status},
+				keyWord = #{keyWord},
+				rebate = #{rebate},
+				sellStartTime = IFNULL(#{sellStartTime},'0000-00-00 00:00:00'),
+				sellEndTime = IFNULL(#{sellEndTime},'0000-00-00 00:00:00')
+		WHERE productId = #{productId}
+    </update>
+    
+    <!-- 查询一条卖家商品信息 -->
+    <select id="getProductByProductIdAndSellerId" resultType="Product">
+    	SELECT * FROM product
+		WHERE productId = #{productId} AND sellerId = #{sellerId}
+    </select>
+    
+    <!-- 更新商品状态 -->
+	<update id="updateProductStatus" parameterType="Product">
+        UPDATE product 
+        	SET status = #{status}
+        WHERE productId = #{productId} AND sellerId = #{sellerId}
+    </update>
+    
+     <!-- 更新商品名称 -->
+	<update id="updateProductName" parameterType="Product">
+        UPDATE product 
+        	SET name = #{name}
+        WHERE productId = #{productId} AND sellerId = #{sellerId}
+    </update>
+    
+    <!-- 更新商品审核结果 -->
+    <update id="updateProductReviewResult" parameterType="Product">
+    	 UPDATE product 
+	        SET status = #{status}, remark = #{remark}
+	     WHERE productId = #{productId}
+    </update>
+  	
+  	<!-- 根据productId查询商品SKU选项数据 -->
+  	<select id="listProductSkuOptionsByProductId" parameterType="java.lang.Integer" resultType="SkuOption">
+  		SELECT DISTINCT d.skuOptionId, d.skuOptionName
+		FROM product_sku a, 
+			product_sku_option_value b, 
+			sku_option_value c,
+			sku_option d
+		WHERE a.productId = #{productId}
+			AND a.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+			AND a.productSkuId = b.productSkuId
+			AND b.skuOptionValueId = c.skuOptionValueId
+			AND c.skuOptionId = d.skuOptionId
+  	</select>
+  	
+  	<!-- 根据skuOptionId查询商品SKU选项值数据 -->
+  	<select id="listProductSkuOptionValuesBySkuOptionId" resultType="SkuOptionValue">
+  		SELECT DISTINCT a.skuOptionValueId,
+  				IFNULL(a.overrideSkuOptionValue ,b.skuOptionValue) AS skuOptionValue,
+  				IF(a.overrideSkuOptionValue IS NULL, '0', '1') AS overrideFlag
+		FROM 
+			product_sku_option_value a, 
+			sku_option_value b,
+			sku_option c,
+			product_sku d
+		WHERE b.skuOptionId = #{skuOptionId}
+			AND a.skuOptionValueId = b.skuOptionValueId
+			AND b.skuOptionId = c.skuOptionId
+			AND d.productSkuId = a.productSkuId
+			AND d.productId = #{productId}
+			AND d.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+  	</select>
+  	
+  	<!-- 根据productId查询当前正在进行的和即将进行的活动 -->
+  	<select id="listPlansByProductIds" resultType="Plan">
+  		SELECT DISTINCT a.planId, a.startTime, a.endTime, a.type, a.status
+  		FROM plan a, plan_product b
+  		WHERE a.planId = b.planId
+  			AND a.status IN(${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE},
+  							${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE})
+  			AND (CURRENT_TIMESTAMP BETWEEN startTime AND endTime OR CURRENT_TIMESTAMP &lt; startTime)
+  			AND b.productId IN
+  			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+  		ORDER BY a.startTime
+  	</select>
+  	
+  	<!-- 根据planId查询商品 -->
+  	<select id="listProductsByPlanId" resultType="Product">
+  		SELECT c.*
+  		FROM plan a, plan_product b, product c
+  		WHERE a.planId = b.planId
+  			AND b.productId = c.productId
+  			AND b.planId = #{planId}
+  		ORDER BY b.rank DESC, c.createTime ASC
+  	</select>
+  	
+  	<!-- 根据productId查询当前时间所在的排期 -->
+  	<select id="listPlansByProductIdAndCurrentTime" resultType="Plan">
+  		select p.*
+		from plan p
+		where p.planId in(
+			select pp.planId
+			from plan_product pp
+ 			where pp.productId in(
+				select pro.productId
+				from product pro
+				where pro.productId=#{productId}
+					and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+				)
+		) 
+  		and (CURRENT_TIMESTAMP BETWEEN p.startTime and p.endTime)
+  		and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} 
+  		<!-- order by p.createTime desc -->
+  	</select>
+  	
+  	<!-- 查询商品活动状态条件 -->
+  	<!-- 
+  	<sql id="activityStatusSelectCondition">
+  		<if test="activityStatus!=null and activityStatus!=''">
+  			<if test="activityStatus==@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@ACTIVITYSTATUS_SPECIAL_SELLER">
+  			AND a.productId IN (SELECT DISTINCT b.productId
+					FROM plan a, plan_product b
+				WHERE a.planId = b.planId 
+					AND a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+					AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+					AND (CURRENT_TIMESTAMP BETWEEN a.startTime AND a.endTime OR CURRENT_TIMESTAMP &lt; a.startTime))
+  			</if>
+  			<if test="activityStatus==@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@ACTIVITYSTATUS_SEC_KILL">
+  			AND a.productId IN (SELECT DISTINCT b.productId
+					FROM plan a, plan_product b
+				WHERE a.planId = b.planId 
+					AND a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+					AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+					AND (CURRENT_TIMESTAMP BETWEEN a.startTime AND a.endTime OR CURRENT_TIMESTAMP &lt; a.startTime))
+  			</if>
+			<if test="activityStatus==@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@ACTIVITYSTATUS_EXPRIE_PRODUCT">
+			AND a.sellStartTime != '0000-00-00 00:00:00' AND a.sellEndTime != '0000-00-00 00:00:00'
+  				AND CURRENT_TIMESTAMP &gt; a.sellEndTime
+			</if>
+		</if>
+  	</sql>
+  	 -->
+  	 
+  	<!-- 商品状态查询条件 -->
+  	<sql id="statusSelectCondition">
+  		<where>
+  		<if test="status!=null and status!=''">
+  			<choose>
+	  		<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_DRAFT">
+  			t.status != ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+  			AND t.expireFlag = '0'
+  			AND NOT EXISTS (SELECT a.planId
+				FROM plan_product a, plan b
+				WHERE a.planId = b.planId
+					AND a.productId = t.productId
+					AND b.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+					AND b.status IN (
+						${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},
+						${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE}
+						)   
+					AND NOW() &lt;= b.endTime)
+			</when>
+			<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PLAN_PEND">
+  			t.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+  			AND t.expireFlag = '0'
+  			AND NOT EXISTS (SELECT a.planId
+				FROM plan_product a, plan b
+				WHERE a.planId = b.planId
+					AND a.productId = t.productId
+					AND b.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+					AND b.status IN (
+						${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},
+						${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE}
+						)   
+					AND NOW() &lt;= b.endTime)
+  			</when>
+  			<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PLANED">
+			(SELECT b.startTime
+				FROM plan_product a, plan b
+			WHERE a.planId = b.planId
+				AND a.productId = t.productId
+				AND b.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+				AND b.status IN (
+						${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE},
+						${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE}
+						)  
+			ORDER BY b.startTime LIMIT 1) &gt; NOW()
+  			</when>
+  			<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_SPECIAL_SELLER_INPROGRESS">
+  			t.saleInventoryCount != 0
+  			AND EXISTS (SELECT a.planId
+				FROM plan_product a, plan b
+				WHERE a.planId = b.planId
+					AND a.productId = t.productId
+					AND b.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+					AND b.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+					AND NOW() BETWEEN b.startTime AND b.endTime)
+  			</when>
+  			<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_SELLOUT">
+  			t.saleInventoryCount = 0
+  			AND EXISTS (SELECT a.planId
+				FROM plan_product a, plan b
+				WHERE a.planId = b.planId
+					AND a.productId = t.productId
+					AND b.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+					AND b.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+					AND NOW() BETWEEN b.startTime AND b.endTime)
+  			</when>
+  			<when test="status==@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_EXPRIED">
+  				t.expireFlag = '1'
+  			</when>
+  			</choose>
+  		</if>
+		</where>
+  	</sql>
+  	
+  	<!-- 卖家查询商品列表where条件 -->
+  	<sql id="searchSellerProductsCondition">
+  		WHERE
+  			a.sellerId = #{sellerId}
+  			AND a.status IN (${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_DRAFT},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_NO_PASS})
+  			<if test="brandId!=null and brandId!=''">AND a.brandId = #{brandId}</if>
+  			<if test="reviewStatus!=null and reviewStatus!=''">AND a.status = #{reviewStatus}</if>
+  			<if test="name!=null and name!=''">
+  			AND (a.name like concat('%',#{name},'%') OR b.name like concat('%',#{name},'%') OR c.skuCode  like concat('%',#{name},'%'))
+  			</if>
+  			<if test="beginTime!=null and beginTime !=''">AND DATE_FORMAT(a.createTime,'%Y-%m-%d') &gt;= #{beginTime}</if>
+			<if test="endTime!=null and endTime!=''">AND DATE_FORMAT(a.createTime,'%Y-%m-%d') &lt;= #{endTime}</if>
+  	</sql>
+  	
+  	<!-- 管理员查询商品列表where条件 -->
+  	<sql id="searchProductsCondition">
+  		<where>
+  			a.status IN (
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_NO_PASS})
+  			<if test="productCategoryId!=null and productCategoryId!=''">
+			AND a.productCategoryId IN (SELECT productCategoryId FROM product_category WHERE parentId = #{productCategoryId}) 
+			</if>
+  			<if test="brandId!=null and brandId!=''">AND a.brandId = #{brandId}</if>
+  			<if test="reviewStatus!=null and reviewStatus!=''">AND a.status = #{reviewStatus}</if>
+  			<if test="name!=null and name!=''">
+  			AND (a.name like concat('%',#{name},'%') OR b.name like concat('%',#{name},'%')  OR c.skuCode  like concat('%',#{name},'%'))
+  			</if>
+  			<if test="beginTime!=null and beginTime !=''">AND DATE_FORMAT(a.createTime,'%Y-%m-%d') &gt;= #{beginTime}</if>
+			<if test="endTime!=null and endTime!=''">AND DATE_FORMAT(a.createTime,'%Y-%m-%d') &lt;= #{endTime}</if>
+  		</where>
+  	</sql>
+  	
+  	<!-- order by 子句-->
+  	<sql id="orderBy">
+  		<if test="sort != null and sort != ''">
+			ORDER BY ${sort}	
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+  	</sql>
+  	
+  	<!-- 分页查询卖家商品信息-->
+  	<select id="searchSellerProducts" parameterType="map" resultType="Product">
+		SELECT t.* FROM (SELECT 
+  			a.productId,
+  			b.name AS `brand.name`,
+  			a.name,
+  			a.imageUrls,
+  			a.marketPrice,
+  			a.salePrice,
+  			a.secKillPrice,
+  			SUM(IFNULL(c.inventory, 0)) AS saleInventoryCount,
+  			SUM(IFNULL(c.secKillInventory, 0)) AS secKillInventoryCount,
+  			a.status,
+  			a.remark,
+  			a.sellStartTime,
+  			a.sellEndTime,
+  			a.createTime,
+  			IF(a.sellStartTime = '0000-00-00 00:00:00' AND a.sellEndTime = '0000-00-00 00:00:00'
+  				OR CURRENT_TIMESTAMP &lt;= a.sellEndTime, '0', '1') AS expireFlag
+  		FROM product a 
+			INNER JOIN brand b ON a.brandId = b.brandId 
+				AND b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+			INNER JOIN product_sku c ON c.productId = a.productId 
+				AND c.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+  		<include refid="searchSellerProductsCondition"/>
+  		GROUP BY a.productId) t
+  		<include refid="statusSelectCondition"/>
+  		ORDER BY t.productId DESC
+	  	LIMIT #{start}, #{limit}	
+  	</select>
+  
+  	<!-- 查询卖家商品数量 -->
+  	<select id="searchSellerProductsCount" parameterType="map" resultType="java.lang.Integer">
+  		SELECT COUNT(t.productId) FROM (
+  			SELECT a.productId, a.status, SUM(IFNULL(c.inventory, 0)) AS saleInventoryCount,
+  			IF(a.sellStartTime = '0000-00-00 00:00:00' AND a.sellEndTime = '0000-00-00 00:00:00'
+  				OR CURRENT_TIMESTAMP &lt;= a.sellEndTime, '0', '1') AS expireFlag
+	  		FROM product a 
+				INNER JOIN brand b ON a.brandId = b.brandId 
+					AND b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+				INNER JOIN product_sku c ON c.productId = a.productId 
+					AND c.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}					
+	  		<include refid="searchSellerProductsCondition"/>
+	  		GROUP BY a.productId) t
+  		<include refid="statusSelectCondition"/>
+  	</select>
+  	
+  	<!-- 管理员查询商品信息-->
+  	<select id="searchProducts" parameterType="map" resultType="Product">
+  		SELECT t.* FROM (SELECT 
+  			a.productId,
+  			b.name AS `brand.name`,
+  			a.name,
+  			a.imageUrls,
+  			a.marketPrice,
+  			a.salePrice,
+  			a.secKillPrice,
+  			SUM(IFNULL(c.inventory, 0)) AS saleInventoryCount,
+  			SUM(IFNULL(c.secKillInventory, 0)) AS secKillInventoryCount,
+  			a.status,
+  			a.sellStartTime,
+  			a.sellEndTime,
+  			a.createTime,
+  			IF(a.sellStartTime = '0000-00-00 00:00:00' AND a.sellEndTime = '0000-00-00 00:00:00'
+  				OR CURRENT_TIMESTAMP &lt;= a.sellEndTime, '0', '1') AS expireFlag
+  		FROM product a
+			INNER JOIN brand b ON a.brandId = b.brandId and b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+			INNER JOIN product_sku c ON c.productId = a.productId 
+				AND c.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+  		<include refid="searchProductsCondition"/>
+  		GROUP BY a.productId) t
+  		<include refid="statusSelectCondition"/>
+  		ORDER BY t.productId DESC
+	  	LIMIT #{start}, #{limit}	
+  	</select>
+  	
+  	<!-- 管理员查询商品数量 -->
+  	<select id="searchProductsCount" parameterType="map" resultType="java.lang.Integer">
+  		SELECT COUNT(t.productId) FROM (
+  			SELECT a.productId, a.status, SUM(IFNULL(c.inventory, 0)) AS saleInventoryCount,
+  			IF(a.sellStartTime = '0000-00-00 00:00:00' AND a.sellEndTime = '0000-00-00 00:00:00'
+  				OR CURRENT_TIMESTAMP &lt;= a.sellEndTime, '0', '1') AS expireFlag
+	  		FROM product a 
+				INNER JOIN brand b ON a.brandId = b.brandId 
+					AND b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+				INNER JOIN product_sku c ON c.productId = a.productId 
+						AND c.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+	  		<include refid="searchProductsCondition"/>
+	  		GROUP BY a.productId) t
+  		<include refid="statusSelectCondition"/>
+  	</select>
+  	
+  	<!-- 根据ID查询上一条商品ID-->
+  	<select id="getPreviousProductId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+	  	SELECT a.productId 
+	  		FROM product a
+		WHERE a.status IN (
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_NO_PASS}
+				)
+			AND a.productId &gt; #{productId}
+		ORDER BY a.createTime ASC, a.productId ASC
+		LIMIT 1
+  	</select>
+  	
+  	<!-- 根据ID查询下一条商品ID-->
+  	<select id="getNextProductId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  		SELECT a.productId
+	  		FROM product a
+		WHERE a.status IN (
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS},
+					 ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_NO_PASS}
+				)
+			AND a.productId &lt; #{productId}
+		ORDER BY a.createTime DESC, a.productId DESC
+		LIMIT 1
+  	</select>
+  	
+  	<!-- 根据productId查询下一条待审核商品id -->
+  	<select id="getNextPendingProduct" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  		SELECT a.productId
+	  		FROM product a
+		WHERE a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND}
+			AND a.productId &lt; #{productId}
+		ORDER BY a.createTime DESC, a.productId DESC
+		LIMIT 1
+  	</select>
+  	
+  	<!-- 根据卖家ID查询可参加特卖活动的商品 -->
+  	<select id="listSpecialSellProductsBysellerId" resultType="Product">
+	  	SELECT 	t1.*, COUNT(t3.orderId) AS salesNum
+	  		FROM (SELECT a.*, SUM(b.inventory) AS saleInventoryCount
+					FROM product a LEFT JOIN product_sku b ON a.productId = b.productId
+						AND b.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+				WHERE a.sellerId = #{sellerId}
+					AND a.brandId = #{brandId}
+					AND a.productCategoryId IN (SELECT productCategoryId FROM product_category WHERE parentId = #{productCategoryId}) 
+					AND a.salePrice IS NOT NULL
+					<choose>
+						<when test="planId!=null and planId!=''">
+						AND (a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+							OR (a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND}
+								AND a.productId IN (SELECT productId FROM plan_product WHERE planId = #{planId})))
+						</when>
+						<otherwise>
+						AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+						</otherwise>
+					</choose>
+					AND (#{startTime} BETWEEN a.sellStartTime AND a.sellEndTime 
+							AND #{endTime} BETWEEN a.sellStartTime AND a.sellEndTime
+							OR a.sellStartTime = '0000-00-00 00:00:00' AND a.sellEndTime = '0000-00-00 00:00:00')
+				GROUP BY a.productId
+				HAVING(SUM(b.inventory) &gt; 0))t1
+		LEFT JOIN (SELECT * FROM plan_product
+					WHERE planId IN (SELECT a.planId FROM plan a
+									WHERE a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+										AND a.status IN (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE},
+													${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE})
+										AND (#{startTime} BETWEEN a.startTime AND a.endTime 
+											OR #{endTime} BETWEEN a.startTime AND a.endTime
+											OR (a.startTime BETWEEN #{startTime} AND #{endTime} 
+												AND a.endTime BETWEEN #{startTime} AND #{endTime}))
+										<if test="planId!=null and planId!=''">AND a.planId != #{planId}</if>
+									))t2 
+		ON t1.productId = t2.productId
+		LEFT JOIN (SELECT DISTINCT a.orderId, b.productId
+					FROM order_item a, product_sku b
+					WHERE a.productSkuId = b.productSkuId) t3 ON t1.productId = t3.productId
+		GROUP BY t1.productId
+		HAVING(COUNT(t2.planId) = 0)
+  	</select>
+  	
+  	<!-- 前台进口商品 -->
+  	<select id="searchImportProducts4Front" resultType="Product">
+  		select pro.*
+  		from product pro
+  		where pro.isImport=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@ISIMPORT_YES}
+  			  and 
+  			  pro.productId in(
+  			  						select pp.productId
+				  					from plan_product pp
+				  					where pp.planId in (
+				  										select p.planId
+				  										from plan p
+				  										where CURRENT_TIMESTAMP between p.startTime and p.endTime
+				  										)
+  			  					  )
+  			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+  			  <if test="brandId!=null and brandId!=''">
+  			  and pro.brandId=#{brandId}	
+  			  </if>
+  			  <if test="sort!=null and sort!=''">
+				order by ${sort}
+				<if test="dir!=null and dir!=''">
+					${dir}
+				</if>
+			  </if> 
+			  limit #{start},#{limit}
+  	</select>
+  	
+  	<!-- 进口商品  通过销量排序 -->
+  	<select id="searchImportProdcuts4FrontBySalesQuantity" resultType="Product">
+  			select pro.* 
+			from product pro left join product_sku ps on pro.productId=ps.productId
+			where pro.isImport=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@ISIMPORT_YES}
+				  and
+				  pro.productId in (
+				  					select pp.productId
+				  					from plan_product pp
+				  					where pp.planId in (
+				  										select p.planId
+				  										from plan p
+				  										where CURRENT_TIMESTAMP between p.startTime and p.endTime
+				  										)
+				  					)
+				  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+				  <if test="brandId!=null and brandId!=''">
+	  			  and pro.brandId=#{brandId}	
+	  			  </if>
+			<if test="sort!=null and sort!=''">
+				group by pro.productId
+				order by sum(${sort})
+				<if test="dir!=null and dir!=''">
+					${dir}
+				</if>
+			</if> 
+			limit #{start},#{limit}
+  	</select>
+  	
+  	<!-- 进口商品数量 -->
+  	<select id="searchImportProducts4FrontCount" resultType="java.lang.Integer">
+		select count(pro.productId)
+  		from product pro
+  		where pro.isImport=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@ISIMPORT_YES}
+  			  and 
+  			  pro.productId in(
+  			  						select pp.productId
+				  					from plan_product pp
+				  					where pp.planId in (
+				  										select p.planId
+				  										from plan p
+				  										where CURRENT_TIMESTAMP between p.startTime and p.endTime
+				  										)
+  			  					  )
+  			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+  			  <if test="brandId!=null and brandId!=''">
+  			  and pro.brandId=#{brandId}	
+  			  </if>
+  	</select>
+  	
+  	<!-- 获取进口商品的品牌 -->
+  	<select id="listImportProductBrands4Front" resultType="Brand">
+		select distinct b.*
+		from brand b inner join product pro on b.brandId=pro.brandId 
+			 inner join plan_product pp on pro.productId=pp.productId
+			 inner join plan p on p.planId=pp.planId
+		where pro.isImport=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@ISIMPORT_YES}
+			  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+			  and (CURRENT_TIMESTAMP between p.startTime and p.endTime)
+			  and b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}	
+  	</select>
+  	
+  	<!-- 获取搜索商品的品牌 -->
+  	<select id="listSearchProductBrands4Front" resultType="Brand">
+  		 select distinct b.*
+		 from plan_product pp inner join product pro on pp.productId=pro.productId
+		 	  inner join plan p on pp.planId=p.planId 
+		 	  inner join brand b on b.brandId=pro.brandId 
+		 where pro.keyWord like concat('%',#{keyWord},'%') 
+		       and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		 	   and CURRENT_TIMESTAMP between p.startTime and p.endTime
+		 	   and b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+  	</select>
+  	
+  	<!-- 前台搜索查询  通过关键字查询 商品 -->
+  	<select id="searchProducts4Front" resultType="Product">
+		 select distinct pro.*
+		 from plan_product pp inner join product pro on pp.productId=pro.productId
+		 	  inner join plan p on pp.planId=p.planId
+		 where pro.keyWord like concat('%',#{keyWord},'%') 
+		       and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		 	   and CURRENT_TIMESTAMP between p.startTime and p.endTime
+		 	   <if test="brandId!=null and brandId!=''">
+  			   and pro.brandId=#{brandId}	
+  			   </if>
+		 <if test="sort==null and sort==''">
+			order by pp.rank desc,pro.hits desc
+		 </if>	   
+		 <if test="sort!=null and sort!=''">
+			order by ${sort}
+			<if test="dir!=null and dir!=''">
+				${dir}
+			</if>
+		 </if> 
+		limit #{start},#{limit}	   
+  	</select>
+  	
+  	<!-- 前台搜索查询  通过关键字查询 商品 总数 -->
+  	<select id="searchProducts4FrontCount" resultType="java.lang.Integer">
+		 select count(distinct pro.productId)
+		 from plan_product pp inner join product pro on pp.productId=pro.productId
+		 	  inner join plan p on pp.planId=p.planId inner join product_sku ps on ps.productId=pro.productId
+		 where pro.keyWord like concat('%',#{keyWord},'%') 
+		       and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		 	   and CURRENT_TIMESTAMP between p.startTime and p.endTime
+  	</select>
+  	
+  	<!-- 按销售数量排序 -->
+  	<select id="searchProducts4FrontBySalesQuantity" resultType="Product">
+			 select distinct pro.*
+			 from plan_product pp inner join product pro on pp.productId=pro.productId
+			 	  inner join plan p on pp.planId=p.planId inner join product_sku ps on ps.productId=pro.productId
+			 where pro.keyWord like concat('%',#{keyWord},'%') 
+			       and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+			 	   and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			 	   <if test="brandId!=null and brandId!=''">
+	  			   and pro.brandId=#{brandId}	
+	  			   </if>
+			 <if test="sort==null and sort==''">
+				order by pp.rank desc,pro.hits desc
+			 </if>	   
+			 <if test="sort!=null and sort!=''">
+				group by pro.productId
+				order by sum(${sort})
+				<if test="dir!=null and dir!=''">
+					${dir}
+				</if>
+			</if> 
+			limit #{start},#{limit}	 
+  	</select>
+  	
+  	<!-- 品牌详细页面的热卖商品  要分页 -->
+  	<select id="searchProducts4FrontByBrandId" resultType="Product">
+  		<!-- 
+  		select pro.* 
+		from product pro 
+		where pro.productId in(
+			select distinct pp.productId
+			from plan_product pp
+		  	where pp.planId in (
+				select p.planId
+				from plan p
+				where CURRENT_TIMESTAMP BETWEEN p.startTime and p.endTime
+					  and p.brandId=#{brandId}
+					  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			)
+		) and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		limit #{start},#{limit} 
+		-->
+		select DISTINCT pro.*
+		from plan_product pp inner join plan p on p.planId=pp.planId
+		 	 inner join product pro on pro.productId=pp.productId
+		where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			 and CURRENT_TIMESTAMP BETWEEN p.startTime and p.endTime
+			 and p.brandId=#{brandId}
+			 and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		limit #{start},#{limit} 
+  	</select>
+  	
+  	<!-- 品牌详细页面的热卖商品  统计 -->
+  	<select id="searchProducts4FrontByBrandIdCount" resultType="java.lang.Integer">
+  		<!-- 
+  		select count(pro.productId)  
+		from product pro 
+		where pro.productId in(
+			select distinct pp.productId
+			from plan_product pp
+		  	where pp.planId in (
+				select p.planId
+				from plan p
+				where CURRENT_TIMESTAMP BETWEEN p.startTime and p.endTime
+					  and p.brandId=#{brandId}
+					  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			)
+		) and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		 -->
+		select count(DISTINCT pro.productId)
+		from plan_product pp inner join plan p on p.planId=pp.planId
+		 	 inner join product pro on pro.productId=pp.productId
+		where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			 and CURRENT_TIMESTAMP BETWEEN p.startTime and p.endTime
+			 and p.brandId=#{brandId}
+			 and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+  	</select>
+  	
+    <!-- 按点击率查询商品  -->
+  	<select id="getProductListByHits" resultType="Product">
+			select distinct
+				   pro.productId,
+				   pro.brandId,
+				   pro.productCategoryId,
+				   pro.sellerId,
+				   pro.name,
+				   pro.imageUrls,
+				   pro.salePrice,
+				   pro.marketPrice,
+				   pro.status,
+				   pro.rebate,
+				   pro.sellStartTime,
+				   pro.sellEndTime,
+				   b.name as `brand.name`
+			from product pro inner join plan_product pp on pp.productId=pro.productId
+							 inner join plan p on pp.planId=p.planId
+							 inner join brand b on b.brandId=pro.brandId
+							 left join product_sku ps on pro.productId=ps.productId
+			where CURRENT_TIMESTAMP between p.startTime and p.endTime
+				  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+				  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+				  and b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+			group by ps.productId
+			order by (sum(ps.salesQuantity)) desc ,pro.hits desc 
+			limit #{maxNum} 
+  	</select>
+  	
+  	<!-- 优惠最多的商品 -->
+  	<select id="getProductListByMostCheap" resultType="Product">
+			select pro.*
+			from product pro inner join plan_product pp on pp.productId=pro.productId
+							 inner join plan p on pp.planId=p.planId
+			where CURRENT_TIMESTAMP between p.startTime and p.endTime
+				  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+				  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			order by (pro.marketPrice-pro.salePrice) desc 
+			limit #{maxNum} 
+  	</select>
+  	
+  	<!-- 通过productId 查询对应所有的sku -->
+  	<select id="getProductSkuListByProductId" resultType="ProductSku">
+  		select ps.* 
+  		from product_sku ps 
+  		where ps.productId=#{productId}
+  			  and ps.isDelete=${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+  	</select>
+  	
+  	<!-- 通过品牌的id查询和当前时间查询在排期内的商品 -->
+  	<select id="getProductsByBrandIdAndCurrentTime" resultType="Product">
+  		<!-- 
+		select pro.* 
+		from product pro 
+		where pro.productId in(
+			select distinct pp.productId
+			from plan_product pp
+		  	where pp.planId in (
+				select p.planId
+				from plan p
+				where CURRENT_TIMESTAMP BETWEEN p.startTime and p.endTime
+					  and p.brandId=#{brandId}
+			)
+		) and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		 -->
+		select DISTINCT pro.*
+		from plan_product pp inner join plan p on p.planId=pp.planId
+		 	 inner join product pro on pro.productId=pp.productId
+		where p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+			 and CURRENT_TIMESTAMP BETWEEN p.startTime and p.endTime
+			 and p.brandId=#{brandId}
+			 and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+  	</select>
+  	  
+  	<!-- 通过productSkuId 查询对应的product -->
+  	<select id="getProductByProductSkuId" parameterType="java.lang.Integer" resultType="Product">
+  		select pro.* 
+  		from product pro
+  		where pro.productId in (
+  								select ps.productId
+  								from product_sku ps 
+  								where ps.productSkuId=#{productSkuId}
+  									)
+  	</select>
+  	
+  	<!-- 根据skuId  查询排期信息 -->
+  	<select id="listPlansByProductSkuId" resultType="Plan">
+  			<!-- 
+  			select p.*
+			from plan p
+			where p.planId in(
+				select pp.planId
+				from plan_product pp
+				where pp.productId in (
+					select ps.productId
+					from product_sku ps inner join product pro on pro.productId=ps.productId
+					where ps.productSkuId=#{productSkuId} 
+						  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+					)
+			) and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			 -->
+		 select p.*	 
+		 from plan_product pp inner join plan p on p.planId=pp.planId
+		 inner join product pro on pro.productId=pp.productId
+		 inner join product_sku ps on pro.productId=ps.productId
+		 where ps.productSkuId=#{productSkuId} 
+			   and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+			   and CURRENT_TIMESTAMP between p.startTime and p.endTime
+			   and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+  	</select>
+  	
+  	<!-- 根据商品的id查询商品  并且  商品在排期内  通过审核的 -->
+  	<select id="getProductByProductId" resultType="Product">
+  			select pro.*
+  			from product pro,plan_product pp,plan p
+  			where pro.productId=#{productId}
+  				  and pp.productId=pro.productId
+  				  and p.planId=pp.planId
+  				  and (CURRENT_TIMESTAMP between p.startTime and p.endTime)
+  				  and p.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE}
+  				  and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+  			order by p.createTime desc
+  	</select>
+  	
+  	<!--根据商品的id 将商品的 hits加一   商品详情页面用  -->
+  	<select id="updateProductHits" parameterType="Product">
+  			update product p
+  			set p.hits=#{hits}
+  			where p.productId=#{productId} 
+  	</select>
+  	
+  	<!--  根据类目查询在排期中的推荐商品-->
+  	<select id="getRecommendByProductCategoryId" parameterType="java.lang.Integer" resultType="Product">
+  		select pro.*
+		from product pro left join plan_product pp on pro.productId=pp.productId
+						 left join plan p on p.planId=pp.planId
+		where CURRENT_TIMESTAMP between p.startTime and p.endTime
+					and pro.productCategoryId=#{productCategoryId}
+					and pro.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+		order by hits desc 
+		limit 4
+  	</select>
+  	<!-- 根据品牌Id查询该品牌下的商品 -->
+  	<select id="listProductsByBrandId" parameterType="java.lang.Integer" resultType="Product">
+		select p.* from product p,brand b where b.brandId=p.brandId and p.brandId=#{brandId} and p.`status` not in(${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_DELETE})
+	</select>
+  	
+</mapper>

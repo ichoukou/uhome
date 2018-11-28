@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="report" extends="uhome-default" namespace="/admin/report">
+    	<action name="report-*" class="com.ytoxl.uhomemanage.web.action.report.ReportAction" 
+    		method="{1}">
+    	   <result name="report">/WEB-INF/pages/report/report.jsp</result>
+    	   <result name="sellerMonthReport" type="dispatcher">/WEB-INF/pages/report/{1}.jsp</result>
+    	  
+    	   <result name="excel" type="stream">  
+                    <param name="contentType">  
+                        application/vnd.ms-excel  
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        filename=${fileName}report.xls
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+                </result>  
+    	</action>
+
+    	<action name="productReport-*" class="com.ytoxl.uhomemanage.web.action.report.ProductReportAction" 
+    		method="{1}">
+    	   <result name="salesDetailReport">/WEB-INF/pages/report/salesDetailReport.jsp</result>
+    	   <result name="searchSellerReport">/WEB-INF/pages/report/searchSellerReport.jsp</result>
+     	   <result name="searchAreaSellReport">/WEB-INF/pages/report/searchAreaSellReport.jsp</result>
+     	   <result name="searchOrderDetailReport">/WEB-INF/pages/report/searchOrderDetailReport.jsp</result>
+     	   <result name="memberSell">/WEB-INF/pages/report/memberSell.jsp</result>
+    		<result name="classifySell">/WEB-INF/pages/report/classifySell.jsp</result>
+    		<result name="productReturn">/WEB-INF/pages/report/productReturnReport.jsp</result>
+    		<result name="brandSell">/WEB-INF/pages/report/brandSellPlanReport.jsp</result>
+    		<result name="everySalesDetailReport">/WEB-INF/pages/report/everySalesDetailReport.jsp</result>
+    	   <result name="excel" type="stream">  
+                    <param name="contentType">  
+                        application/vnd.ms-excel  
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        filename=${fileName}report.xls
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+                </result>  
+    	</action>
+    	<action name="operationsReport-*" class="com.ytoxl.uhomemanage.web.action.report.OperationsReportAction" 
+    		method="{1}">
+    	   <result name="productSales">/WEB-INF/pages/report/productSalesReport.jsp</result>
+    	   <result name="buyerOperationsReport">/WEB-INF/pages/report/buyerOperationsReport.jsp</result>
+    	   <result name="excel" type="stream">  
+                    <param name="contentType">  
+                        application/vnd.ms-excel  
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        filename=${fileName}report.xls
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+                </result>  
+    	</action>
+    	<action name="saleStatementReport-*" class="com.ytoxl.uhomemanage.web.action.report.SaleStatementReportAction" 
+    		method="{1}">
+    	   <result name="orderwaitsend">/WEB-INF/pages/report/orderWaitSendReport.jsp</result>
+    	   <result name="orderWaitRefundReport">/WEB-INF/pages/report/orderWaitRefundReport.jsp</result>
+    	   <result name="excel" type="stream">  
+                    <param name="contentType">  
+                        application/vnd.ms-excel  
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        filename=${fileName}report.xls
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+                </result>  
+    	</action>
+	</package>
+	
+	<package name="planCheck" extends="uhome-default" namespace="/admin/planCheck">
+		<action name="planCheck-*" class="com.ytoxl.uhomemanage.web.action.report.PlanCheckAction" method="{1}">
+            <result name="listPlanCheckOne">/WEB-INF/pages/report/listPlanCheckOne.jsp</result>
+            <result name="listPlanCheckTwo">/WEB-INF/pages/report/listPlanCheckTwo.jsp</result>  
+            <result name="listPlanCheckFinish">/WEB-INF/pages/report/listPlanCheckFinish.jsp</result>
+            <result name="finishOneCheck" type="redirectAction">${nextAction}</result>
+            <result name="finishTwoCheck" type="redirectAction">${nextAction}</result>
+		</action>
+	</package> 
+	
+	<package name="sellerPlanCheck" extends="uhome-default" namespace="/seller/planCheck">
+		<action name="plancheck-*" class="com.ytoxl.uhomemanage.web.action.report.PlanCheckAction" method="{1}">
+			<result name="searchSellerPlanCheck">/WEB-INF/pages/plan/searchSellerPlanCheck.jsp</result>
+		</action>
+	</package>
+</struts>

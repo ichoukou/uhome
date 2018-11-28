@@ -1,0 +1,137 @@
+/**
+ * Created by JetBrains PhpStorm.
+ * User: admin
+ * Date: 13-2-22
+ * Time: 下午1:13
+ * To change this template use File | Settings | File Templates.
+ */
+
+@import url(lib/reset.less);
+@import url(lib/global.less);
+@import url(lib/header.less);
+@import url(lib/foot.less);
+/*头部筛选*/
+.m-fl{float:left;}
+.m-fr{float:right;overflow:hidden;*zoom:1;}
+.curr-num label{float: left;height: 26px;line-height: 26px;}
+/*公共按钮*/
+.m-btn,.m-btn:hover{cursor:pointer;margin-right:10px;padding:2px 11px;*padding:0 11px;color:#fff;font-size:14px;border:1px solid #9b3131;border-radius:3px;border-color: #872121 #9b3131 #b04141;box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);background:#9f2c2a;background-image:linear-gradient(#b04141,#9f2c2a);}
+.m-btn-search,.m-btn-search:hover{border-radius:0 3px 3px 0;}
+.m-btn-done{cursor:pointer;margin-right:10px;padding:2px 20px;*padding:0 20px;color:#020202;border:1px solid #868686;border-radius:3px;background:#f3f3f3;background-image:linear-gradient(#f3f3f3,#ededed,#e5e5e5);}
+/*select*/
+.m-sel,.mc-sel select{margin:0;max-width:150px;padding: 2px;border: solid 1px #b1b1b3;height: 26px;line-height: 26px;}
+.m-sel option{line-height:26px;}
+/*input*/
+.txt-input{width:200px;color:#808080;padding-left:5px;border:solid 1px #b1b1b3;height:24px;line-height:24px;}
+.txt-input-w{width:400px;}
+.txt-input-80{width:80px;}
+/*日历*/
+.Wdate {width:119px;height:24px;padding:0 3px;line-height:24px; border: solid 1px #b1b1b3; background: url(../../web-resource/images/icon.png) no-repeat scroll 43px 0 transparent;}
+/*分页设置*/
+.pagination-right{text-align:right;float:right;}
+.pagination a ,.pagination span{display: inline-block;text-align: center;vertical-align:bottom;}
+.pagination a {height: 18px;margin:0 3px;background: #191814;color: #FFF;text-decoration: none;}
+.pagination span{padding:0 7px;}
+.current {background:#999;}
+.goto-num{width:22px;margin:0 3px;text-align:center;}
+.goto {background: #191814;width: 35px;height:22px;color: #fff;cursor:pointer;}
+.pagination .disable {width: 18px;height: 18px;padding:0;background:url(../../web-resource/images/icon.png) -8px -3px no-repeat;}
+.pagination .alldis {left:75px;}
+.pagination .next {padding:0;background: url(../../web-resource/images/icon.png) -28px -3px no-repeat;width: 18px;height: 18px;}
+/*table*/
+.tab-control{width:100%;border-left: solid  1px #bfad61;border-right: solid  1px #bfad61;}
+.tab-over{border-left: solid  1px #bfad61;border-right: solid  1px #bfad61;overflow:auto;}
+.td-nobor {border: none;}
+.tr-height,.list-tr{height:35px;}
+.tab-control th,.tab-control tbody td{word-break:break-all;word-wrap:break-word;}
+.tab-control th:last-child{border-right:1px solid #000;}
+.tab-control th,.tab-over th {height:30px;line-height:30px;padding-left:10px;background: #191814;color: #FFF;border-right: solid 1px #FFF;text-align: left;font-size: 14px;font-weight: normal;}
+.tab-control .num-icon {padding-left: 7px;}
+.tab-control td,.tab-over td{padding:5px 0 5px 10px;border-bottom: solid  1px #bfad61;}
+/*颜色*/
+.c-red {
+    color: red;
+}
+.c-green {
+    color: #1b730c;
+}
+.c-blue {
+  color: #36c;
+}
+.c-blue:hover {
+    color: #36c;
+    text-decoration: underline;
+}
+/*公用内容页导航样式*/
+.body-nav{border-bottom: solid 2px #191814;}
+.subnav{border:0 none;}
+.body-nav ul li {
+    float:left;
+    background:#bfad61;
+}
+.body-nav ul li a {
+    display: inline-block;
+    padding: 7px 10px;
+    border-right: solid 1px #e7d68d;
+    color: #fff;
+    font-size: 14px;
+    text-shadow: 0px 1px 1px rgba(0,0,0,0.65);
+    cursor:pointer;
+}
+.body-nav ul li .current-chose {
+    padding: 9px 10px 6px;
+    background:#191814;
+    border-bottom: solid 1px #10100d;
+    border-right: solid 1px #10100d;
+    margin-top: -2px;
+    box-shadow: 2px 1px 6px rgba(0, 0, 0, 0.65);
+    position: relative;
+}
+/*公共icon*/
+.num-icon i {
+    background: url(../../web-resource/images/icon.png) no-repeat scroll -12px -25px transparent;
+    display: inline-block;
+    height: 20px;
+    position: absolute;
+    width: 20px;
+}
+.num-icon a {
+    padding-left: 15px;
+
+}
+.change{background: #fcf1ca;}
+.change .num-icon i {
+     background-position: -34px -25px;
+}
+/*公共show出框*/
+.tab-control .show-tab {
+  padding: 0px;
+}
+.show-tab p {
+    padding: 10px 0;
+    line-height: 20px;
+}
+.show-tr {
+  height: auto;
+}
+.show-tr .order-info {
+  display: none;
+}
+.show-tr td { border-bottom:none;}
+.show-tr .order-info { border-bottom:1px solid #BFAD61;}
+
+/*upload-img*/
+.upload-img{display:inline-block;width:95px;height:23px;margin-top:5px;overflow:hidden;vertical-align:bottom;}
+.upload-btn{display:inline-block;height:28px;vertical-align:bottom;}
+.upload-btn object,.upload-btn .uploadifyQueue{float:left;}
+/* -----
+卖家上传商品
+----- */
+.download{
+  color: #014ce4;
+  &:hover{
+    color: #ff5d00;
+  }
+}
+/*站内信未读*/
+.no-read{font-weight:bold;}

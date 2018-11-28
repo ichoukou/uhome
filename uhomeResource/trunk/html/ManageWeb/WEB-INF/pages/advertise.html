@@ -1,0 +1,472 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shopping header</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/advertise.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/My97DatePicker/skins/WdatePicker.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!--start header-->
+    <!--end header-->
+    <!--start body-->
+    <div class="body m-w980p">
+    <div class="body-nav arr-nav">
+        <ul class="layout">
+            <li><a class="current-chose">广告页面</a></li>
+            <li><a>热搜词管理</a></li>
+            <li><a>站内信</a></li>
+            <li><a>网站地图</a></li>
+        </ul>
+    </div>
+    <!--start form-->
+        <form class="sub-form layout advertise">
+            <div class="m-fl">
+                <ul class="layout">
+                    <li>
+                        <select class="chose-brand">
+                            <option>全部页面</option>
+                            <option>选择品牌</option>
+                            <option>选择品牌</option>
+                            <option>选择品牌</option>
+                        </select>
+                    </li>
+                    <li>
+                        <select class="chose-brand">
+                            <option>全部广告位</option>
+                            <option>选择品牌</option>
+                            <option>选择品牌</option>
+                            <option>选择品牌</option>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="button" class="btn btn-danger btn-big" value="查  询"/>
+                    </li>
+                </ul>
+            </div>
+            <div class="m-fr">
+                <label>当前显示：
+                    <select>
+                        <option>10条</option>
+                        <option>10条</option>
+                        <option>10条</option>
+                        <option>10条</option>
+                    </select>
+                </label>
+
+            </div>
+        </form>
+       <!--end form-->
+        <div class="examine m-mt10p layout">
+            <div class="m-fl"><input type="button" id="addAdvertise" class="btn btn-danger" value="添加广告"/></div>
+            <!--添加广告弹出部分-->
+            <div class="add-advertise">
+            	<table>
+            		<tr>
+            			<td width="95" align="right">*位置：</td>
+            			<td width="50"></td>
+            			<td>
+            				<select class="select-ad-palce">
+            					<option>请选择广告位置</option>
+            					<option>头部</option>
+            					<option>底部</option>
+            				</select>
+            			</td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">*广告名称：</td>
+            			<td width="50"></td>
+            			<td><input type="text" class="ad-input-text" /><input type="checkbox" id="set-default" class="set-checkbox" /><label for="set-default">设为默认广告</label></td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">顺序：</td>
+            			<td width="50"></td>
+            			<td><input type="text" class="ad-input-text" value="1" /></td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">*URL：</td>
+            			<td width="50"></td>
+            			<td><input type="text" class="ad-input-addr" value="D://" /><input type="button" class="upload-img" value="上传图片" /></td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">*宽度：</td>
+            			<td width="50"></td>
+            			<td><input type="text" class="ad-input-text" value="960" /> px</td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">*高度：</td>
+            			<td width="50"></td>
+            			<td><input type="text" class="ad-input-text" value="96" /> px</td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">跳转地址：</td>
+            			<td width="50"></td>
+            			<td><input type="text" class="ad-input-addr" value="http://www.baidu.com" /></td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">*广告开始时间：</td>
+            			<td width="50"></td>
+            			<td><input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" class="ad-input-time" value="2012-10-21 12:21:22" /><i class="ad-time-ico"></i></td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">*广告结束时间：</td>
+            			<td width="50"></td>
+            			<td><input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" class="ad-input-time" value="2013-10-21 12:21:22" /><i class="ad-time-ico"></i></td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">创建时间：</td>
+            			<td width="50"></td>
+            			<td>2013-10-21 12:21:22</td>
+            		</tr>
+            		<tr>
+            			<td width="95" align="right">修改时间：</td>
+            			<td width="50"></td>
+            			<td>2013-10-21 12:21:22</td>
+            		</tr>
+            	</table>
+            </div>
+            <!--添加广告弹出部分 结束-->
+            <div class="pagination m-fr">
+                <a href="#">&nbsp;<span class="disable"></span></a>
+                <a href="#">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <span class="etc">...</span>
+                <a href="#">10</a>
+                <a href="#" >&nbsp;<span class="next"></span></a>
+                <span class="current">8</span>
+                <span class="goto">转到</span>
+            </div>
+        </div>
+       <!--start 广告管理table-->
+        <div class="m-mt10p advertise-manage">
+            <table class="tab-control" id="tab">
+                <thead>
+                    <tr>
+                        <th width="25%">广告名称</th>
+                        <th width="15%">预览广告</th>
+                        <th width="20%">广告开始时间</th>
+                        <th width="20%">广告结束时间</th>
+                        <th width="10%">顺序</th>
+                        <th width="10%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a  class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td>
+                        <a class="c-blue" href="#">抢广告啦啦啦啦啦啦啦啦</a>
+                    </td>
+                    <td><a class="preview">预览</a>
+                    </td>
+                    <td>
+                        2.13-05-14
+                    </td>
+                    <td>
+                        2.13.1.2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        <a class="c-blue" href="#">编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="preview-img"><img src="/web-resource/images/goodsbig.png" /></div>
+       <!--end 广告管理table-->
+    </div>
+    <!--end body-->
+    <!--start footer-->
+    <!--end footer-->
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+    <script src="../../web-resource/js/plugin/artdialog/artDialog.plugins.min.js"></script>
+    <script src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+    <script src="../../web-resource/js/plugin/My97DatePicker/WdatePicker.js"></script>
+    <script>
+    	//添加广告弹出
+			$('#addAdvertise').on("click", function () {
+			  var html = $(".add-advertise").html();
+			  $.dialog({
+			    lock: true,
+			    padding: "5px",
+			    title:false,
+			    content:html,
+			    fixed: true,
+			    cancel: true,
+			    cancelValue:"取  消",
+			    ok:function(){},
+			    okValue:"发  布"
+			  });
+			});
+			//广告预览
+			$('.preview').on("click", function () {
+			  var html = $(".preview-img").html();
+			  $.dialog({
+			    lock: true,
+			    padding: "5px",
+			    title:false,
+			    content:html,
+			    fixed: true,
+			    cancel: true,
+			    cancelValue: "关  闭"
+			  });
+			  $(".d-close").hide();
+			});
+		</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>注册</title>
+    <link rel="stylesheet" type="text/css" href="../../web-resource/css/pages/login.css" media="all">
+</head>
+<body>
+	<!--header start-->
+	
+	<!--header end-->
+	<!--wrap start-->
+	<div class="wrap">
+		<div class="m-w960p cf">
+			<div class="login-left">
+				<div class="title">
+					<h1>1.选择注册方式：</h1>
+				</div>
+				<div class="reg-tab J-reg-tab">
+					<ul class="cf">
+						<li class="cur"><i class="email"></i>使用邮箱注册</li>
+						<li><i class="mobile"></i>使用手机号注册</li>
+					</ul>
+				</div>
+				<div class="title">
+					<h1>2.填写您的信息：</h1>
+				</div>
+				<div class="login-form J-reg-list">
+					<ul>
+						<li>
+							<span class="list-name">邮箱:</span>
+							<input type="text" class="txt-input J-email" />
+							<span class="error-tip">* 请输入您的邮箱地址</span>
+							<div class="tip">请输入您的邮箱地址</div>
+						</li>
+						<li>
+							<span class="list-name">密码:</span>
+							<input type="password" class="txt-input J-pwd" />
+							<span class="error-tip">* 请输入密码</span>
+							<div class="tip">请输入6位以上的数字、字母或组合</div>
+						</li>
+						<li>
+							<span class="list-name">确认密码:</span>
+							<input type="password" class="txt-input J-rpwd" />
+							<span class="error-tip">* 请再次输入密码</span>
+							<div class="tip">请再次输入密码</div>
+						</li>
+						<li>
+							<span class="list-name">验证码:</span>
+							<input type="text" class="txt-input input-small" maxlength="4" />
+							<a href="javascript:;" class="verify-code"><img src="http://test.xlbuy365.net/front_1/validationCode.htm" width="50" height="30"/></a>
+							<a href="javascript:;" class="change-code">看不清换一张</a>
+							<span class="error-tip">* 验证码不能为空</span>
+							<div class="tip">请输入验证码</div>
+						</li>
+					</ul>
+					<div class="auto-login">
+						<label>
+							<input type="checkbox" checked="checked"/> 我已阅读并接受<a class="forget-psw" href="#">新龙直销服务条款</a>
+						</label>
+					</div>
+					<div class="login-div">
+						<a class="login-btn registration" href="javascript:;">立即注册</a>
+					</div>
+				</div>
+				<div class="login-form J-reg-list m-hidden">
+					<ul>
+						<li>
+							<span class="list-name">手机:</span>
+							<input type="text" class="txt-input J-mobile" />
+							<span class="error-tip">* 请输入手机号</span>
+							<div class="tip">请输入手机号</div>
+						</li>
+						<li>
+							<span class="list-name">验证码:</span>
+							<input type="text" class="txt-input input-small" maxlength="4" />
+							<a href="javascript:;" class="verify-code"><img src="http://test.xlbuy365.net/front_1/validationCode.htm" width="50" height="30"/></a>
+							<a href="javascript:;" class="change-code">看不清换一张</a>
+							<span class="error-tip">* 验证码不能为空</span>
+							<div class="tip">请输入验证码</div>
+						</li>
+						<li>
+							<span class="list-name"></span>
+							<a class="reg-btn" href="javascript:;">获取短信激活码</a>
+						</li>
+						<li>
+							<span class="list-name">激活码:</span>
+							<input type="text" class="txt-input input-small" maxlength="4" />
+							<span class="error-tip">* 请输入激活码</span>
+							<div class="tip">请输入激活码</div>
+						</li>
+						<li>
+							<span class="list-name">密码:</span>
+							<input type="password" class="txt-input J-pwd" />
+							<span class="error-tip">* 请输入密码</span>
+							<div class="tip">请输入6位以上的数字、字母或组合</div>
+						</li>
+						<li>
+							<span class="list-name">确认密码:</span>
+							<input type="password" class="txt-input J-rpwd" />
+							<span class="error-tip">* 请再次输入密码</span>
+							<div class="tip">请再次输入密码</div>
+						</li>
+					</ul>
+					<div class="auto-login">
+						<label>
+							<input type="checkbox" checked="checked"/> 我已阅读并接受<a class="forget-psw" href="#">新龙直销服务条款</a>
+						</label>
+					</div>
+					<div class="login-div">
+						<a class="login-btn registration" href="javascript:;">立即注册</a>
+					</div>
+				</div>
+			</div>
+			<div class="login-right">
+				<div class="login-tip">已有新龙直销账号</div>
+				<div>
+					<a class="reg-btn" href="#">立即登录</a>
+				</div>
+				<div class="login-link">
+						<p>使用合作网站的账户登录</p>
+						<a href="" class="link-QQ" title="QQ">QQ登录</a>
+						<a href="" class="link-sina" title="新浪微博">新浪微博</a>
+					</div>
+			</div>
+		</div>
+		<div class="login-foot">
+			Copyright <span class="copy-right">&copy;</span> 2000-2013 All Right Reserved上海圆通新龙电子商务有限公司 沪ICP备07507086号-3
+		</div>
+	</div>
+<script type="text/javascript" src="../../web-resource/js/jquery/jquery.1.8.1.js"></script>
+<script>
+$(function(){
+	$(".login-form .txt-input").on({
+		"focus":function(){
+			var $this = $(this),
+				$tip = $(this).siblings(".tip"),
+				$error = $(this).siblings(".error-tip");
+			$this.removeClass("error");
+			$error.hide();
+			$tip.hide();
+		},
+		"blur":function(){
+			var $this = $(this),
+				$val = $this.val(),
+				$tip = $(this).siblings(".tip"),
+				$error = $(this).siblings(".error-tip"),
+				$email = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/,
+				$mobile = /^13[0-9]{9}|15[012356789][0-9]{8}|18[0256789][0-9]{8}|147[0-9]{8}$/,
+				$pwd = /^[0-9A-Za-z]{6,}$/;
+			if(!$val){
+				$this.addClass("error");
+				$error.show();
+				$tip.show();
+			}else if($this.hasClass("J-email")){//验证邮箱
+				var flag = $email.test($val);
+				if(!flag){
+					$this.addClass("error");
+					$error.text("* 邮箱格式错误").show();
+				}
+			}else if($this.hasClass("J-mobile")){//验证手机
+				var flag = $mobile.test($val);
+				if(!flag){
+					$this.addClass("error");
+					$error.text("* 手机号码格式错误").show();
+				}
+			}else if($this.hasClass("J-pwd")){//密码
+				var flag = $pwd.test($val);
+				if(!flag){
+					$this.addClass("error");
+					$error.text("* 请输入6位以上的数字、字母或组合").show();
+				}
+			}else if($this.hasClass("J-rpwd")){//确认密码
+				$pwd = $this.parent().prev().find(".J-pwd").val();
+				if($val != $pwd){
+					$this.addClass("error");
+					$error.text("* 两次密码不一致！").show();
+				}
+			}
+		}
+	});
+	$(".login-form .tip").on("click",function(){
+		$(this).hide().siblings(".txt-input").focus();
+	});
+	$(".J-reg-tab li").on("click",function(){
+		var $this = $(this),
+			$index = $this.index(),
+			$siblings = $this.siblings(),
+			$list = $(".J-reg-list");
+		$this.addClass("cur");
+		$siblings.removeClass("cur");
+		$list.eq($index).show().siblings(".J-reg-list").hide()
+	});
+});
+</script>
+</body>
+</html>

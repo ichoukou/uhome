@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.EventRangeMapper">
+	
+	<!--  添加一组数据  -->
+	<insert id="addBatch" useGeneratedKeys="true" keyProperty="eventRangeId">
+		INSERT INTO event_range (eventId, outId, type) 
+		VALUES 
+		<foreach item="eventRange" index="index" collection="list" separator=",">
+			(#{eventId}, #{eventRange.outId}, #{eventRange.type})
+		</foreach>
+	</insert>
+	
+	<!-- 根所eventId查询适用范围 -->
+	<select id="listEventRangesByEventId" resultType="EventRange">
+		SELECT outId, type 
+			FROM event_range 
+		WHERE eventId = #{eventId}
+	</select>
+</mapper>

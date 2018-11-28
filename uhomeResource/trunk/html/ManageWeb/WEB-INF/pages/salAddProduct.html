@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/addProduct.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/addProduct.js" language="javascript"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="addPro-border">
+		<table border="0" class="addPro-table">
+			<tr>
+				<th width="145" align="right">商品属性</th>
+				<th colspan="3">&nbsp;</th>
+			</tr>
+			<tr>
+				<td align="right">*品牌：</td>
+				<td width="130">
+					<select class="select-Brand">
+						<option>请选择品牌</option>
+						<option>请选择品牌</option>
+						<option>请选择品牌</option>
+					</select>
+				</td>
+				<td colspan="2"><span class="c-red">请选择商品品牌！</span></td>
+			</tr>
+			<tr>
+				<td align="right">*商品名称：</td>
+				<td><input type="text" class="text-name" value="女女的羽绒服" /></td>
+				<td colspan="2"><span class="c-red">请填写1-20个字符组成的商品名称</span></td>
+			</tr>
+			<tr>
+				<td align="right">货号：</td>
+				<td><input type="text" class="text-name" value="539.00" /></td>
+				<td colspan="2"><span class="c-red">请填写1-30个字符组成的货号</span></td>
+			</tr>
+			<tr>
+				<td align="right">*商品原价：</td>
+				<td><input type="text" class="text-name" value="539.00" /></td>
+				<td colspan="2"><span class="c-red">填写1-10位数字、小数点组成的商品原价！</span></td>
+			</tr>
+			<tr>
+				<td align="right">特卖价：</td>
+				<td><input type="text" class="text-name" value="539.00" /></td>
+				<td width="150"><small>折扣：1.5折</small></td>
+				<td rowspan="2"><small>温馨提示：<br />填写特卖价后可参与特卖活动，填写秒杀价后商品<br/>可参与秒杀活动：请至少填写一条价格信息！</small></td>
+			</tr>
+			<tr>
+				<td align="right">秒杀价：</td>
+				<td><input type="text" class="text-name" value="539.00" /></td>
+				<td><span>折扣：1.5折</span></td>
+			</tr>
+			<tr>
+				<td align="right">可售日期：</td>
+				<td colspan="2"><input type="text" class="text-name Wdate" value="2012-12-12" /> 至 <input type="text" class="text-name Wdate" value="2012-13-12" /></td>
+				<td><small class="c-red">此商品已加入排期，可售日期必须包含排期日期</small></td>
+			</tr>
+			<tr>
+				<td align="right">*是否为进口商品：</td>
+				<td colspan="3">
+					<input type="radio" id="is-import" class="input-radio" name="is-import" checked="checked" /><label for="is-import"><small>是</small></label>
+					<input type="radio" id="no-import" class="input-radio" name="is-import" /><label for="no-import"><small>否</small></label>
+				</td>
+			</tr>
+			<tr valign="top" class="small">
+				<td align="right">颜色：</td>
+				<td colspan="3" class="c-select">
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">军绿色</span></dd>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="3">
+					<span class="small">温馨提示：勾选颜色框，可对颜色进行编辑</span>
+					<span class="c-red">请填写1-4位汉字组成的商品颜色</span>
+				</td>
+			</tr>
+			<tr valign="top" class="small">
+				<td align="right">尺码/规格：</td>
+				<td colspan="3" class="c-select">
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">165/84</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">170/88</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">175/92</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">180/96</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">165/84</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">165/84</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">165/84</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">165/84</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">165/84</span></dd>
+					<dd><input type="checkbox" class="input-checkbox" /><span class="label-sel">165/84</span></dd>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="3">
+					<span class="small">温馨提示：勾选颜色框，可对颜色进行编辑</span>
+					<span class="c-red">请填写1-15位字符组成的商品规格</span>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="right" class="small">库存：</td>
+				<td colspan="3" class="small">
+					<table>
+						<tr>
+							<td width="450">
+								<table class="repertories" width="450" class="small">
+									<tr>
+										<th>颜色</th>
+										<th>规格</th>
+										<th>特卖数量</th>
+										<th>秒杀数量</th>
+										<th>商品编码</th>
+									</tr>
+									<tr>
+										<td rowspan="2">红色</td>
+										<td>160/80(XS)</td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+									</tr>
+									<tr>
+										<td>160/80(XS)</td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+									</tr>
+									<tr>
+										<td rowspan="2">金色</td>
+										<td>160/80(XS)</td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+									</tr>
+									<tr>
+										<td>160/80(XS)</td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+										<td><input type="text" class="repertories-num" value="50" /></td>
+									</tr>
+								</table>
+							</td>
+							<td valign="bottom" class="size-tip">
+								<p class="c-red">请填写1-15位字符组成的商品</p>
+								<p class="c-red">请填写1-15位字符组成的商品规格</p>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr valign="top" class="small">
+				<td align="right">*商品图片：</td>
+				<td colspan="3">
+					<table class="no-border-table">
+						<tr>
+							<td width="120">
+								<div class="default-img">
+									<div class="del-img"></div>
+									<img src="../../web-resource/images/imgtu.gif" />
+									<i class="img-prev"></i>
+									<i class="img-next"></i>
+								</div>
+								<input type="button" class="upload-btn" value="上传新图片" />
+							</td>
+							<td width="120">
+								<div class="default-img">
+									<div class="del-img"></div>
+									<img src="../../web-resource/images/goodsbig.png" />
+									<i class="img-prev"></i>
+									<i class="img-next"></i>
+								</div>
+								<input type="button" class="upload-btn" value="上传新图片" />
+							</td>
+							<td width="120">
+								<div class="default-img">
+									<div class="del-img"></div>
+									<img src="../../web-resource/images/imgtu.gif" />
+									<i class="img-prev"></i>
+									<i class="img-next"></i>
+								</div>
+								<input type="button" class="upload-btn" value="上传新图片" />
+							</td>
+							<td width="120">
+								<div class="default-img">
+									<div class="del-img"></div>
+									<i class="img-prev"></i>
+									<i class="img-next"></i>
+								</div>
+								<input type="button" class="upload-btn" value="上传新图片" />
+							</td>
+							<td valign="bottom" id="no_img"><span class="c-red">请上传完整的商品展示图</span></td>
+						</tr>
+						<tr>
+							<td colspan="5">温馨提示：为保证图片效果请上传400px X 400px的商品图片</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr valign="top" class="small">
+				<td align="right">*商品描述：</td>
+				<td colspan="3">
+					<textarea class="edit-textarea"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><div class="c-red">问题描述不能为空</div></td>
+				<td></td>
+				<td align="center">源码：已输入<b class="c-green">0</b>/最多输入<b class="c-red">25000</b></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="3">
+					<input type="button" class="edit-btn" value="保&nbsp;&nbsp;存" />
+					<input type="button" class="edit-btn" value="提交审核" />
+					<input type="button" class="edit-btn" value="预&nbsp;&nbsp;览" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+<script>
+$(document).ready(function(){
+	//如果有上传图片，显示交换按钮
+	$(".default-img").hover(function(){
+		if($(this).find("img")[0]){
+			$(this).find("i").show();
+		}
+	},function(){
+		$(this).find("i").hide();
+	});
+	//图片向前排序
+	$(".img-prev").on("click",function(){
+		var this_td = $(this).parent().parent();
+		var prev_td = $(this_td).prev("td");
+		$(prev_td).before(this_td);
+	});
+	//图片向后排序
+	$(".img-next").on("click",function(){
+		var this_td = $(this).parent().parent();
+		var next_td = $(this_td).next("td");
+		var no_img = $(next_td).attr("id");
+		if(no_img != "no_img"){
+			$(next_td).after(this_td);
+		}
+	});
+	//删除图片
+	$(".del-img").on("click",function(){
+		$(this).next("img").remove();
+	});
+});
+</script>
+</body>
+</html>

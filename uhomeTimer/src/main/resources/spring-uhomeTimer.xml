@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	
+	
+	<!--zebra.properties: 
+		zebra.dev.properties:开发时使用的属性文件；
+		zebra.test.properties:测试时使用的属性文件；
+		zebra.pre.properties: 
+		zebra.pre.properties:
+		zebra.prod.properties:
+		
+		      <value>classpath:zebra.properties</value>
+                <value>classpath:zebra.dev.properties</value>
+                <value>classpath:zebra.test.properties</value>
+                <value>classpath:zebra.pre.properties</value>
+                <value>classpath:zebra.prod.properties</value>
+		
+		-->
+    <bean id="propertyConfigurer" class="com.ytoxl.module.core.common.config.PropertyPlaceholderConfigurer" lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>classpath:ytoxlCore.properties</value>
+                <value>classpath:ytoxlMail.properties</value>
+            	<value>classpath:ytoxlUser.properties</value>
+                <value>classpath:uHomeBase.properties</value>
+                <value>classpath:uHomeContent.properties</value>
+                <value>classpath:uHomeOrder.properties</value>
+          		<value>classpath:uhomeTimer.properties</value>
+                <value>classpath:uhomeTimer.dev.properties</value>
+                <value>classpath:uhomeTimer.test.properties</value>
+                <value>classpath:uhomeTimer.pre.properties</value>
+                <value>classpath:uhomeTimer.prod.properties</value>                
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+    </bean>  
+    
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>exceptions_uHomeBase</value>
+                <value>exceptions_uHomeContent</value>
+                <value>exceptions_uHomeOrder</value>
+                <value>exceptions_uHomeFront</value>
+                <value>messages</value>
+            </list>
+        </property>        
+    </bean>
+</beans>

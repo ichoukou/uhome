@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.RegionMapper">
+
+  <insert id="add" parameterType="Region" keyProperty="regionId" useGeneratedKeys="true">
+		insert into region(parentRegionId,  regionName,  regionCode,  rank ) 
+		values ( #{parentRegionId},  #{regionName},  #{regionCode},  #{rank} )                    
+  </insert>
+  
+  <select id="get" parameterType="integer" resultType="Region">
+        SELECT  parentRegionId,  regionName,  regionCode,  rank 
+		FROM region 
+		where regionId = #{regionId}
+  </select>
+  
+  <!-- 根据地址库编码查询地址库信息 -->
+  <select id="getRegionByCode" parameterType="String" resultType="Region">
+        SELECT  regionId,parentRegionId,  regionName,  regionCode,  rank 
+		FROM region 
+		where regionCode = #{regionCode}
+  </select>
+  
+  <!-- 根据址库编码修改地址库信息 -->
+ <update id="update" parameterType="Region">
+		update region 
+		set 
+			parentRegionId=#{parentRegionId}, 
+			regionName=#{regionName},
+			regionCode=#{regionCode},
+			rank=#{rank}
+		where  regionCode = #{regionCode}
+  </update>
+  
+  <select id="getDetailInfoByRegionId" parameterType="Integer" resultType="Region">
+  		SELECT countyId regionId, regionName province,city ,county FROM region region ,
+			(
+			SELECT three.regionId countyId, two.regionName city, two.parentRegionId ,three.regionName county FROM region two 
+			,(SELECT regionId , regionName,parentRegionId FROM region WHERE region.regionId=#{regionId}) three
+			WHERE two.regionId=three.parentRegionId) one 
+		WHERE region.regionId=one.parentRegionId 
+  </select>
+  
+  <select id="getDetailInfoByRegionCode" parameterType="Integer" resultType="Region">
+  		SELECT countyId regionId, regionName province,city ,county FROM region region ,
+			(
+			SELECT three.regionId countyId, two.regionName city, two.parentRegionId ,three.regionName county FROM region two 
+			,(SELECT regionId , regionName,parentRegionId FROM region WHERE region.regionCode=#{regionCode}) three
+			WHERE two.regionId=three.parentRegionId) one 
+		WHERE region.regionId=one.parentRegionId 
+  </select>
+  <!-- 根据regionId 得到相关的code -->
+    <select id="getRegionCodesByRegionId" parameterType="Integer" resultType="Region">
+  		SELECT countyId regionId, regionCode province,city, county FROM region region ,
+			(
+			SELECT three.regionId countyId, two.regionCode city, two.parentRegionId ,three.regionCode county FROM region two 
+			,(SELECT regionId , regionCode,parentRegionId FROM region WHERE region.regionId=#{regionId}) three
+			WHERE two.regionId=three.parentRegionId) one 
+		WHERE region.regionId=one.parentRegionId 
+  </select>
+
+  <!-- 查询出所有的省 -->	
+  <select id="getProvince" resultType="RegionModel">
+  		select regionId as `id`,
+  			   regionName as `name`
+		from region
+		where parentRegionId=0
+  </select>
+  <!-- 根据省份id查询下面所有的城市 -->	
+  <select id="getCityOrArea" resultType="RegionModel">
+  		select regionId as `id`,
+  			   regionName as `name`
+		from region
+		where parentRegionId=#{pcId}
+  </select>
+
+  <!-- 通过id查询 省、市、区的regionId -->
+  <select id="getRegionIdsByRegionId" resultType="RegionModel">
+  		select c.countyId,c.cityId,regionId provinceId
+		from region,(		
+		  select a.regionId countyId,b.regionId cityId,b.parentRegionId
+		  from region b,(
+				select regionId,parentRegionId
+				from region
+				where regionId=#{regionId}
+			) a
+		  where a.parentRegionId=b.regionId
+		) c
+		where c.parentRegionId=regionId	
+  </select>
+
+</mapper>

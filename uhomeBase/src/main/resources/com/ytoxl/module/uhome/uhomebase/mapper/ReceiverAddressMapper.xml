@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.ReceiverAddressMapper">
+	
+	<!-- 添加一条数据 -->
+	<insert id="add" parameterType="ReceiverAddress" useGeneratedKeys="true" keyProperty="receiverAddressId">
+		insert into receiver_address(regionId,regionCodes,mobile,telephone,postCode,receiverName,receiveAddress,
+									isDefault,createTime,userId)
+		values(#{regionId},#{regionCodes},#{mobile},#{telephone},#{postCode},#{receiverName},#{receiveAddress},
+									#{isDefault},CURRENT_TIMESTAMP,#{userId})
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from receiver_address where receiverAddressId=#{id}
+	</delete>
+	
+    <!-- 更新一条数据 -->
+    <update id="update" parameterType="ReceiverAddress">
+    	update receiver_address 
+    	set	
+    		<if test="regionId!=null">
+    			regionId=#{regionId},
+    		</if>
+    		<if test="regionCodes!=null">
+    		regionCodes=#{regionCodes},
+    		</if>
+    		<if test="receiverName!=null">
+    			receiverName=#{receiverName},
+    		</if>
+    		<if test="mobile!=null">
+    			mobile=#{mobile},
+    		</if>
+   			<if test="mobile!=null">
+    				telephone=#{telephone},
+    		</if>
+    		postCode=#{postCode},
+    		receiveAddress=#{receiveAddress},
+    		isDefault=#{isDefault},
+    		updateTime=CURRENT_TIMESTAMP 
+    	where receiverAddressId=#{receiverAddressId}
+    </update>
+    
+    <!-- 根据收货地址id查询数据 -->
+    <select id="get" parameterType="ReceiverAddress" resultType="ReceiverAddress">
+    	select * 
+    	from receiver_address 
+    	where receiverAddressId=#{receiverAddressId}
+    </select> 
+    
+    <!-- 根据用户的id查询非默认地址的数据 -->
+    <select id="getOtherAddress" parameterType="java.lang.Integer" resultType="ReceiverAddress">
+    	select * 
+    	from receiver_address 
+    	where userId=#{userId} and isDefault = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ReceiverAddress@ISDEFAULT_FALSE}
+    </select> 
+    
+    <!-- 根据用户id查询该用户所有的收货地址 -->
+    <select id="getReceiverAddressList" parameterType="java.lang.Integer" resultType="ReceiverAddress">
+    	select * 
+    	from receiver_address 
+    	where userId=#{userId}
+    	ORDER BY isDefault DESC
+    </select>
+    
+        <!-- 获取该用户默认的地址 -->
+    <select id="getDefaultAddress" parameterType="java.lang.Integer" resultType="ReceiverAddress">
+    	select * 
+    	from receiver_address 
+    	where userId=#{userId} and isDefault = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ReceiverAddress@ISDEFAULT_TRUE}
+    </select> 
+    
+    <!-- 根据用户id查询该用户所有的收货地址详细信息 -->
+    <select id="getRAddressDetailList" parameterType="java.lang.Integer" resultType="ReceiverAddress">
+    	select ra.*,
+			   detail.regionId as `region.regionId`,
+			   province as `region.province`,
+			   city as `region.city`,
+			   county as `region.county`
+    	from receiver_address ra inner join  (SELECT countyId regionId, regionName province,city ,county FROM region region ,
+			(SELECT three.regionId countyId, two.regionName city, two.parentRegionId ,three.regionName county FROM region two 
+			,(SELECT regionId , regionName,parentRegionId FROM region ) three
+			WHERE two.regionId=three.parentRegionId) one 
+				WHERE region.regionId=one.parentRegionId )detail 
+		on ra.regionId=detail.regionId
+    	where userId=#{userId}
+    	order by isDefault desc
+    </select>
+      <!-- 设置成默认的收货地址-->
+    <update id="updateDefaultAddress" parameterType="java.lang.Integer" >
+    	update receiver_address 
+    	set	isDefault =${@com.ytoxl.module.uhome.uhomebase.dataobject.ReceiverAddress@ISDEFAULT_TRUE} where  receiverAddressId=#{receiverAddressId} 
+    </update> 
+    
+      <!-- 取消其他全部默认的收货地址-->
+    <update id="updateNotDefaultAddress" parameterType="ReceiverAddress" >
+    	update receiver_address 
+    	set	isDefault =${@com.ytoxl.module.uhome.uhomebase.dataobject.ReceiverAddress@ISDEFAULT_FALSE} where userId=#{userId} and receiverAddressId!=#{receiverAddressId}
+    </update> 
+    
+    <!-- 取消当前用户所有的默认地址-->
+    <update id="updatesNotDefaultAddress" parameterType="java.lang.Integer" >
+    	update receiver_address 
+    	set	isDefault =${@com.ytoxl.module.uhome.uhomebase.dataobject.ReceiverAddress@ISDEFAULT_FALSE} where userId=#{userId} 
+    </update> 
+    <!-- 查詢當前所有的地址 -->
+    <select id="myAddress" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    	select count(*) from receiver_address where userId=#{userId}
+    </select>
+</mapper>

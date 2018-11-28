@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderHeadMapper">
+
+	<insert id="add" parameterType="OrderHead" keyProperty="orderId" useGeneratedKeys="true">
+		INSERT INTO order_head(
+			orderId,
+			orderNo,
+			userId,
+			skuNum,
+			totalPrice,
+			receiverAddressId,
+			status,
+			createTime,
+			parentOrderId
+		)
+		VALUES(
+			#{orderId},
+			#{orderNo},
+			#{userId},
+			#{skuNum},
+			#{totalPrice},
+			#{receiverAddressId},
+			#{status},
+			CURRENT_TIMESTAMP,
+			#{parentOrderId}
+		)            
+  </insert>
+
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_head WHERE
+		orderId = #{orderId}
+  </delete>
+
+	<!-- 根据址库编码修改地址库信息 -->
+	<update id="update" parameterType="OrderHead">
+		UPDATE order_head
+		SET
+			orderNo = #{orderNo},
+			userId = #{userId},
+			skuNum = #{skuNum},
+			receiverAddressId = #{receiverAddressId},
+			totalPrice = #{totalPrice},
+			status = #{status},
+			updateTime = CURRENT_TIMESTAMP,
+			parentOrderId = #{parentOrderId}
+		WHERE orderId = #{orderId}
+  </update>
+
+	<select id="get" parameterType="integer" resultType="OrderHead">
+		SELECT
+			orderId,
+			orderNo,
+			userId,
+			skuNum,
+			receiverAddressId,
+			totalPrice,
+			status,
+			createTime,
+			updateTime,
+			parentOrderId
+		FROM order_head
+		WHERE orderId = #{orderId}
+  </select>
+
+	<!-- 根据订单号获取订单信息 -->
+	<select id="getOrderHeadByOrderNo" resultType="OrderHead">
+		SELECT
+		*
+		FROM order_head
+		WHERE orderNo = #{orderNo}
+  </select>
+
+	<!-- 根据id查询订单明细 -->
+	<select id="getOrderById" parameterType="integer" resultType="OrderHead">
+		SELECT
+			head.*,
+			payment.paymentAmount AS `payment.paymentAmount`,
+			payment.closingCostAmount AS `payment.closingCostAmount`,
+			payment.payTime AS `payment.payTime`,
+			payment.status AS `payment.status`,
+			payment.hasInvoice AS `payment.hasInvoice`,
+			payment.InvoiceTitle AS `payment.InvoiceTitle`,
+			payment.account AS `payment.account`,
+			exp.receiverName AS `address.receiverName`,
+			exp.receiveAddress AS `address.receiveAddress`,
+			exp.telephone AS `address.telephone`,
+			exp.postCode AS `address.postCode`,
+			exp.mobile AS `address.mobile`,
+			exp.regionId AS `address.regionId`,
+			IFNULL(op.postage,0) AS `orderPostage.postage`
+		FROM
+			order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		LEFT JOIN order_express exp ON head.orderId = exp.orderId
+		LEFT JOIN order_postage op ON head.orderId = op.orderId
+		WHERE head.orderId = #{orderId}
+  </select>
+  
+  <!-- 前台我的订单 除了待付款状态的查询 -->
+  <select id="searchOrders4Front" parameterType="map" resultType="OrderHead">
+  		SELECT
+		head.* ,
+		payment.paymentAmount AS `payment.paymentAmount`,
+		payment.payTime AS `payment.payTime`,
+		payment.status AS `payment.status`,
+		<!-- address.receiverName AS `address.receiverName`, -->
+		order_express.receiverName AS `address.receiverName`,
+		order_express.orderExpressId as `orderExpress.orderExpressId`,
+		order_express.expressName as `orderExpress.expressName`,
+		express.expressId as `orderExpress.express.expressId`,
+		express.expressName as `orderExpress.express.expressName`,
+		IFNULL(op.postage,0) AS `orderPostage.postage`
+		FROM order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		<!-- LEFT JOIN receiver_address address ON head.receiverAddressId = address.receiverAddressId -->
+		LEFT JOIN order_express ON head.orderId=order_express.orderId
+		LEFT JOIN express ON order_express.expressId=express.expressId
+		LEFT JOIN order_postage op ON head.orderId = op.orderId
+		where 1=1
+		<if test="userId != null and userId != ''">
+			and head.userId=#{userId}
+		</if>
+		<if test="status != null and status != ''">
+			and head.status = #{status}
+		</if>
+		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			and DATE_FORMAT(head.createTime,'%Y-%m-%d') between #{beginTime} and #{endTime}
+		</if>
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+		limit #{start},#{limit}
+  </select>
+	
+  <select id="searchOrders4FrontCount" parameterType="map" resultType="java.lang.Integer">
+  	SELECT count(*)
+    FROM order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		<!-- LEFT JOIN receiver_address address ON head.receiverAddressId = address.receiverAddressId -->
+		LEFT JOIN order_express ON head.orderId=order_express.orderId
+		LEFT JOIN express ON order_express.expressId=express.expressId
+		where 1=1
+		<if test="userId != null and userId != ''">
+			and head.userId=#{userId}
+		</if>
+		<if test="status != null and status != ''">
+			and head.status = #{status}
+		</if>
+		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			and DATE_FORMAT(head.createTime,'%Y-%m-%d') between #{beginTime} and #{endTime}
+		</if>
+  </select>
+  
+  <!-- 前台我的订单待付款状态订单 -->
+  <select id="searchOrders4FrontMyOrders" parameterType="map" resultType="OrderHead">
+  		SELECT
+		head.* ,
+		payment.paymentAmount AS `payment.paymentAmount`,
+		payment.payTime AS `payment.payTime`,
+		payment.status AS `payment.status`,
+		<!-- address.receiverName AS `address.receiverName`, -->
+		order_express.receiverName AS `address.receiverName`,
+		order_express.orderExpressId as `orderExpress.orderExpressId`,
+		order_express.expressName as `orderExpress.expressName`,
+		express.expressId as `orderExpress.express.expressId`,
+		express.expressName as `orderExpress.express.expressName`,
+		IFNULL(op.postage,0) AS `orderPostage.postage`
+		FROM order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		<!-- LEFT JOIN receiver_address address ON head.receiverAddressId = address.receiverAddressId -->
+		LEFT JOIN order_express ON head.orderId=order_express.orderId
+		LEFT JOIN express ON order_express.expressId=express.expressId
+		LEFT JOIN order_postage op ON head.orderId = op.orderId
+		where(
+			(
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			or
+			payment.documentType is null
+			)
+			<if test="status == null or status == ''">
+				and head.parentOrderId is null	
+	  		</if>
+			<if test="userId != null and userId != ''">
+				and head.userId=#{userId}
+			</if>
+			<if test="status != null and status != ''">
+				and head.status = #{status}
+				and head.parentOrderId is null
+				or( head.orderId in(
+					select distinct oh.parentOrderId
+					from order_head oh
+					where oh.parentOrderId is not null
+					and oh.status = #{status}
+					and oh.userId = #{userId})
+				)
+			)
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				and DATE_FORMAT(head.createTime,'%Y-%m-%d') between #{beginTime} and #{endTime}
+			</if>
+			<if test="sort != null and sort != ''">
+				order by ${sort}
+				<if test="dir != null and dir != ''">
+					${dir}	
+				</if>
+			</if>
+			limit #{start},#{limit}
+  </select>
+  <select id="searchOrders4FrontMyOrdersCount" parameterType="map" resultType="java.lang.Integer">
+  		SELECT count(*)
+		FROM order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		<!-- LEFT JOIN receiver_address address ON head.receiverAddressId = address.receiverAddressId -->
+		<!-- LEFT JOIN order_return ON head.orderId=order_return.orderId -->
+		LEFT JOIN order_express ON head.orderId=order_express.orderId
+		LEFT JOIN express ON order_express.expressId=express.expressId
+		where(
+			(
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			or
+			payment.documentType is null
+			)
+			<if test="status == null or status == ''">
+				and head.parentOrderId is null	
+	  		</if>
+			<if test="userId != null and userId != ''">
+				and head.userId=#{userId}
+			</if>
+			<if test="status != null and status != ''">
+				and head.status = #{status}
+				and head.parentOrderId is null
+				or( head.orderId in(
+					select distinct oh.parentOrderId
+					from order_head oh
+					where oh.parentOrderId is not null
+					and oh.status = #{status}
+					and oh.userId = #{userId})
+				)
+			)
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				and DATE_FORMAT(head.createTime,'%Y-%m-%d') between #{beginTime} and #{endTime}
+			</if>
+  </select>		
+	
+	<!-- 获取我的订单 -->
+	<select id="searchOrders" parameterType="map" resultType="OrderHead">
+		SELECT
+		head.* ,
+		payment.paymentAmount AS `payment.paymentAmount`,
+		payment.payTime AS `payment.payTime`,
+		payment.status AS `payment.status`,
+		address.receiverName AS `address.receiverName`,
+		order_express.orderExpressId as `orderExpress.orderExpressId`,
+		order_express.expressName as `orderExpress.expressName`,
+		express.expressId as `orderExpress.express.expressId`,
+		express.expressName as `orderExpress.express.expressName`
+		FROM order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		LEFT JOIN
+		receiver_address address ON head.receiverAddressId =
+		address.receiverAddressId
+		LEFT JOIN order_express ON
+		head.orderId=order_express.orderId
+		LEFT JOIN express ON
+		order_express.expressId=express.expressId
+		<include refid="searchOrdersCondition" />
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+		limit #{start},#{limit}
+	</select>
+
+	<select id="searchOrdersCount" parameterType="map" resultType="Integer">
+		SELECT count(*)
+		FROM order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		LEFT JOIN
+		receiver_address address ON head.receiverAddressId =
+		address.receiverAddressId
+		<!-- LEFT JOIN order_return ON head.orderId=order_return.orderId -->
+		LEFT JOIN order_express ON head.orderId=order_express.orderId
+		LEFT JOIN
+		express ON order_express.expressId=express.expressId
+		<include refid="searchOrdersCondition" />
+	</select>
+
+	<sql id="searchOrdersCondition">
+		<where>
+			(
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			or
+			payment.documentType is null
+			)
+			<if test="status == null or status == ''">
+				and head.parentOrderId is null	
+	  		</if>
+			<if test="userId != null and userId != ''">
+				and head.userId=#{userId}
+			</if>
+			<if test="status != null and status != ''">
+				and head.status = #{status}
+				and head.parentOrderId is null
+				<!-- 
+				or head.status is null
+				and head.parentOrderId is null
+				-->
+				or( head.orderId in(
+					select distinct oh.parentOrderId
+					from order_head oh
+					where oh.parentOrderId is not null
+					and oh.status = #{status}
+					and oh.userId = #{userId})
+				)
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				<!-- and payment.payTime between #{beginTime} and #{endTime} -->
+				and head.createTime between #{beginTime} and #{endTime}
+			</if>
+			<if test="productCategoryId != null and productCategoryId != ''">
+				and head.orderId in(
+				SELECT
+				order_item.orderId
+				FROM
+				order_item
+				INNER JOIN product_sku ON order_item.productSkuId =
+				product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				INNER JOIN brand ON product.brandId = brand.brandId
+				WHERE
+				brand.productCategoryId=#{productCategoryId}
+				)
+			</if>
+			<if test="brandId != null and brandId != ''">
+				and head.orderId in(
+				SELECT
+				order_item.orderId
+				FROM
+				order_item
+				INNER JOIN product_sku ON order_item.productSkuId =
+				product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				INNER JOIN brand ON product.brandId = brand.brandId
+				WHERE
+				brand.brandId=#{brandId}
+				)
+			</if>
+			<if test="sellerId != null and sellerId != ''">
+				and head.orderId in(
+				SELECT
+				order_item.orderId
+				FROM
+				order_item
+				WHERE
+				order_item.sellerId=#{sellerId}
+				)
+			</if>
+			<if test="receiverName != null and receiverName != ''">
+				and (address.receiverName like CONCAT('%','${receiverName}','%')
+				or
+				address.mobile like CONCAT('%','${receiverName}','%' ) or
+				address.telephone like CONCAT('%','${receiverName}','%' ) or
+				head.orderNo like CONCAT('%','${receiverName}','%' )
+				)
+			</if>
+			<if test="buyerId != null and buyerId != ''">
+				and head.userId=#{buyerId}
+			</if>
+		</where>
+	</sql>
+
+	<!--查询需要导出的订单 -->
+	<select id="listOrders" parameterType="map" resultType="OrderHead">
+		SELECT DISTINCT
+			oh.orderId,
+			oh.orderNo,
+			oh.status,
+			oh.createTime,
+			pm.paymentAmount AS `payment.paymentAmount`,
+			pm.createTime AS `payment.createTime`,
+			pm.payTime AS `payment.payTime`,
+			pm.hasInvoice AS `payment.hasInvoice`,
+			pm.invoiceTitle AS `payment.invoiceTitle`,
+			oe.receiverName AS `address.receiverName`,
+			oe.receiveAddress AS `address.receiveAddress`,
+			oe.mobile AS `address.mobile`,
+			oe.regionId AS `address.regionId`,
+			oe.telephone AS `address.telephone`,
+			oe.postCode AS `address.postCode`
+		FROM
+			order_head oh
+		LEFT JOIN order_payment pm ON oh.orderId = pm.orderId
+		LEFT JOIN order_item item ON oh.orderId = item.orderId
+		LEFT JOIN order_express oe ON oh.orderId = oe.orderId
+		<include refid="searchOrders4ManagerCondition" />
+		ORDER BY oh.createTime DESC
+	</select>
+	<select id="listReturnOrders" parameterType="map" resultType="OrderReturnExport" >
+	   select 
+ 			oh.orderId,
+			oh.orderNo,
+			oh.status,
+			oh.createTime,
+			pm.paymentAmount AS `payment.paymentAmount`,
+			pm.createTime AS `payment.createTime`,
+			pm.payTime AS `payment.payTime`,
+			pm.hasInvoice AS `payment.hasInvoice`,
+			pm.invoiceTitle AS `payment.invoiceTitle`,
+			oe.receiverName AS `address.receiverName`,
+			oe.receiveAddress AS `address.receiveAddress`,
+			oe.mobile AS `address.mobile`,
+			oe.regionId AS `address.regionId`,
+			oe.telephone AS `address.telephone`,
+			oe.postCode AS `address.postCode`,
+			oi.orderItemId AS `item.orderItemId`,
+			ori.status AS `orderReturn.item.status`,
+			orp.status AS `orderReturn.orderReturnPayment.status`
+	  from order_head oh 
+	  LEFT JOIN order_payment pm ON oh.orderId = pm.orderId
+	  LEFT JOIN order_express oe ON oh.orderId = oe.orderId
+	  join order_return ort 
+	  on oh.orderId = ort.orderId 
+	  left join order_return_payment orp
+ 	  on ort.orderReturnId = orp.orderReturnId
+	  join order_return_item ori 
+	  on ort.orderReturnId = ori.orderReturnId
+	  join order_item oi 
+	  on ori.orderItemId = oi.orderItemId
+	  <if test="returnStatus!=0">
+			WHERE ori.status = #{index}
+	  </if>
+	  <if test="returnStatus==0">
+			WHERE 1 = 1 
+	  </if>
+	  <if test="returnStatus==3">
+         	and	orp.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_WAITREFUND}
+      </if>
+      <if test="returnStatus==5">
+         	and	orp.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+      </if>
+	  <include refid="searchReturnOrders4ManagerCondition" />
+	  ORDER BY oh.createTime DESC
+	</select>	
+
+	<!--查询订单产品规格 -->
+	<select id="listProductSkus" parameterType="integer" resultType="OrderHead">
+		SELECT
+			GROUP_CONCAT(sov.skuOptionValue) productProperty,
+			GROUP_CONCAT(order_item.productName) productName,
+			seller.companyName sellerName,
+			order_item.orderSource
+		FROM order_item
+		INNER JOIN product_sku ON order_item.productSkuId = product_sku.productSkuId
+		LEFT JOIN product_sku_option_value psov ON product_sku.productSkuId = psov.productSkuId
+		LEFT JOIN sku_option_value sov ON psov.skuOptionValueId = sov.skuOptionValueId
+		INNER JOIN sku_option so ON sov.skuOptionId = so.skuOptionId
+		INNER JOIN seller ON order_item.sellerId = seller.sellerId
+		WHERE orderId = #{orderId}
+		GROUP BY order_item.orderId
+		ORDER BY order_item.orderItemId
+  </select>
+
+	<!-- 查询可以退货的订单的总和 -->
+	<select id="searchDeliveredOrdersCount" parameterType="map" resultType="Integer">
+		SELECT count(orderId)
+		FROM order_head head
+		where head.userId=#{userId} 
+			and head.status in (
+				${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED},
+				${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_RETURN},
+				${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND}
+			)
+			and (DATEDIFF(CURRENT_TIMESTAMP,head.sendProductTime)+1) &lt;= ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@RETRUN_DATE}
+		<if test="beginTime != null and beginTime != ''">
+			and head.createTime &gt; #{beginTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and head.createTime &lt; #{endTime} 
+		</if>
+		<if test="orderId!= null and orderId != ''">
+			and head.orderId=#{orderId}	
+		</if>
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+	</select>
+
+	<!-- 查询可以退货的订单列表 -->
+	<select id="searchDeliveredOrders" parameterType="map"
+		resultType="OrderHead">
+		SELECT
+		head.*
+		FROM order_head head
+		where
+		head.userId=#{userId} and
+		head.status in
+		(${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND},
+		 ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED},
+		 ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_RETURN})
+		and  (DATEDIFF(CURRENT_TIMESTAMP,head.sendProductTime)+1) &lt;= ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@RETRUN_DATE}
+		<if test="beginTime != null and beginTime != ''">
+			and head.createTime &gt; #{beginTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and head.createTime &lt; #{endTime}
+		</if>
+		<if test="orderId!= null and orderId != ''">
+			and head.orderId=#{orderId}	
+		</if>
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+		limit #{start},#{limit}
+	</select>
+
+	<!-- 更改订单状态 -->
+	<update id="updateStatus" parameterType="OrderHead">
+		UPDATE order_head
+		SET
+		status = #{status},
+		updateTime = CURRENT_TIMESTAMP
+		WHERE orderId =#{orderId}
+  	</update>
+  	
+  	<!-- 更新收货时间 -->
+  	<update id="updateReceiveProductTime" parameterType="java.lang.Integer">
+  		update order_head
+  		set receiveProductTime = CURRENT_TIMESTAMP
+  		where orderId=#{orderId}
+  	</update>
+  	
+  	<!-- 更新发货时间 -->
+	<update id="updateSendProductTimeAndOrderStatus" parameterType="OrderHead">
+  		update order_head
+  		set 
+  		status = #{status},
+  		updateTime = CURRENT_TIMESTAMP,
+  		sendProductTime = CURRENT_TIMESTAMP
+  		where orderId=#{orderId}
+  	</update>
+
+	<!-- 更改订单状态 -->
+	<update id="updateStatusByOrderId" parameterType="Integer">
+		UPDATE
+		order_head
+		SET
+		status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_RETURN},
+		updateTime = CURRENT_TIMESTAMP
+		WHERE orderId = #{orderId}
+  	</update>
+	<!--查询订单根据当前用户id -->
+	<select id="getOrderHead" parameterType="integer" resultType="OrderHead">
+		SELECT
+		distinct order_head.orderId,
+		status
+		FROM order_head INNER JOIN
+		order_item on order_head.orderId=order_item.orderId
+		where orderNo=#{orderNo} and sellerId=#{sellerId}
+  </select>
+
+	<!-- 15天自动更改订单为完成 -->
+	<update id="updateStatusToFinished">
+		UPDATE order_head SET
+		status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED},
+		receiveProductTime = CURRENT_TIMESTAMP
+		WHERE orderId in (
+			SELECT t.orderId FROM (select orderId from order_head
+			where status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND}
+			<!-- and updateTime &lt;= date_sub(CURRENT_TIMESTAMP, interval #{defaultDay} day) -->
+			and (DATEDIFF(CURRENT_TIMESTAMP,sendProductTime)+1) &gt;= #{defaultDay}
+			and status is not null
+			limit #{limit})AS t
+		)
+  </update>
+	<!-- 30分钟未付款自动更改订单为已取消 -->
+	<update id="updateStatusToCanceled">
+		UPDATE order_head
+		SET
+		status =
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_CANCEL}
+		WHERE orderId in (
+		SELECT t.orderId FROM (select orderId from order_head
+		where
+		status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_NEW}
+		and updateTime &lt;= date_sub(CURRENT_TIMESTAMP, interval
+		#{cancelTime} MINUTE)
+		and status is not null
+		limit #{limit})AS t
+		)
+  </update>
+
+	<!-- 查询30分钟未付款的订单 -->
+	<select id="listNotPayOrders" resultType="OrderHead">
+		select * from order_head
+		where
+		status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_NEW}
+		and updateTime &lt;= date_sub(CURRENT_TIMESTAMP, interval
+		#{cancelTime} MINUTE)
+		and status is not null
+		limit #{limit}
+  </select>
+
+	<!-- 后台订单分页 -->
+	<select id="searchOrders4Manager" resultType="OrderHead">
+		SELECT
+			oh.*, pm.paymentAmount AS `payment.paymentAmount`,
+			pm.status AS `payment.status`,
+			pm.payTime AS `payment.payTime`,
+			oe.orderExpressId AS `orderExpress.orderExpressId`,
+			oe.expressName AS `orderExpress.expressName`,
+			oe.receiverName AS `address.receiverName`
+		FROM order_head oh
+		LEFT JOIN order_payment pm ON oh.orderId = pm.orderId
+		LEFT JOIN order_express oe ON oh.orderId = oe.orderId
+		<include refid="searchOrders4ManagerCondition" />
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+		limit #{start},#{limit}
+	</select>
+
+	<select id="searchOrders4ManagerCount" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM order_head oh
+		LEFT JOIN order_payment pm ON oh.orderId = pm.orderId
+		LEFT JOIN order_express oe ON oh.orderId = oe.orderId
+		<include refid="searchOrders4ManagerCondition" />
+	</select>
+	<sql id="searchReturnOrders4ManagerCondition">
+			AND oh.orderNo IS NOT NULL
+			AND pm.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			<if test="status!=null and status !=''">and oh.status in (${status})</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			AND DATE_FORMAT(oh.createTime,"%Y-%m-%d") between #{beginTime} and #{endTime}	
+			</if>
+			<if test="productCategoryId != null and productCategoryId != ''">
+			AND oh.orderId IN(
+				SELECT order_item.orderId
+					FROM order_item
+				INNER JOIN product_sku ON order_item.productSkuId = product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				WHERE product.productCategoryId IN (SELECT productCategoryId FROM product_category WHERE parentId = #{productCategoryId})
+			)
+			</if>
+			<if test="brandId != null and brandId != ''">
+			AND oh.orderId IN(
+				SELECT order_item.orderId
+					FROM order_item
+				INNER JOIN product_sku ON order_item.productSkuId = product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				INNER JOIN brand ON product.brandId = brand.brandId
+				WHERE brand.brandId = #{brandId}
+			)
+			</if>
+			<if test="sellerId != null and sellerId != ''">
+			AND oh.orderId IN(SELECT order_item.orderId FROM order_item WHERE order_item.sellerId=#{sellerId})
+			</if>
+			<if test="buyerId != null and buyerId != ''">
+			AND oh.userId = #{buyerId}
+			</if>
+			<if test="keywords != null and keywords != ''">
+			AND (oh.orderNo like CONCAT('%','${keywords}','%') 
+					OR oe.receiverName like CONCAT('%','${keywords}','%')
+					<if test="sellerId != null and sellerId != ''">
+					OR oe.mobile like CONCAT('%','${keywords}','%')
+					</if>
+				)
+			</if>
+	</sql>
+
+	<!-- 后台订单查询条件  -->
+	<sql id="searchOrders4ManagerCondition">
+		<where>
+			oh.orderNo IS NOT NULL
+			AND pm.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			<if test="status!=null and status !=''">and oh.status in (${status})</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			AND DATE_FORMAT(oh.createTime,"%Y-%m-%d") between #{beginTime} and #{endTime}	
+			</if>
+			<if test="productCategoryId != null and productCategoryId != ''">
+			AND oh.orderId IN(
+				SELECT order_item.orderId
+					FROM order_item
+				INNER JOIN product_sku ON order_item.productSkuId = product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				WHERE product.productCategoryId IN (SELECT productCategoryId FROM product_category WHERE parentId = #{productCategoryId})
+			)
+			</if>
+			<if test="brandId != null and brandId != ''">
+			AND oh.orderId IN(
+				SELECT order_item.orderId
+					FROM order_item
+				INNER JOIN product_sku ON order_item.productSkuId = product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				INNER JOIN brand ON product.brandId = brand.brandId
+				WHERE brand.brandId = #{brandId}
+			)
+			</if>
+			<if test="sellerId != null and sellerId != ''">
+			AND oh.orderId IN(SELECT order_item.orderId FROM order_item WHERE order_item.sellerId=#{sellerId})
+			</if>
+			<if test="buyerId != null and buyerId != ''">
+			AND oh.userId = #{buyerId}
+			</if>
+			<if test="keywords != null and keywords != ''">
+			AND (oh.orderNo like CONCAT('%','${keywords}','%') 
+					OR oe.receiverName like CONCAT('%','${keywords}','%')
+					<if test="sellerId != null and sellerId != ''">
+					OR oe.mobile like CONCAT('%','${keywords}','%')
+					</if>
+				)
+			</if>
+		</where>
+	</sql>
+
+	<!-- 根据parentOrderId查询所有相同的订单 -->
+	<select id="listOrderByParentOrderId" resultType="OrderHead">
+		SELECT
+		head.* ,
+		payment.paymentAmount AS `payment.paymentAmount`,
+		payment.payTime AS `payment.payTime`,
+		payment.status AS `payment.status`,
+		address.receiverName AS `address.receiverName`,
+		order_express.orderExpressId as `orderExpress.orderExpressId`,
+		order_express.expressName as `orderExpress.expressName`,
+		express.expressId as `orderExpress.express.expressId`,
+		express.expressName as `orderExpress.express.expressName`,
+		IFNULL(op.postage,0) AS `orderPostage.postage`
+		FROM order_head head
+		LEFT JOIN order_payment payment ON head.orderId = payment.orderId
+		LEFT JOIN receiver_address address ON head.receiverAddressId = address.receiverAddressId
+		LEFT JOIN order_express ON head.orderId=order_express.orderId
+		LEFT JOIN express ON order_express.expressId=express.expressId	
+		LEFT JOIN order_postage op ON head.orderId = op.orderId
+		where
+		payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+		and head.parentOrderId=#{parentOrderId}
+		<if test="buyerId != null and buyerId != ''">
+			and head.userId=#{buyerId}
+			</if>
+		<if test="status!=null and status !=''">
+			and head.status in (${status})
+	  		</if>
+	</select>
+
+	<!-- 更新子订单的父订单id -->
+	<update id="updateOrderParentId">
+		UPDATE order_head
+		SET
+		parentOrderId = #{parentOrderId},
+		updateTime = CURRENT_TIMESTAMP
+		WHERE orderId = #{orderId}
+  </update>
+
+	<!-- 检查用户退货订单信息 -->
+	<select id="checkUserOrder" resultType="OrderHead">
+		SELECT
+		head.*
+		FROM order_head head
+		Where head.orderId = #{orderId} and head.userId = #{userId} and
+		(head.status =
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED}
+		or head.status =
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_RETURN}
+		or head.status =
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND}
+		)
+	</select>
+	
+	<select id="deleteOrderHeadByOrderId" resultType="java.lang.Integer">
+		delete from order_head where orderId=#{orderId}
+	</select>
+	
+	<select id="getOrderHeadCountByOrderParentId" resultType="java.lang.Integer">
+		select count(*)
+		from order_head
+		where parentOrderId=#{parentOrderId}
+	</select>
+	
+</mapper>

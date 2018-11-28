@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.SkuOptionValueMapper">
+	
+  	<!-- 查询产品规格值列表 -->
+  	<select id="listSkuOptionValues" parameterType="java.lang.Integer" resultType="SkuOptionValue">
+  		SELECT * FROM sku_option_value
+  		WHERE skuOptionId = #{skuOptionId}
+  		ORDER BY rank
+  	</select>
+	
+	<!-- 根据id查询一条产品规格值数据 -->
+	<select id="get" parameterType="int" resultType="SkuOptionValue">
+		SELECT * FROM sku_option_value
+		WHERE skuOptionValueId = #{skuOptionValueId}
+	</select>
+	
+	<!-- 根据id集合查询产品规格选项值数据 -->
+	<select id="listSkuOptionValuesByIds" resultType="SkuOptionValue">
+		SELECT * FROM sku_option_value
+  		WHERE skuOptionValueId IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+		</foreach>
+	</select>
+	
+	<!-- 根据选项的值查询选项 -->
+	<select id="getSkuOptionValuesBySkuOptionValue" resultType="SkuOptionValue">
+		select *
+		from sku_option_value
+		where skuOptionValue=#{skuOptionValue}
+	</select>
+  
+  	<!-- 根据传入的skuOptionName 查询第一个选项  颜色或者尺码规格 -->
+  	<select id="getFirstSkuOptionValues" resultType="SkuOptionValue">
+  		select sov.*
+  		from sku_option_value sov inner join sku_option so on sov.skuOptionId=so.skuOptionId 
+  		where so.skuOptionName like concat('%',#{skuOptionName},'%')
+  		order by sov.rank asc
+  		limit 1
+  	</select>
+  	
+  	<!-- 获取此product中唯一没有的颜色或者尺码 -->
+  	<select id="getUniqueSkuOptionValues" resultType="SkuOptionValue">
+  		select sov.*
+  		from sku_option_value sov inner join sku_option so on sov.skuOptionId=so.skuOptionId 
+  		where so.skuOptionName like concat('%',#{skuOptionName},'%')
+  			  and sov.skuOptionValueId not in(${alreadySkuOptionValues})
+  		order by sov.rank asc
+  		limit 1
+  	</select>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="order" extends="uhome-default" namespace="/order">
+    	<action name="order-*" class="com.ytoxl.uhomefront.web.action.order.OrderAction" method="{1}">
+    	   <result name="listCartItem">/WEB-INF/pages/order/listCartItem.jsp</result>
+    	   <!-- old -->
+    	   <result name="shoppingCart">/WEB-INF/pages/order/shoppingCart.jsp</result>
+    	   <result name="checkOrder">/WEB-INF/pages/order/checkOrder.jsp</result>
+    	   <result name="editAddress">/WEB-INF/pages/order/editAddress.jsp</result>
+    	   <result name="showOrders">/WEB-INF/pages/order/showOrders.jsp</result>
+    	   <!-- old -->
+    	   <result name="myOrders">/WEB-INF/pages/order/myOrders4Front.jsp</result>
+    	   <result name="getOrder">/WEB-INF/pages/order/getOrder.jsp</result>
+    	   <result name="getOrderCoupons">/WEB-INF/pages/order/getOrderCoupons.jsp</result>
+    	   <result name="alipay">/WEB-INF/pages/alipay/alipay.jsp</result>
+    	   <result name="finishOrder">/WEB-INF/pages/order/finishOrder.jsp</result> 
+    	</action>
+    	<!-- 给[支付调用] begin-->
+		<!--1)[同步]支付宝只调用一次[不需传界面给支付宝]  -->
+		<action name="alipayReturn" class="com.ytoxl.uhomefront.web.action.order.AlipayAction" method="alipayReturn">	
+		 	<result name="alipayResult" type="redirect">
+		 		/order/order-finishOrder.htm?orderNo=${orderNo}
+		 	</result> 
+		</action>
+		<!--2)[异步][需传界面给支付宝]假如传的界面没有输出success,支付宝每隔一段时间还会调用  -->
+		<action name="alipayNotify" class="com.ytoxl.uhomefront.web.action.order.AlipayAction" method="alipayNotify">
+		</action>
+		<!-- 给[支付调用] end  -->
+	</package>
+</struts>

@@ -1,0 +1,154 @@
+/**
+ * Created by JetBrains PhpStorm.
+ * User: admin
+ * Date: 13-3-6
+ * Time: 下午5:30
+ * To change this template use File | Settings | File Templates.
+ */
+@import '../lib/global.less';
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../common.less';
+@import '../lib/crumbs.less';
+//状态条
+.step-status{
+  margin: 15px 0 10px;
+  height:37px;
+  padding:13px 0 0 0px;
+  background:url("../../images/crumbs/cart_step1.gif") 0 -150px no-repeat;
+  &.step-1{background-position:0 -150px;}
+  &.step-2{background-position:0 -200px;}
+  &.step-3{background-position:0 -250px;}
+  &.step-4{background-position:0 -300px;}
+  span{
+    float: left;
+    width: 160px;
+    font-family:"microsoft yahei";
+    font-size:18px;
+    height: 37px;
+    line-height: 37px;
+    margin-left:80px;
+    &.step{
+      color: #ffffff;
+    }
+    &.step-4{
+      color: #ffffff;
+      background-color: #78bcbd;
+    }
+    &.original{
+      background-position: right -32px;
+    }
+  }
+}
+/*找回密码*所有样式*/
+.pwd-reset {
+    width: 720px;
+    height: 290px;
+    margin: 40px auto 0;
+}
+.pwd-dir {
+    position: absolute;
+    border-bottom: 10px solid #78bcbd;
+    border-left: 10px solid #ffffff;
+    border-right: 10px solid #ffffff;
+    width: 0px;
+    height: 0px;
+    line-height: 0;
+    overflow: hidden;
+    margin-left: 50px;
+    margin-top: -10px;
+}
+.pwd-one {
+    margin-left: 30px;
+}
+.pwd-two {
+    margin-left: 210px;
+}
+.pwd-three {
+    margin-left: 420px;
+}
+.pwd-four {
+    margin-left: 600px;
+}
+.pwd-tab {
+    margin: 40px auto;
+    .pwd-name {
+        font-size: 18px;
+        color: #1a1a1a;
+        text-align: right;
+    }
+    .cor-hui {
+        color: #898989;
+    }
+.pwd-yzname {
+    font-size: 18px;
+    color: #1a1a1a;
+    text-align: left;
+}
+.cor-red {
+    color: #e60012;
+    line-height: 30px;
+    font-weight: normal;
+    display: inline-block;
+}
+}
+.pwd-cont {
+  height:50px;
+  input {
+      width: 290px;
+      border: solid 2px #25c5a5;
+      padding: 7px 5px;
+      color: #898989;
+  }
+  img{
+    float: left;
+    margin-left:10px;
+  }
+  a{
+    float: left;
+    margin-top: 5px;
+    _position: relative;
+  }
+  .check-tips{
+    clear: both;
+    padding-top: 3px;
+    color: #C00;
+  }
+.btn-c {
+    margin: 0px 10px;
+}
+}
+.pwd-validate {
+  input {
+      width:135px;
+      float: left;
+  }
+ .cor-hui {
+     float: left;
+     line-height: 30px;
+ }
+}
+.btn-c {
+    margin-top: 15px;
+     span {
+         font-size: 14px;
+     }
+}
+.pwd-changev {
+  color: #ec6820;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+/*验证身份的单独tab*/
+.yz-tab {
+    margin:60px 0px 0 200px;
+}
+.position{height:30px;position:relative;}
+.position .onShow,.position .onFocus,.position .onError,.position .onCorrect{left:0;}
+.error{color:#ff5702;}
+/*修改密码第2步，邮箱验证*/
+.pwd-email .pwd-name{font-size: 18px;color: #1a1a1a;text-align: left;}
+.pwd-email a{color: #f96619;text-decoration: underline;}
+/*我的资料时间控件抖动*/
+.user-formdetail p{height:26px;}
+.user-formdetail .btn-wp{height:50px;}

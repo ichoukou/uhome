@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+  
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+    	<property name="triggers">
+			<list>
+				<ref local="orderPushTimerTrigger"/>
+			</list>
+		</property>
+		<property name="autoStartup" value="true" />
+		<property name="startupDelay" value="30" />
+    </bean>
+   
+    <!-- 定时推送订单 -->
+	<bean id="orderPushTimerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="description" value="每2分钟推送" />
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="orderPushServiceImpl" />
+				<property name="targetMethod" value="orderPushTimer" />
+				<property name="concurrent" value="false" />
+				<property name="name" value="每2分钟推送" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<value>${quartz.time.orderPushTimerTrigger}</value>
+		</property>
+	</bean>
+	
+</beans>

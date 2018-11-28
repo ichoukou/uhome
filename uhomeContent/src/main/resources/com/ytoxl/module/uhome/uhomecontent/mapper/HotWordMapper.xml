@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.HotWordMapper">
+	<insert id="add" parameterType="HotWord" useGeneratedKeys="true" keyProperty="hotWordId">
+		insert into hot_word (word, rank) values(#{word}, #{rank})
+	</insert>
+	<!-- 查询用户订阅的品牌信息 -->
+	<select id="listHotWords" parameterType="map" resultType="HotWord">
+		SELECT * 
+				FROM hot_word
+			order by rank
+	</select>
+	
+	<select id="listHotWordByRank" parameterType="integer" resultType="HotWord">
+		SELECT hotWordId,rank 
+				FROM hot_word
+			where rank>#{rank}
+	</select>
+	
+	<select id="get" parameterType="HotWord" resultType="HotWord">
+		SELECT * 
+				FROM hot_word
+			where hotWordId=#{hotWordId}
+	</select>
+	
+	<select id="listHotWordCounts" parameterType="map" resultType="integer">
+		SELECT count(hotWordId)
+				FROM hot_word
+	</select>
+	
+	<update id="update" parameterType="HotWord">
+		update hot_word set 
+		<if test="word != null and word != ''">
+			word=#{word}
+		</if>
+		<if test="rank != null and rank != ''">	
+			<if test="word != null and word != ''">
+			,	
+			</if>
+				rank=#{rank} 
+		</if>
+		where hotWordId=#{hotWordId} 
+	</update>
+	
+	<delete id="del" parameterType="HotWord">
+		delete from hot_word where hotWordId=#{hotWordId}
+	</delete>
+	
+	<!-- 根据参数查询所有个数的 热搜词 -->
+	<select id="listHotWordsNum" resultType="HotWord">
+		select * 
+		from hot_word 
+		order by rank
+		limit #{num}
+	</select>
+	
+</mapper>

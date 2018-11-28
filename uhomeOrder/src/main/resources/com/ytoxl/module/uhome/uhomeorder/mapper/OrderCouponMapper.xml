@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderCouponMapper">
+
+  <insert id="add" parameterType="OrderCoupon" keyProperty="orderCouponId" useGeneratedKeys="true">
+		INSERT INTO order_coupon
+            (
+             orderCouponId,
+             orderId,
+             couponNo,
+             allowance,
+             limitCharge,
+             createTime)
+		VALUES (
+            #{orderCouponId},
+	        #{orderId},
+	        #{couponNo},
+	        #{allowance},
+	        #{limitCharge},
+		    CURRENT_TIMESTAMP)                  
+  </insert>
+  
+  <!-- 根据删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_coupon WHERE orderCouponId = #{orderCouponId}
+  </delete>
+  
+  <!-- 修改payment信息 -->
+  <update id="update" parameterType="OrderCoupon">
+		UPDATE order_coupon
+		SET 
+		  orderCouponId = #{orderCouponId},
+		  orderId = #{orderId},
+		  couponNo = #{couponNo},
+		  allowance = #{allowance},
+		  limitCharge = #{limitCharge},
+		  createTime = #{createTime}
+		WHERE orderCouponId = #{orderCouponId}
+  </update>
+  
+  <select id="get" parameterType="integer" resultType="OrderCoupon">
+		    SELECT
+			  orderCouponId,
+			  orderId,
+			  couponNo,
+			  allowance,
+			  limitCharge,
+			  createTime
+			FROM order_coupon
+			WHERE orderCouponId = #{orderCouponId}
+  </select>
+  
+  <select id="deleteOrderCouponByOrderId" resultType="java.lang.Integer">
+  		delete from order_coupon where orderId=#{orderId}
+  </select>
+</mapper>

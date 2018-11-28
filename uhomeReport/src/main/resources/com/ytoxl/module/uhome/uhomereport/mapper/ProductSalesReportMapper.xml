@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ytoxl.module.uhome.uhomereport.mapper.ProductSalesReportMapper">
+	
+	<!-- 查询商家销售报表 -->
+	<select id="searchProductSalesReport" parameterType="map" resultType="ProductSalesReport">
+		SELECT SUM(opay.paymentAmount) AS orderAmount,
+		COUNT(oh.orderId) AS orderNum
+		FROM order_head oh
+		JOIN order_payment opay ON oh.orderId = opay.orderId
+		WHERE oh.`status` IN(${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND},
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND},
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED})
+		<if test="stime!=null and stime!=''">
+			AND DATE_FORMAT(oh.createTime,'%Y-%m-%d') &gt;= #{stime}
+		</if>
+		<if test="etime!=null and etime!=''">
+			AND DATE_FORMAT(oh.createTime,'%Y-%m-%d') &lt;= #{etime}
+		</if>
+	</select>
+	
+</mapper>

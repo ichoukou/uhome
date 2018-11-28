@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+    "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<!-- See the manual for configuring: http://tuckey.org/urlrewrite/manual/   -->
+<!-- For protect the jsp which is inside the pages folder -->
+<urlrewrite>
+	<!-- 
+	<rule>
+		<from>^/$</from>
+		<to type="redirect">index.htm</to>
+	</rule> 
+	-->
+	<rule>
+		<from>^/fsxb/$</from>
+		<to>/category-100000.htm</to>
+	</rule> 
+	<rule>
+		<from>^/myyp/$</from>
+		<to>/category-100001.htm</to>
+	</rule>
+	<rule>
+		<from>^/jjyp/$</from>
+		<to>/category-100002.htm</to>
+	</rule> 
+	<rule>
+		<from>^/mrhf/$</from>
+		<to>/category-100003.htm</to>
+	</rule>  
+	<rule>
+		<from>/p/([0-9]+)/</from>
+		<to>/brandDetail-$1.htm</to>
+	</rule>
+	<!-- 品牌详情301 -->
+	<rule>
+		<from>/brand-([0-9]+).htm</from>
+		<to>/brand-301-$1.htm</to>
+	</rule>
+	<!-- 频道301 -->
+	<rule>
+		<from>/cate-([0-9]+).htm</from>
+		<to>cate-301-$1.htm</to>
+	</rule>
+	<!-- 友情链接 -->
+	<rule>
+		<from>^/Links/$</from>
+		<to>/listLinks.htm</to>
+	</rule>
+</urlrewrite>

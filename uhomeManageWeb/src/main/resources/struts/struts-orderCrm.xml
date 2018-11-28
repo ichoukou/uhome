@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="orderCrm" extends="uhome-default" namespace="/admin/orderCrm">
+		<action name="orderCrm-*"
+			class="com.ytoxl.uhomemanage.web.action.content.OrderCrmAction" method="{1}">
+			<result name="listOrderCrm">/WEB-INF/pages/order/searchOrderCrm.jsp</result>
+		</action>
+	</package>
+</struts>

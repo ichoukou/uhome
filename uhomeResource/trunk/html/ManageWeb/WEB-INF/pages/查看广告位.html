@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>查看广告位</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/special.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/artdialog/artDialog.plugins.min.js"></script>
+    <script src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+    <script src="../../web-resource/js/plugin/uploadify/swfobject.js"></script>
+		<script src="../../web-resource/js/plugin/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+    <script src="../../web-resource/js/plugin/formvalidator/formValidatorRegex.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/formvalidator/formValidator-4.1.3.js"  language="javascript"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="body-nav">
+    <ul class="m-clear">
+      <li><a>广告页面</a></li>
+      <li><a>站内信</a></li>
+      <li><a>网站地图</a></li>
+      <li><a>SEO信息</a></li>
+      <li><a>友情链接</a></li>
+      <li><a class="current-chose">专题模板</a></li>
+    </ul>
+  </div>
+  <form class="m-clear m-mt10p">
+    <div class="m-fl">
+    	<select class="m-sel">
+    		<option>首页中间1</option>
+    		<option>首页中间2</option>
+    	</select>
+    	<input type="button" class="m-btn" value="查询" />
+    	<input type="button" class="m-btn J-editAd" value="新增广告" />
+    	<input type="button" class="m-btn-done" value="返回" />
+    </div>
+    <!--右侧显示分页控件 start-->
+    <div class="m-fr curr-num">
+      <label>当前显示： </label>
+      <select class="m-sel">
+          <option>20条</option>
+          <option>50条</option>
+          <option>100条</option>
+          <option>200条</option>
+          <option>500条</option>
+      </select>
+    </div>
+    <!--右侧显示分页控件 end-->
+	</form>
+	<!--100%表格样式-->
+	<div class="m-mt10p">
+		<div class="body-nav subnav">
+		<ul class="m-clear">
+			<li><a>十一专题模板十一专题模板</a></li>
+		</ul>
+	</div>
+		<table id="tab" class="tab-control">
+      <thead>
+        <tr>
+          <th width="40%">位置名称</th>
+          <th width="40%">预览广告</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">十一活动专题</span></td>
+      		<td><a class="c-blue J-adPreview" href="javascript:;" onclick="imgView('/adv/2013/10/09/38ff991a-efeb-4299-9654-1c6f8f2c89c8.jpg', 304, 300)">预览</a></td>
+      		<td><a class="c-blue J-editAd" href="javascript:;">编辑</a></td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">冬季活动</span></td>
+      		<td><a class="c-blue J-adPreview" href="javascript:;" onclick="imgView('/adv/2013/10/09/38ff991a-efeb-4299-9654-1c6f8f2c89c8.jpg', 304, 300)">预览</a></td>
+      		<td><a class="c-blue J-editAd" href="javascript:;">编辑</a></td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">夏季狂欢</span></td>
+      		<td><a class="c-blue J-adPreview" href="javascript:;" onclick="imgView('/adv/2013/10/09/38ff991a-efeb-4299-9654-1c6f8f2c89c8.jpg', 304, 300)">预览</a></td>
+      		<td><a class="c-blue J-editAd" href="javascript:;">编辑</a></td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><span class="c-blue">秋季狂欢</span></td>
+      		<td><a class="c-blue J-adPreview" href="javascript:;" onclick="imgView('/adv/2013/10/09/38ff991a-efeb-4299-9654-1c6f8f2c89c8.jpg', 304, 300)">预览</a></td>
+      		<td><a class="c-blue J-editAd" href="javascript:;">编辑</a></td>
+      	</tr>
+      </tbody>
+    </table>
+	</div>
+	<!--分页插件 start -->
+	<div class="pagination pagination-right">
+	    共<span class="items-all">36</span>条
+	    第<span class="page-all">10</span>页
+	    <a href="#"><span class="disable alldis"></span></a>
+	    <a href="#"><span class="current">1</span></a>
+	    <a href="#"><span>2</span></a>
+	    <a href="#"><span>3</span></a>
+	    <a href="#"><span>4</span></a>
+	    <span class="etc">...</span>
+	    <a href="#"><span>10</span></a>
+	    <a href="#" ><span class="next"></span></a>
+	    <span>共<i>1</i>页<i>1</i>条 到
+	    	<input type="text" class="goto-num" value="1" onfocus="this.value='';" />页
+	    </span>
+	    <span class="goto">转到</span>
+	</div>
+	<!--分页插件 end -->
+	<!--新增广告位弹出层 start-->
+	<div class="newAd m-hide">
+		<table>
+			<tr>
+				<td class="m-tar"><span class="c-red">*</span>位置：</td>
+				<td>
+					<select class="m-sel J-adType">
+						<option adType="1">首页中间1</option>
+	          <option adType="2">首页中间2</option>
+	          <option adType="2">大型活动广告图</option>
+	          <option adType="3">特卖产品展示</option>
+	          <option adType="3">特卖产品展示2</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="m-tar"><span class="c-red">*</span>广告图片：</td>
+				<td>
+					<input type="text" class="txt-input J-imgSrc" />
+					<input type="file" id="imgUpload" name="file" />
+					<input type="hidden" id="imageUrl" value="D://sjkdjidsjfisdjfi" />
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><span class="c-red">*</span>请上传 <span class="c-red J-adSize">960px*390px</span> 像素的图片</td>
+			</tr>
+			<tr>
+				<td class="m-tar">跳转地址：</td>
+				<td><input type="text" class="txt-input" /></td>
+			</tr>
+		</table>
+	</div>
+	<!--新增广告位弹出层 start-->
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+<script>
+    var _ctxPath = 'http://localhost:8090/uHomeManage',
+    		_jsPath = '../../web-resource/js';
+$(function(){
+	//添加广告弹出
+	$('.J-editAd').on("click",function(){
+	  var html = $(".newAd").get(0);
+	  $.dialog({
+	    lock: true,
+	    padding: "10px 30px",
+	    title:"新增广告",
+	    content:html,
+	    fixed: true,
+	    cancel: true,
+	    cancelValue:"取  消",
+	    ok:function(){},
+	    okValue:"发  布"
+	  });
+	  return false;
+	});
+	//广告尺寸修改
+	$(".J-adType").on("change",function(){
+		var adType = $(this).find("option:selected").attr("adType");
+		if(adType == 1){
+			$(".J-adSize").text("960px*390px");
+		}else if(adType == 2){
+			$(".J-adSize").text("960px*100px");
+		}else if(adType == 3){
+			$(".J-adSize").text("228px*285px");
+		}
+	});
+	//上传图片
+	var uploadDefaultParams = {
+		'auto' : true,
+		'buttonImg' : _jsPath+'/plugin/uploadify/uploadimg_btn.png',
+		'cancelImg' : _jsPath+'/plugin/uploadify/cancel.png',
+		'expressInstall' : _jsPath+'/plugin/uploadify/expressInstall.swf',
+		'fileDataName'   : 'file',
+		'fileDesc' : '请选择jpg、gif、png文件',
+		'fileExt' : '*.jpg;*.jpeg;*.gif;*.png',
+	    'height' : 24,
+	    'multi' : false,
+	    'script' : _ctxPath+'/upload/upload.htm',
+	    'uploader' : _jsPath+'/plugin/uploadify/uploadify.allglyphs.swf',
+	    'width' : 100,
+	    'scriptData' : {'category':'brand'}
+	};
+    var uploadLogoImgParams = uploadDefaultParams;
+    uploadLogoImgParams.onComplete = function(event, ID, fileObj, response, data){
+		$('#imageUrl').val(response);
+		$('.J-imgSrc').val(_filePath+response);
+   };
+   $('#imgUpload').uploadify(uploadLogoImgParams);
+});
+	//广告预览
+	var imgView=function(src, width, height){
+		var suffix = src.split(".")[1];
+		var url =src + "_t5." + suffix;
+		if(src!='' && src != null){
+			var html = '<img src="http://192.168.5.20/file/media/thumb/uhome'+url+'"/>';
+			  $.dialog({
+			    lock: true,
+			    padding: "5px",
+			    title:false,
+			    content:html,
+			    fixed: true,
+			    cancel: true,
+			    cancelValue: "关  闭"
+			  });
+			  $(".d-close").hide();
+		}
+	}
+</script>
+</body>
+</html>

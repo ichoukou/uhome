@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="index" extends="uhome-default" namespace="/">
+		<action name="index" class="com.ytoxl.uhomefront.web.action.index.IndexAction" method="index">
+			<result name="success">/index.jsp</result>
+		</action>
+		<action name="default" class="com.ytoxl.uhomefront.web.action.index.IndexAction" method="defaultIndex301" >
+			<result name="success">/WEB-INF/pages/index/index.jsp</result>  
+		</action>
+		<!-- 类目action -->
+		<action name="category-*" class="com.ytoxl.uhomefront.web.action.index.IndexAction" method="productCategoryIndex">
+			<param name="productCategory.productCategoryId">{1}</param>
+			<result name="default">/WEB-INF/pages/index/index.jsp</result>
+		</action>
+		
+		<!-- 将搜索引擎的以前抓去的连接301 -->
+		<action name="cate-301-*" class="com.ytoxl.uhomefront.web.action.index.IndexAction" method="productCategoryIndex301">
+			<param name="productCategory.productCategoryId">{1}</param>
+			<result name="default">/WEB-INF/pages/index/index.jsp</result>
+		</action>
+		<!-- 加入购物车后推荐 页面-->
+		<action name="recommend-*" class="com.ytoxl.uhomefront.web.action.specialseller.ProductAction" method="recommend">
+			<param name="product.productCategoryId">{1}</param>
+			<result name="recommend">/WEB-INF/pages/product/recommendProducts.jsp</result>
+		</action>
+		
+		<!-- 
+		<action name="login" class="com.opensymphony.xwork2.ActionSupport">
+            <result name="success">/WEB-INF/pages/index/index.jsp</result>              
+        </action>
+         -->
+        <action name="login" class="com.ytoxl.uhomefront.web.action.index.IndexAction" method="defaultIndex">
+            <result name="success">/WEB-INF/pages/index/index.jsp</result>              
+        </action>
+        
+        <action name="validationCode" class="com.google.code.jcaptcha4struts2.core.actions.JCaptchaImageAction">
+        	<result type="captchaImage"/>
+        </action>
+        
+        <!-- 建议意见   想要的品牌  old -->
+        <action name="suggest-*" class="com.ytoxl.uhomefront.web.action.content.SuggestAction" method="{1}">
+        	<result name="success">/WEB-INF/pages/index/suggest.jsp</result>
+        </action>
+        
+        <!-- 邮件订阅 -->
+        <action name="subscriptionEmail" class="com.ytoxl.uhomefront.web.action.content.MailSubscribeAction" method="subscriptionEmail">
+        	<!-- 返回json -->
+        </action>
+          <!-- 邮件退订 -->
+        <action name="unSubscriptionEmail" class="com.ytoxl.uhomefront.web.action.content.MailSubscribeAction" method="unSubscriptionEmail">
+        	<result name="success" >/WEB-INF/pages/index/unSubscriptionEmail.jsp</result>
+        	<result name="input" type="redirectAction" >default</result>
+        </action>
+        <action name="unsubscribe" class="com.ytoxl.uhomefront.web.action.content.MailSubscribeAction" method="unsubscribe">
+        </action>
+        <!-- new
+		<action name="specials" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="specialSeller">
+			<result name="specialSeller">/WEB-INF/pages/product/specialSeller.jsp</result>
+		</action>
+		-->
+		<!-- 
+		new 
+		<action name="seckills" class="com.ytoxl.uhomefront.web.action.seckill.SecKillAction" method="secKill">
+			<result name="secKill">/WEB-INF/pages/product/secKill.jsp</result>
+		</action>
+		
+		<action name="seckill-*" class="com.ytoxl.uhomefront.web.action.seckill.SecKillAction" method="secKillDetail">
+			<param name="plan.planId">{1}</param>
+			<result name="seckillDetail">/WEB-INF/pages/product/secKillDetail.jsp</result>
+		</action>
+		 -->
+		 
+		<!-- new 
+		<action name="brands" class="com.ytoxl.uhomefront.web.action.brand.BrandAction" method="brands">
+    			<result name="brands">/WEB-INF/pages/brand/brands.jsp</result>
+   		</action>
+   		-->
+   		
+   		<!-- 
+   		new
+   		<action name="brand-*-*-*" class="com.ytoxl.uhomefront.web.action.brand.BrandAction" method="brandDetail">
+    			<param name="brand.brandId">{1}</param>
+    			<param name="productPage.total">{2}</param>
+    			<param name="productPage.currentPage">{3}</param>
+    			<result name="brandDetail">/WEB-INF/pages/brand/brandDetail.jsp</result>
+   		</action>
+   		-->
+   		
+   		<!-- 将搜索引擎的以前抓去的连接301 -->
+   		<action name="brand-301-*" class="com.ytoxl.uhomefront.web.action.brand.BrandAction" method="brandDetail301">
+    			<param name="brand.brandId">{1}</param>
+    			<result name="brandDetail">/WEB-INF/pages/brand/brandDetail.jsp</result>
+   		</action>
+   		
+   		<action name="brandDetail-*" class="com.ytoxl.uhomefront.web.action.brand.BrandAction" method="brandDetail">
+    			<param name="brand.brandId">{1}</param>
+    			<result name="brandDetail">/WEB-INF/pages/brand/brandDetail.jsp</result>
+   		</action>
+   		
+   		<!-- 点击3个子目录执行的Action -->
+   		<!-- new 
+		<action name="special-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="categoryBrand">
+			<param name="productCategory.productCategoryId">{1}</param>
+			<result name="categoryBrand">/WEB-INF/pages/product/specialSeller.jsp</result>
+		</action>
+		-->	
+		<!-- 分页new 按照规则 分页 -->
+		<action name="plan-*-*-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<param name="productPage.total">{4}</param>
+			<param name="productPage.currentPage">{5}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		<!-- 没有单击规则  直接分页 -->
+		<action name="plan-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<param name="productPage.total">{2}</param>
+			<param name="productPage.currentPage">{3}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		
+		<!--特卖商品按规定的规则排序  new -->
+		<action name="plan-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		
+		<!-- 特卖中的商品列表 -->
+		<!-- new -->
+		<action name="plan-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		<!-- 特卖详情添加仅显示库存和显示页面数量 -->
+		<!-- 
+		分页new 按照规则 分页
+		<action name="plan-*-*-*-*-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<param name="productPage.params['showScope']">{4}</param>
+			<param name="productPage.limit">{5}</param>
+			<param name="productPage.total">{6}</param>
+			<param name="productPage.currentPage">{7}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		没有单击规则  直接分页
+		<action name="plan-*-*-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<param name="productPage.params['showScope']">{2}</param>
+			<param name="productPage.limit">{3}</param>
+			<param name="productPage.total">{4}</param>
+			<param name="productPage.currentPage">{5}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		
+		特卖商品按规定的规则排序  new
+		<action name="plan-*-*-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<param name="productPage.params['showScope']">{4}</param>
+			<param name="productPage.limit">{5}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		根据库存有无显示商品
+		<action name="plan-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<param name="productPage.params['showScope']">{2}</param>
+			<param name="productPage.limit">{3}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action> 
+		 特卖中的商品列表
+		 new 
+		<action name="plan-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<param name="productPage.params['planId']">{1}</param>
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		-->
+		
+		<!-- 显示一个商品的详细信息 -->
+		<!-- new -->
+		<action name="item-*" class="com.ytoxl.uhomefront.web.action.specialseller.ProductAction" method="productDetail">
+			<param name="product.productId">{1}</param>
+			<result name="productDetail">/WEB-INF/pages/product/productDetail.jsp</result>
+		</action>
+		
+		<!-- 商品搜索
+		分页切排序 new 
+		<action name="search-*-*-*-*-*" class="com.ytoxl.uhomefront.web.action.search.SearchAction" method="searchProduct">
+			<param name="productPage.params['brandId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<param name="productPage.total">{4}</param>
+			<param name="productPage.currentPage">{5}</param>
+			<result name="searchProduct">/WEB-INF/pages/search/search.jsp</result>
+		</action>
+		
+		商品搜索排序	new
+		<action name="search-*-*-*" class="com.ytoxl.uhomefront.web.action.search.SearchAction" method="searchProduct">
+			<param name="productPage.params['brandId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<result name="searchProduct">/WEB-INF/pages/search/search.jsp</result>
+		</action>
+		<action name="search-*" class="com.ytoxl.uhomefront.web.action.search.SearchAction" method="searchProduct">
+			<param name="productPage.params['brandId']">{1}</param>
+			<result name="searchProduct">/WEB-INF/pages/search/search.jsp</result>
+		</action>
+		new
+		<action name="search" class="com.ytoxl.uhomefront.web.action.search.SearchAction" method="searchProduct">
+			<result name="searchProduct">/WEB-INF/pages/search/search.jsp</result>
+		</action> -->
+		
+		<!-- 购物车 -->
+		<action name="shoppinpCart" class="com.ytoxl.uhomefront.web.action.order.OrderAction" method="shoppinpCart">
+			<result name="shoppingCart">/WEB-INF/pages/order/shoppingCart.jsp</result>
+		</action>
+		
+		<!-- 
+		进口商品
+		<action name="import-*-*-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="importGoods">
+			<param name="productPage.params['brandId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<param name="productPage.total">{4}</param>
+			<param name="productPage.currentPage">{5}</param>
+			<result name="importGoods">/WEB-INF/pages/product/importGoods.jsp</result>		
+		</action>
+		<action name="import-*-*-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="importGoods">
+			<param name="productPage.params['brandId']">{1}</param>
+			<param name="productPage.sort">{2}</param>
+			<param name="productPage.dir">{3}</param>
+			<result name="importGoods">/WEB-INF/pages/product/importGoods.jsp</result>		
+		</action>
+		<action name="import-*" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="importGoods">
+			<param name="productPage.params['brandId']">{1}</param>
+			<result name="importGoods">/WEB-INF/pages/product/importGoods.jsp</result>		
+		</action>
+		<action name="import" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="importGoods">
+			<result name="importGoods">/WEB-INF/pages/product/importGoods.jsp</result>		
+		</action>
+		 -->
+		 
+		<!-- 品牌加盟 -->
+		<action name="supplier" class="com.ytoxl.uhomefront.web.action.content.SupplierAction" method="editSupplier">
+        	 <result name="success">/WEB-INF/pages/index/editSupplier.jsp</result> 
+        </action>
+		<action name="supplier-*" class="com.ytoxl.uhomefront.web.action.content.SupplierAction" method="{1}">
+        	 <result name="success">/WEB-INF/pages/index/editSupplier.jsp</result> 
+        </action>
+        <!-- 友情链接 -->
+        <action name="listLinks" class="com.ytoxl.uhomefront.web.action.content.LinksAction" method="listLinks">
+        	 <result name="listLinks">/WEB-INF/pages/index/links.jsp</result> 
+        </action>
+        <!-- 专题中的广告列表 -->
+        <action name="zt-*" class="com.ytoxl.uhomefront.web.action.specialtopic.SpecialTopicAction" method="showSpecialTopic">
+			<param name="templetId">{1}</param>
+			<result name="specialTopic">/WEB-INF/pages/special/specialTopic.jsp</result>
+ 		</action>
+	</package>		
+</struts>

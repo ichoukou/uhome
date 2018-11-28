@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderReturnItemMapper">
+
+  <insert id="add" parameterType="OrderReturnItem" keyProperty="orderReturnItemId" useGeneratedKeys="true">
+		INSERT INTO order_return_item
+            (orderReturnItemId,orderReturnId,orderItemId,imageUrls,num,`status`,`describe`,noPassReason,refundAmount)
+		VALUES ( #{orderReturnItemId},
+		         #{orderReturnId},
+		         #{orderItemId},
+		         #{imageUrls},
+		         #{num},
+		         #{status},
+		         #{describe},
+		         #{noPassReason}, 
+		         #{refundAmount})             
+  </insert>
+
+  <!-- 删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_return_item WHERE orderReturnId = #{orderReturnId}
+  </delete>
+  
+  <!-- 根据址库编码修改地址库信息 -->
+  <update id="update" parameterType="OrderReturnItem">
+		UPDATE order_return_item
+		SET 
+		  orderReturnId = #{orderReturnId},
+		  orderItemId = #{orderItemId},
+		  imageUrls = #{imageUrls},
+		  num = #{num},
+		  status = #{status},
+		  describe = #{describe},
+		  noPassReason = #{noPassReason},
+		  refundAmount = #{refundAmount}
+		WHERE orderReturnId = #{orderReturnId}
+  </update>
+
+  <select id="get" parameterType="integer" resultType="OrderReturnItem">
+        SELECT
+		  *
+		FROM order_return_item
+		where orderReturnItemId = #{orderReturnItemId}
+  </select>
+  
+  <select id="listOrderReturnItemsByOrderReturnId" resultType="OrderReturnItem">
+  		SELECT reitem.*,
+	       oitem.orderSource AS `orderItem.orderSource`,
+	       oitem.productName AS `orderItem.productName`,
+	       oitem.productSkuId AS `orderItem.productSkuId`,
+	       oitem.num AS `orderItem.num`
+    	FROM order_return_item reitem LEFT JOIN order_item oitem ON reitem.orderItemId = oitem.orderItemId
+  		where orderReturnId = #{orderReturnId}
+  </select>
+
+	<!-- 更新退货订单项的状态 -->
+  <select id="updateStatus" parameterType="OrderReturnItem">
+  		update order_return_item
+  		set
+  			status=#{status},
+  			noPassReason=#{noPassReason}
+		where orderReturnItemId=#{orderReturnItemId}
+  </select>
+
+  <!-- 根据订单明细id 查询退货订单明细  退货管理用 -->
+  <select id="getOrderReturnItemsByOrderItemId" resultType="Integer">
+  		select IFNULL(sum(num),0)
+  		from order_return_item
+  		where orderItemId=#{orderItemId}
+  </select>
+  <!-- 查询当前订单产品已经退过的价钱总额 -->
+  <select id="getReturnedOrderItemSumPaymentAmount" resultType="java.math.BigDecimal">
+	  select IFNULL(sum(ori.refundAmount),0) from order_return_item ori where ori.orderitemid=#{orderItemId};
+  </select>
+
+</mapper>

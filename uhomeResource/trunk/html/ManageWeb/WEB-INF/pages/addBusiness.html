@@ -1,0 +1,328 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/addBusiness.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/formvalidator/formValidatorRegex.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/formvalidator/formValidator-4.1.3.js"  language="javascript"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="addBusiness-border">
+		<h1 class="addBusiness-t">新增商家:</h1>
+		<form id="form1">
+		<table border="0" class="addBusiness-table">
+			<tr>
+				<th width="100">基本信息</th>
+				<th colspan="4">&nbsp;</th>
+			</tr>
+			<tr>
+				<td align="right">*登录名：</td>
+				<td colspan="3"><input type="text" id="login-name" class="input_public" value="" /></td>
+				<td width="320"><span id="login-nameTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*业务联系人：</td>
+				<td colspan="3"><input type="text" id="linkman" class="input_public" value="" /></td>
+				<td><span id="linkmanTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*手机号码：</td>
+				<td colspan="3"><input type="text" id="tel-text" class="input_public" value="" /></td>
+				<td><span id="tel-textTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*固定电话：</td>
+				<td colspan="3"><input type="text" id="dh" class="input_public" value="" /></td>
+				<td><span id="dhTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*电子邮箱：</td>
+				<td colspan="3"><input id="email" type="text" class="input_public" value="" /></td>
+				<td><span id="emailTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">QQ：</td>
+				<td colspan="3"><input type="text" id="QQ" class="input_public" value="" /></td>
+				<td><span id="QQTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">传真：</td>
+				<td colspan="4"><input type="text" class="input_public" value="" /></td>
+			</tr>
+			<tr>
+				<th>公司信息</th>
+				<th colspan="4">&nbsp;</th>
+			</tr>
+			<tr>
+				<td align="right">*公司名称：</td>
+				<td colspan="3"><input type="text" id="business-name" class="input_public" value="" /></td>
+				<td><span id="business-nameTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">公司类型：</td>
+				<td colspan="4">
+					<select class="select-type">
+						<option>请选择公司类型</option>
+						<option value="a">民营企业</option>
+						<option value="b">国营企业</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">供应商性质：</td>
+				<td colspan="4"><input type="text" class="input_public" value="品牌代理商" /></td>
+			</tr>
+			<tr>
+				<td align="right">*成立日期：</td>
+				<td colspan="3"><input type="text" id="rq" class="input_public" value="" /></td>
+				<td><span id="rqTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*注册资本：</td>
+				<td colspan="3"><input type="text" id="regdit-zb" class="input_public" value="" /></td>
+				<td><span id="regdit-zbTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*实收资本：</td>
+				<td colspan="3"><input type="text" id="ss-zb" class="input_public" value="" /></td>
+				<td><span id="ss-zbTip"></span></td>
+			</tr>
+			<tr valign="top">
+				<td align="right">*经营范围：</td>
+				<td colspan="3"><textarea id="scope" class="text-area"></textarea></td>
+				<td><span id="scopeTip"></span></td>
+			</tr>
+			<tr valign="top">
+				<td align="right">*公司简介：</td>
+				<td colspan="3"><textarea id="summary" class="text-area"></textarea></td>
+				<td><span id="summaryTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">公司网址：</td>
+				<td colspan="3"><input type="text" id="url" class="input_public" value="http://" /></td>
+				<td><span id="urlTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*可售品牌：</td>
+				<td colspan="3">
+					<div class="sal-brand-t">
+						<a href="javascript:viod(0);">A</a>
+						<a href="javascript:viod(0);">B</a>
+						<a href="javascript:viod(0);">C</a>
+						<a href="javascript:viod(0);">D</a>
+						<a href="javascript:viod(0);">E</a>
+						<a href="javascript:viod(0);">F</a>
+						<a href="javascript:viod(0);">G</a>
+						<a href="javascript:viod(0);">H</a>
+						<a href="javascript:viod(0);">I</a>
+						<a href="javascript:viod(0);">J</a>
+						<a href="javascript:viod(0);">K</a>
+						<a href="javascript:viod(0);">M</a>
+						<a href="javascript:viod(0);">N</a>
+						<a href="javascript:viod(0);">O</a>
+						<a href="javascript:viod(0);">P</a>
+						<a href="javascript:viod(0);">Q</a>
+						<a href="javascript:viod(0);">R</a>
+						<a href="javascript:viod(0);">S</a>
+						<a href="javascript:viod(0);">T</a>
+						<a href="javascript:viod(0);">U</a>
+						<a href="javascript:viod(0);">V</a>
+						<a href="javascript:viod(0);">W</a>
+						<a href="javascript:viod(0);">X</a>
+						<a href="javascript:viod(0);">Y</a>
+						<a href="javascript:viod(0);">Z</a>
+					</div>
+					<div id="brand-A" class="br-list">
+						<input type="checkbox" name="brand" id="brand-1" /><label for="brand-1">ZIWE</label>
+						<input type="checkbox" name="brand" id="brand-2" /><label for="brand-2">ZIWE</label>
+						<input type="checkbox" name="brand" id="brand-3" /><label for="brand-3">ZIWE</label>
+						<input type="checkbox" name="brand" id="brand-4" /><label for="brand-4">ZIWE</label>
+					</div>
+				</td>
+				<td><span id="brandTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">已勾选品牌：</td>
+				<td colspan="4">
+					<b>ZIWE</b>、<b>ZIWE</b>、<b>ZIWE</b>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">公司地址：</td>
+				<td colspan="3">
+					<select id="addr-province" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">上海</option>
+						<option value="2">北京</option>
+						<option value="3">内蒙古自治区</option>
+					</select>
+					<select id="addr-city" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">上海市</option>
+						<option value="2">昆山市</option>
+					</select>
+					<select id="addr-district" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">徐汇区</option>
+						<option value="2">闵行区</option>
+					</select>
+					<input id="addr-info" type="text" class="addr-text" />
+				</td>
+				<td><span id="addrTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*发货地址：</td>
+				<td colspan="3">
+					<select id="addr-province-f" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">上海</option>
+						<option value="2">北京</option>
+						<option value="3">内蒙古自治区</option>
+					</select>
+					<select id="addr-city-f" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">上海市</option>
+						<option value="2">昆山市</option>
+					</select>
+					<select id="addr-district-f" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">徐汇区</option>
+						<option value="2">闵行区</option>
+					</select>
+					<input id="addr-info-f" type="text" class="addr-text" />
+				</td>
+				<td><span id="addr-fTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*退货地址：</td>
+				<td colspan="3">
+					<select id="addr-province-t" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">上海</option>
+						<option value="2">北京</option>
+						<option value="3">内蒙古自治区</option>
+					</select>
+					<select id="addr-city-t" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">上海市</option>
+						<option value="2">昆山市</option>
+					</select>
+					<select id="addr-district-t" class="select-addr">
+						<option>请选择…</option>
+						<option value="1">徐汇区</option>
+						<option value="2">闵行区</option>
+					</select>
+					<input id="addr-info-t" type="text" class="addr-text" />
+				</td>
+				<td><span id="addr-tTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*法人代表：</td>
+				<td colspan="3"><input type="text" id="juridicalPperson" class="input_public" value="" /></td>
+				<td><span id="juridicalPpersonTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*税务登记号：</td>
+				<td colspan="3"><input type="text" id="registration" class="input_public" value="" /></td>
+				<td><span id="registrationTip"></span></td>
+			</tr>
+			<tr>
+				<td align="right">企业法人营业执照注册号：</td>
+				<td colspan="3"><input type="text" class="input_public" value="" /></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td align="right">*企业编码：</td>
+				<td colspan="4"><input type="text" class="input_public" value="" /></td>
+			</tr>
+			<tr>
+				<td align="right">*经营范围：</td>
+				<td colspan="4"><input type="text" class="input_public" value="" /></td>
+			</tr>
+			<tr>
+				<td align="right">*支付宝帐号：</td>
+				<td><input type="text" id="alipay" class="input_public" value="" /></td>
+				<td align="right">*注册支付宝姓名：</td>
+				<td><input type="text" class="input_public" value="" /></td>
+				<td rowspan="2"><span id="paynum"></span></td>
+			</tr>
+			<tr>
+				<td align="right">*开户银行：</td>
+				<td><input type="text" id="bank" class="input_public" value="" /></td>
+				<td align="right">*银行帐号：</td>
+				<td><input type="text" class="input_public" value="" /></td>
+			</tr>
+			<tr valign="top">
+				<td align="right">*营业执照：</td>
+				<td colspan="3"><div class="license"><img src="" /><input type="hidden" id="license" /></div><input type="button" class="addBusiness-btn" value="点击上传" /></td>
+				<td><span id="licenseTip"></span></td>
+			</tr>
+			<tr>
+				<td colspan="5" align="center">
+					<input type="submit" class="addBusiness-btn" value="保存所有信息" />
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+<script>
+	//品牌筛选
+	$(document).ready(function(){
+		$(".sal-brand-t a").click(function(){
+			var brand_temp = "brand-" + $(this).text();
+			if(!$("#"+brand_temp)[0]){
+				$(".br-list:last").after($("#brand-A").clone().attr("id",brand_temp));
+				$("#"+brand_temp).show().siblings(".br-list").hide();
+			}
+			else{
+				$("#"+brand_temp).show().siblings(".br-list").hide();
+			}
+		});
+	});
+	//验证
+	$.formValidator.initConfig({formID:"form1",theme:"Default",submitOnce:true,onError:function(){}});
+	$("#login-name").formValidator({onShowText:"请输入登录名",onShow:"由6~30位，英文，中文，数字和下划线组成",onFocus:"由6~30位，英文，中文，数字和下划线组成",onCorrect:"登录名可以使用"}).inputValidator({min:6,max:30,onErrorMin:"请输入大于6个字符的登录名",onErrorMax:"请输入小于30个字符的登录名",onError:"你输入的登录名格式错误"});
+	$("#linkman").formValidator({onShowText:"请输入联系人姓名",onShow:"请输入3~20位英文或中文姓名"}).inputValidator({min:3,max:20,onErrorMin:"请输入大于3个字符",onErrorMax:"请输入小于20个字符",onError:"你输入的姓名错误"});
+	$("#tel-text").formValidator({onShowText:"请输入你的手机号码",onShow:"请输入你的手机号码",onFocus:"请输入正确的手机号",onCorrect:"谢谢你的合作"}).inputValidator({min:11,max:11,onError:"手机号码必须是11位的,请确认"}).regexValidator({regExp:"mobile",dataType:"enum",onError:"你输入的手机号码格式不正确"});
+	$("#email").formValidator({onShow:"请输入邮箱",onFocus:"邮箱6-100个字符,输入正确了才能离开焦点",onCorrect:"恭喜你,你输对了",defaultValue:"@"}).inputValidator({min:6,max:100,onError:"邮箱格式错误"}).regexValidator({regExp:"^([\\w-.]+)@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.)|(([\\w-]+.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(]?)$",onError:"你输入的邮箱格式不正确"});
+	$("#dh").formValidator({onShowText:"请输入固定电话",onShow:"请输入国内电话",onFocus:"例如：021-88888888或省略区号88888888",onCorrect:"谢谢你的合作，你的固定电话正确"}).regexValidator({regExp:"tel",dataType:"enum",onError:"国内电话格式不正确"});
+	$("#QQ").formValidator({empty:true,onShowText:"请输入QQ号",onShow:"请输入QQ号码",onCorrect:"谢谢你的合作，你的QQ号码正确"}).inputValidator({min:6,max:10}).regexValidator({regExp:"qq",dataType:"enum",onError:"QQ号码格式不正确"});
+	$("#business-name").formValidator({onShowText:"请输入公司名称",onShow:"由6~30位，英文，中文，数字和下划线组成",onFocus:"由6~30位，英文，中文，数字和下划线组成",onCorrect:"公司名称可以使用"}).inputValidator({min:6,max:30,onErrorMin:"请输入大于6个字符的公司名称",onErrorMax:"请输入小于30个字符的用户名",onError:"你输入的公司名称格式错误"});
+	$("#rq").formValidator({onShowText:"请输入成立日期",onShow:"请输入成立日期",onFocus:"例如：2012-01-03",onCorrect:"成立日期正确"}).regexValidator({regExp:"date",dataType:"enum",onError:"日期格式不正确"});
+	$("#regdit-zb").formValidator({onShowText:"请输入注册资本数",onShow:"请输入注册资本数",onCorrect:"谢谢你的合作，你的注册资本数正确"}).inputValidator({min:0,max:10}).regexValidator({regExp:"intege1",dataType:"enum",onError:"请填写0~10位数字"});
+	$("#ss-zb").formValidator({onShowText:"请输入实收资本数",onShow:"请输入实收资本数",onCorrect:"谢谢你的合作，你的实收资本数正确"}).inputValidator({min:0,max:10}).regexValidator({regExp:"intege1",dataType:"enum",onError:"请填写0~10位数字"});
+	$("#scope").formValidator({onShowText:"你输入的经营范围"}).inputValidator({min:3,max:100,onError:"你输入的经营范围长度不正确,请确认"});
+	$("#summary").formValidator({onShowText:"你输入的公司简介"}).inputValidator({min:3,max:200,onError:"你输入公司简介长度不正确,请确认"});
+	$("#url").formValidator({onShowText:"你输入的公司网址"}).inputValidator({min:3,onError:"你输入公司网站格式不正确"}).regexValidator({regExp:"url",dataType:"enum",onError:"你输入公司网站格式不正确"});
+	$(":checkbox[name='brand']").formValidator({tipID:"brandTip",onShow:"请选择你的兴趣爱好（至少选一个）",onFocus:"你至少选择1个",onCorrect:"恭喜你,你选对了"}).inputValidator({min:1,onError:"你选的个数不对"});
+	$("#addr-province").formValidator({tipID:"addrTip",onShow:"请选择你的省份",onFocus:"省份必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "省份必须选择!"}).defaultPassed();
+	$("#addr-city").formValidator({tipID:"addrTip",onShow:"请选择你的城市",onFocus:"城市必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "城市必须选择!"}).defaultPassed();
+	$("#addr-district").formValidator({tipID:"addrTip",onShow:"请选择你的区县",onFocus:"区县必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "区县必须选择!"}).defaultPassed();
+	$("#addr-info").formValidator({tipID:"addrTip",onShowText:"请输入详细地址",onShow:"请输入详细地址"}).inputValidator({min:0,max:30,onErrorMax:"请输入小于20个字符",onError:"你输入的详细地址有误"});
+	$("#addr-province-f").formValidator({tipID:"addr-fTip",onShow:"请选择你的省份",onFocus:"省份必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "省份必须选择!"}).defaultPassed();
+	$("#addr-city-f").formValidator({tipID:"addr-fTip",onShow:"请选择你的城市",onFocus:"城市必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "城市必须选择!"}).defaultPassed();
+	$("#addr-district-f").formValidator({tipID:"addr-fTip",onShow:"请选择你的区县",onFocus:"区县必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "区县必须选择!"}).defaultPassed();
+	$("#addr-info-f").formValidator({tipID:"addr-fTip",onShowText:"请输入详细地址",onShow:"请输入详细地址"}).inputValidator({min:0,max:30,onErrorMax:"请输入小于20个字符",onError:"你输入的详细地址有误"});
+	$("#addr-province-t").formValidator({tipID:"addr-tTip",onShow:"请选择你的省份",onFocus:"省份必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "省份必须选择!"}).defaultPassed();
+	$("#addr-city-t").formValidator({tipID:"addr-tTip",onShow:"请选择你的城市",onFocus:"城市必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "城市必须选择!"}).defaultPassed();
+	$("#addr-district-t").formValidator({tipID:"addr-tTip",onShow:"请选择你的区县",onFocus:"区县必须选择",onCorrect:"谢谢你的配合",defaultValue:"a"}).inputValidator({min:1,onError: "区县必须选择!"}).defaultPassed();
+	$("#addr-info-t").formValidator({tipID:"addr-tTip",onShowText:"请输入详细地址",onShow:"请输入详细地址"}).inputValidator({min:0,max:30,onErrorMax:"请输入小于20个字符",onError:"你输入的详细地址有误"});
+	$("#juridicalPperson").formValidator({onShowText:"请输入法人姓名",onShow:"请输入3~20位英文或中文姓名"}).inputValidator({min:3,max:20,onErrorMin:"请输入大于3个字符",onErrorMax:"请输入小于20个字符",onError:"你输入的姓名错误"});
+	$("#registration").formValidator({onShowText:"请输入税务登记号",onShow:"请输入税务登记号",onCorrect:"谢谢你的合作，你的税务登记号正确"}).inputValidator({min:0,max:20}).regexValidator({regExp:"intege1",dataType:"enum",onError:"请填写0~20位数字"});
+	$("#alipay,#bank").formValidator({tipID:"paynum",onshow:"请填写任一种名字)",onfocus:"请请填写任一种名字。",oncorrect:"输入正确！"}).functionValidator({fun:allEmpty}); 
+	function allEmpty(val,elem){return ($("#alipay").val()=="" && $("#bank").val()=="")?'为了保证您能收到货款，请至少填写一种收<br/>款帐号！':true;} 
+	$("#license").formValidator({ onShow: "请输入图片名", onCorrect: "谢谢你的合作，你的图片名正确" }).inputValidator({min:1,onErrorMin:"请上传图片"}).regexValidator({ regExp: "picture", dataType: "enum", onError: "图片名格式不正确" }); 
+</script>
+</body>
+</html>

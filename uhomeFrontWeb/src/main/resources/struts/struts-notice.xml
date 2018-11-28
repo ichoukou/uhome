@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- 公告区 -->
+	<package name="notice" extends="uhome-default" namespace="/notice">
+	
+		<!-- 分页  -->
+		<action name="index-*-*-*" class="com.ytoxl.uhomefront.web.action.notice.NoticeAction" method="noticeList">
+			<param name="noticePage.params['type']">{1}</param>
+			<param name="noticePage.total">{2}</param>
+			<param name="noticePage.currentPage">{3}</param>
+			<result name="noticeList">/WEB-INF/pages/notice/noticeList.jsp</result>
+		</action>
+		
+		<!-- old -->
+		<action name="index-*" class="com.ytoxl.uhomefront.web.action.notice.NoticeAction" method="noticeList">
+			<param name="noticePage.params['type']">{1}</param>
+			<result name="noticeList">/WEB-INF/pages/notice/noticeList.jsp</result>
+		</action>
+		
+		<action name="detail-*-*-*" class="com.ytoxl.uhomefront.web.action.notice.NoticeAction" method="noticeDetail">
+			<param name="noticeId">{1}</param>
+			<param name="noticePage.total">{2}</param>
+			<param name="noticePage.currentPage">{3}</param>
+			<result name="noticeDetail">/WEB-INF/pages/notice/noticeDetail.jsp</result>
+		</action>
+		
+		<action name="detail-*" class="com.ytoxl.uhomefront.web.action.notice.NoticeAction" method="noticeDetail">
+			<param name="noticeId">{1}</param>
+			<result name="noticeDetail">/WEB-INF/pages/notice/noticeDetail.jsp</result>
+		</action>
+	</package>
+</struts>

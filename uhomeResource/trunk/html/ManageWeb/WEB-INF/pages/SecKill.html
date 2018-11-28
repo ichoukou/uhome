@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>秒杀管理</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/arrangement.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js_build/pages/index.js"></script>
+    <script src="../../web-resource/js/plugin/artdialog/artDialog.plugins.min.js"></script>
+    <script src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+</head>
+
+<body>
+    <!--start header-->
+    <!--end header-->
+    <!--start body-->
+    <div class="body m-w980p ">
+        <div class="body-nav arr-nav">
+            <ul class="layout">
+                <li><a>特&nbsp;卖</a></li>
+                <li><a class="current-chose">秒&nbsp;杀</a></li>
+            </ul>
+        </div>
+    		<!--start form-->
+        <form class="sub-form layout">
+            <div class="m-fl">
+                <ul class="layout">
+                    <li>
+                        <select class="chose-brand">
+                            <option>选择品牌类目</option>
+                            <option>选择品牌</option>
+                            <option>选择品牌</option>
+                            <option>选择品牌</option>
+                        </select>
+                    </li>
+                    <li>
+                        <select class="chose-year">
+                            <option>2503</option>
+                            <option>2562</option>
+                            <option>2354</option>
+                            <option>6250</option>
+                        </select><label>年</label>
+                        <select  class="chose-month">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        <label>月</label>
+                    </li>
+                    <li>
+                        <input type="button" class="btn btn-danger" value="查  询"/>
+                    </li>
+                </ul>
+            </div>
+        </form>
+       <!--end form-->
+        <div class="examine m-mt10p layout">
+            <div class="m-fl"><input type="button" id="addSale-btn" class="btn btn-danger" value="新增排期"/></div>
+            <div class="pagination m-fr">
+                <a href="#">&nbsp;<span class="disable"></span></a>
+                <a href="#">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <span class="etc">...</span>
+                <a href="#">10</a>
+                <a href="#" >&nbsp;<span class="next"></span></a>
+                <span class="current">8</span>
+                <span class="goto">转到</span>
+            </div>
+        </div>
+       <!--start 秒杀管理table-->
+        <div class="m-mt10p arrange-management">
+            <table class="tab-control" id="tab">
+                <thead>
+                    <tr>
+                        <th width="15%">品牌名称</th>
+                        <th width="15%">商品名称</th>
+                        <th width="15%">秒杀数量</th>
+                        <th width="15%">秒杀时间</th>
+                        <th width="15%">排序</th>
+                        <th width="10%">状态</th>
+                        <th width="15%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><input type="checkbox"/><label>灰太狼</label></td>
+                    <td><label>灰太狼</label></td>
+                    <td>100</td>
+                    <td>
+                        <label>2.10.5.3~2035.2.1</label>
+                    </td>
+                    <td>1</td>
+                    <td>已发布</td>
+                    <td>
+                        <a class="right">编辑</a><a class="right">确认</a><a class="right">删除</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+       <!--end 秒杀管理table-->
+       <!--star 新增秒杀 -->
+       <div class="addSale">
+       	<div class="addSale-table">
+       		<div class="addSale-time">
+       			<span>选择特卖日期：</span>
+       			<input type="text" class="addSale-set-time" value="2012-12-12" /><i class="addSal-time-icon"></i>
+       			至
+       			<input type="text" class="addSale-set-time" value="2012-12-12" /><i class="addSal-time-icon"></i>
+       			<select class="addSale-select-brand">
+       				<option>选择品牌</option>
+       				<option>七匹狼</option>
+       				<option>劲霸</option>
+       			</select>
+       		</div>
+       		<div class="addSale-select-product">
+       			<div class"addSale-saler-list">
+	       			<div class="addSale-saler">
+	       				<p>我是卖家一我是卖家一</p>
+	       				<input type="checkbox" id="select-all" /><label for="select-all">全选</label>
+	       			</div>
+	       			<div class="addSale-product">
+	       				<ul>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<div class="clear"></div>
+	       				</ul>
+	       			</div>
+	       			<div class="clear"></div>
+	       		</div>
+	       		<!--star 选择商品 -->
+	       		<div class"addSale-saler-list">
+	       			<div class="addSale-saler">
+	       				<p>我是卖家一我是卖家二</p>
+	       				<input type="checkbox" id="select-all" /><label for="select-all">全选</label>
+	       			</div>
+	       			<div class="addSale-product">
+	       				<ul>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<li>
+	       						<img src="../../web-resource/images/goodsbig.png" />
+	       						<p><label>2.5折</label><input name="seckill-product" type="radio" /></p>
+	       					</li>
+	       					<div class="clear"></div>
+	       				</ul>
+	       			</div>
+	       			<div class="clear"></div>
+	       		</div>
+	       		<!--end 选择商品 -->
+       		</div>
+       		<div class="addSale-img">
+       			<table>
+       				<tr>
+       					<td><img src="../../web-resource/images/goodsbig.png" /></td>
+       					<td>
+       						<p>排序：<input type="text" class="addSale-name" value="1" /></p><br/>
+       						<p>如果需要在首页展示，填写1~7的数字来排序。</p>
+       					</td>
+       				</tr>
+       				<tr>
+       					<td>
+       						<input type="button" class="addSale-btn" value="上传活动形象图" />
+       						<span>请上传像素为420px*180px的图片</span>
+       					</td>
+       					<td></td>
+       				</tr>
+       			</table>
+       		</div>
+       	</div>
+       </div>
+       <!--end 新增秒杀 -->
+    </div>
+    <!--end body-->
+    <!--start footer-->
+    <!--end footer-->
+    <script>
+    //添加活动弹出
+			$('#addSale-btn').on("click", function () {
+			  var html = $(".addSale").html();
+			  $.dialog({
+			    lock: true,
+			    padding: "0px",
+			    title:false,
+			    content:html,
+			    fixed: true,
+			    cancel: true,
+			    cancelValue:"取  消",
+			    ok:function(){},
+			    okValue:"保  存"
+			  });
+			});
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="specialTopic" extends="uhome-default" namespace="/admin/specialtopic">
+		<action name="specialTopic_*"
+			class="com.ytoxl.uhomemanage.web.action.specialtopic.SpecialTopicAction" method="{1}">
+			<result name="specialTopicPage">/WEB-INF/pages/specialtopic/specialTopicTemplate.jsp</result>
+			<result name="turnAction" type="redirectAction">specialTopic_searcheSecialTopicTemplate.htm</result>
+			<result name="advertisement">/WEB-INF/pages/specialtopic/searchAdv.jsp</result>
+			<result name="saveAdv" type="redirectAction">${nextAction}?advertisementPage.params.specialTopicTempletId=${advertisementPage.params.specialTopicTempletId}</result>
+			<result name="editAdv" type="dispatcher">/WEB-INF/pages/specialtopic/editAdv.jsp</result>
+			<result type="json">
+				<param name="includeProperties">advertisement.*,availableAdvPositions.*,advProducts.*</param>
+			</result>
+		</action>
+	</package>
+</struts>

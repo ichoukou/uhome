@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <!-- 商品搜索 -->
+	<package name="search" extends="uhome-default" namespace="/search">
+		<!-- old -->
+		<action name="searchProduct" class="com.ytoxl.uhomefront.web.action.search.SearchAction" method="searchProduct">
+			<result name="searchProduct">/WEB-INF/pages/search/search.jsp</result>
+		</action> 
+	</package>
+	
+	<!-- 特卖 -->
+	<package name="specialseller" extends="uhome-default" namespace="/specialseller">
+		<!-- 第一次默认加载最受欢迎的品牌 -->
+		<!-- old -->
+		<action name="specialSeller" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="specialSeller">
+			<result name="specialSeller">/WEB-INF/pages/product/specialSeller.jsp</result>
+		</action>
+		
+		<!-- 最受欢迎的品牌  用于ajax调用 -->
+		<action name="specialSellerAjax" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction"  method="specialSellerAjax">
+			<result name="specialSellerAjax">/WEB-INF/pages/product/special.jsp</result>
+		</action>
+		
+		<!-- 折扣最低的品牌 -->
+		<action name="lowestDiscountBrand" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="lowestDiscountBrand">
+			<result name="lowestDiscountBrand">/WEB-INF/pages/product/special.jsp</result>
+		</action>
+		
+		<!-- 最新上线的品牌 -->
+		<action name="lastOnLineBrand" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="lastOnLineBrand">
+			<result name="lastOnLineBrand">/WEB-INF/pages/product/special.jsp</result>
+		</action>
+		
+		<!-- 点击3个子目录执行的Action -->
+		<!-- old -->
+		<action name="categoryBrand" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerAction" method="categoryBrand">
+			<result name="categoryBrand">/WEB-INF/pages/product/specialSeller.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 特卖中的商品列表 -->
+	<package name="specialsellerproduct" extends="uhome-default" namespace="/specialsellerproduct">
+		<!-- old -->
+		<action name="specialSellerProduct" class="com.ytoxl.uhomefront.web.action.specialseller.SpecialSellerProductAction" method="specialSellerProduct">
+			<result name="specialSellerProduct">/WEB-INF/pages/product/specialSellerProducts.jsp</result>
+		</action>
+		<!-- 显示一个商品的详细信息 -->
+		<!-- old -->
+		<action name="productDetail" class="com.ytoxl.uhomefront.web.action.specialseller.ProductAction" method="productDetail">
+			<result name="productDetail">/WEB-INF/pages/product/productDetail.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 秒杀 -->
+	<package name="seckill" namespace="/seckill" extends="uhome-default">
+		<!-- old -->
+		<action name="secKill" class="com.ytoxl.uhomefront.web.action.seckill.SecKillAction" method="secKill">
+			<result name="secKill">/WEB-INF/pages/product/secKill.jsp</result>
+		</action>
+		<!-- old -->
+		<action name="secKillDetail" class="com.ytoxl.uhomefront.web.action.seckill.SecKillAction" method="secKillDetail">
+			<result name="seckillDetail">/WEB-INF/pages/product/secKillDetail.jsp</result>
+		</action>
+	</package>
+		
+</struts>

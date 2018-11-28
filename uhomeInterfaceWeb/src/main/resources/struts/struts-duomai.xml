@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="duomai" extends="uhomeInterface-default"  namespace="/duomai">
+		<action name="orderSearch" class="com.ytoxl.uhomeInterface.web.action.duomai.OrderSearchAction" method="orderSearch">
+			<result name="jsonMsg" type="json">
+        		<param name="root">bean</param>
+        	</result>
+		</action>
+		<action name="getOrderContentByOrderNo" class="com.ytoxl.uhomeInterface.web.action.duomai.OrderPushAction" method="getOrderContentByOrderNo">
+			<result name="success">/WEB-INF/page/searchOrderHead.jsp</result>
+		</action>
+	</package>
+	
+</struts>

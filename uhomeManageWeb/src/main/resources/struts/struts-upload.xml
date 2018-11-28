@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="upload" extends="uhome-default" namespace="/upload">
+        <!-- upload -->
+        <action name="upload" class="com.ytoxl.module.file.core.web.FileUploadAction" method="uploadImges">
+        	<result name="result" type="json">fileUri</result>
+        </action>
+        <!-- 商品描述的图片 -->
+        <action name="image-upload">
+        	<result name="success">/WEB-INF/pages/upload/upload.jsp</result>
+        </action>
+        <!-- 帮助中的描述图片 -->
+        <action name="help-image-upload">
+        	<result name="success">/WEB-INF/pages/upload/helpUpload.jsp</result>
+        </action>
+	</package>
+</struts>

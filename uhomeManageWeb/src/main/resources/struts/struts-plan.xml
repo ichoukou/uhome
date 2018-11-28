@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="plan" extends="uhome-default" namespace="/admin/plan">
+		<action name="plan-*" class="com.ytoxl.uhomemanage.web.action.plan.PlanAction" method="{1}">
+			 <result name="searchSellPlans">/WEB-INF/pages/plan/searchPlans.jsp</result>
+			 <result name="searchSeckillPlans">/WEB-INF/pages/plan/searchSeckillPlans.jsp</result>
+			 <result name="editSellPlan">/WEB-INF/pages/plan/editSellPlan.jsp</result>
+			 <result name="editSeckillPlan">/WEB-INF/pages/plan/editSeckillPlan.jsp</result>
+			 <result name="sellProducts">/WEB-INF/pages/plan/sellProducts.jsp</result>
+			 <result name="seckillProducts">/WEB-INF/pages/plan/seckillProducts.jsp</result>
+			 <result name="viewPlanProducts">/WEB-INF/pages/plan/viewPlanProducts.jsp</result>
+		</action>
+		<action name="plancheck-*" class="com.ytoxl.uhomemanage.web.action.report.PlanCheckAction" method="{1}">
+			<result name="searchSellerPlanCheck">/WEB-INF/pages/plan/searchSellerPlanCheck.jsp</result>
+		</action>
+	</package>
+</struts>

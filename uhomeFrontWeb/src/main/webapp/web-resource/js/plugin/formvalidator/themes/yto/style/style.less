@@ -1,0 +1,43 @@
+//通配样式项-父层
+.onShow,.onFocus,.onError,.onCorrect{
+  position: absolute;
+}
+//通配样式项-提示文本
+.onShow-txt,.onFocus-txt,.onError-txt,.onCorrect-txt{
+  height: 22px;
+  line-height: 22px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+//初始化时提示文本
+.onShow-txt {
+  border: 1px solid #ECECD5;
+  background: #FFFCEB;
+  color: #808080;
+}
+//聚焦时提示文本
+.onFocus-txt {
+  border: 1px solid #ECECD5;
+  background: #FFFCEB;
+  color: #808080;
+}
+//错误时提示文本
+.onError-txt {
+  border: 1px solid #fcfcfc;
+  background: url(../images/form_error.png) no-repeat;
+  background-position: 2% center;
+  color: #DF5151;
+  padding-left: 25px;
+}
+//正确时提示文本
+.onCorrect-txt {
+  background: url(../images/form_success.png) no-repeat;
+  background-position: 2% center;
+  padding-left: 25px;
+}
+//加载提示层
+.onLoad-txt {
+  display: block;
+}

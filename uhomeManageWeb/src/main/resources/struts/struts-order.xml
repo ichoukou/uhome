@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="order" extends="uhome-default" namespace="/admin/order">
+    	<action name="order-*" class="com.ytoxl.uhomemanage.web.action.order.OrderAction"  method="{1}">
+    	   <result name="orderWildcard">/WEB-INF/pages/order/{1}.jsp</result>
+    	   <result name="getOrder">/WEB-INF/pages/order/{1}.jsp</result>
+    	   <result name="excel" type="stream">  
+                    <param name="contentType">  
+                        application/octet-stream
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        filename=${fileName}orders.zip
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+           </result>
+            <result name="excels" type="stream">  
+                    <param name="contentType">  
+                        application/vnd.ms-excel;charset=ISO8859-1
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        attachment;filename=${fileName}.xls
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+           </result>  
+           <result name="template" type="stream">  
+                    <param name="contentType">  
+                        application/vnd.ms-excel  
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        filename=default_template.xlsx
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+           </result>
+           <result name="searchOrders4Manager">/WEB-INF/pages/order/{1}.jsp</result>
+           <result name="searchOrders4Seller">/WEB-INF/pages/order/{1}.jsp</result>
+           <result name="getOrder4Manager">/WEB-INF/pages/order/{1}.jsp</result>
+           <result name="getOrder4Seller">/WEB-INF/pages/order/{1}.jsp</result>   
+    	</action>
+	</package>
+</struts>

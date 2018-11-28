@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="brand" extends="uhome-default" namespace="/admin/brand">
+    	<action name="brand-*" class="com.ytoxl.uhomemanage.web.action.brand.BrandAction" 
+    		method="{1}">
+    	   <result name="listBrands" type="dispatcher">/WEB-INF/pages/user/brandList.jsp</result>
+    	   <result name="alterBrand" >/WEB-INF/pages/brand/alterBrand.jsp</result>
+    	   <result name="listUserBrands" >/WEB-INF/pages/brand/branduserlist.jsp</result>
+    	    <result name="listUserBrands" >/WEB-INF/pages/brand/branduserlist.jsp</result>
+    	</action>
+	</package>
+	<package name="brandSort" extends="uhome-default" namespace="/admin/brandSort">
+    	<action name="brandSort-*" class="com.ytoxl.uhomemanage.web.action.brand.BrandSortAction" 
+    		method="{1}">
+    	   	<result name="listBrandSort" >/WEB-INF/pages/brand/listBrandSort.jsp</result>
+    	   	<result name="sort" type="redirectAction">${nextAction}</result>
+      	</action>
+	</package>
+</struts>

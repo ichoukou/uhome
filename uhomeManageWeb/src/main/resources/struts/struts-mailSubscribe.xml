@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="mailsubscribe" extends="uhome-default" namespace="/admin/mailsub">
+    	<action name="mailsub-*" class="com.ytoxl.uhomemanage.web.action.content.MailSubscribeAction" 
+    		method="{1}">
+    	   <result name="searchMailSubs">/WEB-INF/pages/mailSub/searchMailSubs.jsp</result>
+    	   <result name="nextAction" type="redirectAction">${nextAction}</result>
+    	</action>
+	</package>
+</struts>

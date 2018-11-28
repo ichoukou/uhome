@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="index" extends="uhome-default" namespace="/">
+		<action name="index"
+			class="com.ytoxl.uhomemanage.web.action.order.IndexAction" method="index">
+			<result name="success">/WEB-INF/pages/index/index.jsp</result>
+		</action>
+		<action name="getMenu"
+			class="com.ytoxl.uhomemanage.web.action.order.IndexAction" method="getMenu">
+		</action>
+		<action name="login" class="com.opensymphony.xwork2.ActionSupport">
+			<result name="success">/WEB-INF/pages/index/login.jsp</result>
+		</action>
+
+		<action name="validationCode"
+			class="com.google.code.jcaptcha4struts2.core.actions.JCaptchaImageAction">
+			<result type="captchaImage" />
+		</action>
+	</package>
+</struts>

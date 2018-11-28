@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="user" extends="uhome-default" namespace="/user">
+		<global-results>
+			<result name="updateError">/WEB-INF/pages/user/passWordstep3.jsp</result>
+        	<result name="updateSuccess">/WEB-INF/pages/user/updatesuccess.jsp</result>
+        	<result name="updateInfo">/WEB-INF/pages/user/updatesuccess.jsp</result>
+        	<result name="verificationError">/WEB-INF/pages/user/yanzhemaerror.jsp</result>
+        	<!-- 验证码 -->
+        	<result name="accoutError">/WEB-INF/pages/user/accouterror.jsp</result>
+        	<!-- 找回密码第二步登录报错 -->
+        	<result name="success">/WEB-INF/pages/user/passWordstep1.jsp</result>
+        	<!-- 找回密码 是登录了 跳转到首页 -->
+        	<!-- 
+        	<result name="defaultIndex" type="redirectAction">/default</result>
+        	 -->
+		</global-results>
+	
+        <action name="user-*" class="com.ytoxl.uhomefront.web.action.user.UserAction" method="{1}">
+        	<result name="userInfo">/WEB-INF/pages/user/information.jsp</result>
+        	<result name="passWordstep1">/WEB-INF/pages/user/passWordstep1.jsp</result>
+        	<result name="mailmsg">/WEB-INF/pages/user/passWordstep2.jsp</result>
+        	<result name="passWordStep3">/WEB-INF/pages/user/passWordstep3.jsp</result>
+        	<result name="renewPass">/WEB-INF/pages/user/reUpdatePassWord.jsp</result>
+        	<result name="joinMe">/WEB-INF/pages/user/joinMe.jsp</result>
+        </action>
+        
+        <!-- 发送邮件到邮箱的url -->
+        <action name="resetpassword" class="com.ytoxl.uhomefront.web.action.user.UserAction" method="resetPassword">
+        	<result name="passWordStep3">/WEB-INF/pages/user/passWordstep3.jsp</result>
+        </action>
+        
+        <!-- new -->
+        <action name="orders" class="com.ytoxl.uhomefront.web.action.order.OrderAction" method="myOrders">
+        	<result name="myOrders">/WEB-INF/pages/order/myOrders.jsp</result>
+        </action>
+        
+        <!-- new -->
+        <!-- 建议意见   想要的品牌 -->
+        <action name="suggest" class="com.ytoxl.uhomefront.web.action.content.SuggestAction" method="editSuggest">
+        	<result name="success">/WEB-INF/pages/index/suggest.jsp</result>
+        </action>
+        
+        <!-- new -->
+        <action name="userInfo" class="com.ytoxl.uhomefront.web.action.user.UserAction" method="getUerInfo">
+        	<result name="userInfo">/WEB-INF/pages/user/information.jsp</result>
+        </action>
+        
+        <!-- new -->
+        <action name="receiverAddress" class="com.ytoxl.uhomefront.web.action.user.ReceiverAddressAction" method="getReceiverAddress">
+			<result name="success">/WEB-INF/pages/address/address.jsp</result>
+		</action>
+		<action name="getAllAddress" class="com.ytoxl.uhomefront.web.action.user.ReceiverAddressAction" method="getAllAddress">
+		</action>
+		
+		<!-- new -->
+		<action name="joinMe"  class="com.ytoxl.uhomefront.web.action.user.UserAction" method="joinMe">
+			<result name="joinMe">/WEB-INF/pages/user/joinMe.jsp</result>
+		</action>
+		
+		<!-- new -->
+		<action name="returnOrders" class="com.ytoxl.uhomefront.web.action.order.ReturnOrderAction" method="myOrders">
+			<result name="myFhResult">/WEB-INF/pages/order/myThResult.jsp</result>
+		</action>
+		
+		<!-- new -->
+		<action name="reNewPassWord" class="com.ytoxl.uhomefront.web.action.user.UserAction" method="getRenewPassWord">
+			<result name="renewPass">/WEB-INF/pages/user/reUpdatePassWord.jsp</result>
+		</action>
+		
+		<!-- 积分管理 -->
+		<!-- new -->
+		<action name="points" class="com.ytoxl.uhomefront.web.action.user.PointAction" method="listPoints">
+			<result name="success">/WEB-INF/pages/user/point.jsp</result>
+		</action>
+		<!-- new -->
+		<action name="pointRules" class="com.ytoxl.uhomefront.web.action.user.PointAction" method="getPointRule">
+			<result name="getRule">/WEB-INF/pages/user/rule.jsp</result>
+		</action>
+		
+		<!-- 服务条款 -->
+		<action name="serviceTerms"  class="com.ytoxl.uhomefront.web.action.user.UserAction" method="getServiceTerms">
+			<result name="getServiceTerms">/WEB-INF/pages/user/serviceTerms.jsp</result>
+		</action>
+		
+		<!-- 我的优惠券 -->
+		<action name="userCoupons" class="com.ytoxl.uhomefront.web.action.user.UserCouponAction" method="listCoupons">
+			<result name="success">/WEB-INF/pages/user/userCoupons.jsp</result>
+		</action>
+		<!-- 激活我的优惠券 -->
+		<action name="activateCoupon" class="com.ytoxl.uhomefront.web.action.user.UserCouponAction" method="activateCoupon">
+		</action>
+		<!-- 未使用优惠券 -->
+		<action name="listValidCoupons" class="com.ytoxl.uhomefront.web.action.user.UserCouponAction" method="listValidCoupons">
+		</action>
+		<!-- 结算时查询可用的优惠劵 -->
+		<action name="selectCanUseUserConpon" class="com.ytoxl.uhomefront.web.action.user.UserCouponAction" method="selectCanUseUserConpon">
+		</action>
+	</package>
+</struts>

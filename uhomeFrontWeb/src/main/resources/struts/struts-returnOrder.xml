@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    <struts>
+    	<!-- 品牌详情 -->
+    	<package name="returnOrder"  namespace="/returnOrder" extends="uhome-default">
+    		<action name="returnOrder-*" class="com.ytoxl.uhomefront.web.action.order.ReturnOrderAction" method="{1}">
+    			<!-- old -->
+    			<result name="myFhResult">/WEB-INF/pages/order/myThResult.jsp</result>
+    			<result name="ordReturnReasons" >/WEB-INF/pages/order/ordReturnReasons.jsp</result>
+    			<result name="returnOrders" >/WEB-INF/pages/order/returnOrders.jsp</result>
+    			<result name="returnSingle" >/WEB-INF/pages/order/returnDetail.jsp</result>
+    		</action>
+    	</package>
+    </struts>

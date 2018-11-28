@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.MailTemplateMapper">
+	
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="mailTemplateId" parameterType="MailTemplate">
+		insert into mail_template(title,content,type) 
+		values(#{title},#{content},#{type})
+	</insert>
+	
+	<!-- 查询一条数据 -->
+	<select id="get" parameterType="MailTemplate" resultType="MailTemplate">
+		select mt.*
+		from mail_template mt
+		where mailTemplateId=#{mailTemplateId}
+	</select>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="MailTemplate">
+		update mail_template
+		set title=#{title},
+			content=#{content}
+		where mailTemplateId=#{mailTemplateId}
+	</update>
+	
+	<!-- 删除一条模版 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from mail_template where mailTemplateId=#{id} 
+	</delete>
+	
+	<!-- 查询所有的模版 -->
+	<select id="getAllMailTemplate" resultType="MailTemplate">
+		select *
+		from mail_template
+	</select>
+	
+	<!-- 根据模版类型查找模版 -->
+	<select id="getMailTemplateByType" resultType="MailTemplate">
+		select mt.*
+		from mail_template mt
+		where mt.type=#{type}
+	</select>
+</mapper>

@@ -1,0 +1,58 @@
+/*热卖商品，历史记录*/
+.static-mod{
+  .hd{
+    height: 28px;
+    line-height: 28px;
+    margin-top:10px;
+    font-size: 14px;
+    font-weight:bold;
+    color: #009a78;
+    padding-left: 15px;
+    border-bottom:4px solid #009a78;
+  }
+  .bd{
+    width:1008px;overflow:hidden;margin-top:10px;
+  }
+  dl{
+    width:226px;
+    float:left;
+    margin-right:16px;
+    margin-bottom:25px;
+    overflow: hidden;
+    border:1px solid #fff;
+    *zoom: 1;
+  }
+  .hover{
+   border:1px solid #cdcdcd;
+  }
+  dt{
+    width: 220px;
+    height: 220px;
+    margin:3px;
+  }
+  dd{    
+    &.link{
+      margin:8px 5px 10px;
+      overflow: hidden;
+    }
+    &.price{
+      font-family: arial;
+    }
+  }
+  .value-box{
+    .now-value{
+      color: #f96619;
+      font-size: 18px;
+      font-family: arial;
+      margin:0 5px;
+    }
+    .rebate{
+      color: #f96619;
+    }
+    .orig-value{
+      margin-left: 35px;
+      text-decoration: line-through;
+      font-family: arial;
+    }
+  }
+}

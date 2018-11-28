@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderReturnMapper">
+
+  <insert id="add" parameterType="OrderReturn" keyProperty="orderReturnId" useGeneratedKeys="true">
+		INSERT INTO order_return
+            (
+             orderId,
+             customerName,
+             telephone,
+             createTime)
+		VALUES (
+             #{orderId},
+             #{customerName},
+             #{telephone},
+		      CURRENT_TIMESTAMP)                  
+  </insert>
+  
+  <!-- 根据删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_return WHERE orderReturnId = #{orderReturnId}
+  </delete>
+  
+  <!-- 修改payment信息 -->
+  <update id="update" parameterType="OrderReturn">
+		UPDATE order_return
+		SET 
+		  orderId = #{orderId},
+		  customerName = #{customerName},
+		  telephone = #{telephone},
+		  createTime = #{createTime}
+		WHERE orderReturnId = #{orderReturnId}
+  </update>
+  
+  <select id="get" parameterType="integer" resultType="OrderReturn">
+        SELECT
+		  orderReturnId,
+		  orderId,
+		  customerName,
+		  telephone,
+		  createTime,
+		  updateTime
+		FROM order_return 
+		WHERE orderReturnId = #{orderPaymentId}
+  </select>
+  
+  <select id="listReturnItems" parameterType="integer" resultType="OrderItem">
+      SELECT DISTINCT oi.orderItemId, orderId, oi.sellerId,
+			oi.productSkuId, orderSource, ori.num, closingCost, 
+			oi.marketPrice, productName, b.name as `brand.name` 
+			FROM order_item oi inner join order_return_item ori on oi.orderItemId=ori.orderItemId 
+			INNER JOIN product_sku ps on oi.productSkuId=ps.productSkuId 
+			INNER JOIN product p on ps.productId=p.productId
+			INNER JOIN brand b on p.brandId=b.brandId
+		WHERE oi.orderId = #{orderId}
+  </select>
+  
+  <!-- 根据orderReturnId查询退货订单明细 -->
+  <select id="listOrderReturnItems" parameterType="java.lang.Integer" resultType="OrderReturnItem">
+  		select  
+<!--   			oReturn.*, -->
+  			returnItem.*,
+  			item.orderItemId		as `orderItem.orderItemId`,
+  			item.orderId			as `orderItem.orderId`,
+  			item.productSkuId		as `orderItem.productSkuId`, 
+  			item.sellerId			as `orderItem.sellerId`,
+  			item.orderSource		as `orderItem.orderSource`,
+  			item.num				as `orderItem.num`,
+  			item.closingCost 		as `orderItem.closingCost`,
+  			item.marketPrice		as `orderItem.marketPrice`,
+  			item.productName		as `orderItem.productName`
+  		from order_return_item returnItem
+  			 left join order_return oReturn on oReturn.orderReturnId=returnItem.orderReturnId
+  			 inner join order_item item on returnItem.orderItemId=item.orderItemId
+  		where oReturn.orderReturnId=#{orderReturnId}
+  </select>
+  
+  <select id="listOrderReturnItems4Manager" resultType="OrderReturnItem">
+  	  select
+	   		returnItem.*,
+  			item.orderItemId		as `orderItem.orderItemId`,
+  			item.orderId			as `orderItem.orderId`,
+  			item.productSkuId		as `orderItem.productSkuId`, 
+  			item.sellerId			as `orderItem.sellerId`,
+  			item.orderSource		as `orderItem.orderSource`,
+  			item.num				as `orderItem.num`,
+  			item.closingCost 		as `orderItem.closingCost`,
+  			item.marketPrice		as `orderItem.marketPrice`,
+  			item.productName		as `orderItem.productName`
+	   from order_return oReturn 
+	    	inner join order_return_item returnItem on oReturn.orderReturnId = returnItem.orderReturnId 
+	   		left  join order_return_payment orp on oReturn.orderReturnId = orp.orderReturnId
+	   		inner join order_item item on returnItem.orderItemId=item.orderItemId
+	   where 
+	   		oReturn.orderReturnId=#{orderReturnId}
+	   		<if test="returnStatus!=0">
+			 and returnItem.`status`= #{index}
+			</if>
+	   		<if test="returnStatus==3">
+         	 and	orp.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_WAITREFUND}
+           </if>
+           <if test="returnStatus==5">
+         	 and	orp.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+          </if>
+  </select>
+  <select id="getOrderReturnById" parameterType="integer" resultType="OrderReturn">
+        SELECT
+		  orderReturn.*,
+		  order_return_payment.status 				AS `orderReturnPayment.status`,
+		  order_return_payment.paymentAmount 		as `orderReturnPayment.paymentAmount`,
+		  order_return_payment.orderReturnPaymentId as `orderReturnPayment.orderReturnPaymentId`,
+		  express.expressName 						as `express.expressName`,
+		  express.mailNo 							as `express.mailNo`
+		FROM order_return orderReturn LEFT JOIN order_return_payment ON orderReturn.orderReturnId=order_return_payment.orderReturnId
+			 left join order_express express on express.orderReturnId=orderReturn.orderReturnId
+		WHERE orderReturn.orderId = #{orderId}
+  </select>
+  <select id="getOrderReturn4Manager" resultType="OrderReturn">
+  	    SELECT
+		  orderReturn.*,
+		  orp.status 				AS `orderReturnPayment.status`,
+		  orp.paymentAmount 		as `orderReturnPayment.paymentAmount`,
+		  orp.orderReturnPaymentId as `orderReturnPayment.orderReturnPaymentId`,
+		  express.expressName 						as `express.expressName`,
+		  express.mailNo 							as `express.mailNo`
+		FROM order_return orderReturn LEFT JOIN order_return_payment orp ON orderReturn.orderReturnId=orp.orderReturnId
+			 left join order_express express on express.orderReturnId=orderReturn.orderReturnId
+		WHERE 
+        orderReturn.orderReturnId in ( 
+			   select DISTINCT orn.orderReturnId from order_return_item ori join order_return orn on ori.orderReturnId = orn.orderReturnId
+        WHERE  orn.orderId =#{orderId} 
+        	 <if test="returnStatus!=0">
+			  AND ori.status  = #{index}
+			</if>
+			<if test="orderReturnId!=null">
+			 AND orn.orderReturnId = #{orderReturnId}
+			</if>
+    	)
+   		<if test="returnStatus==3">
+         	 AND orp.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_WAITREFUND}
+        </if>
+        <if test="returnStatus==5">
+         	 AND orp.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+        </if>
+  </select>
+  
+   <!-- 修改退货订单状态 -->
+  <update id="updateStatus" parameterType="OrderReturn">
+		UPDATE order_return
+		SET 
+		  status = #{status},
+		WHERE orderReturnId = #{orderReturnId}
+  </update>
+  <select id="searchOrdersReturn4Manager" resultType="OrderHead">
+        SELECT
+			oh.*, pm.paymentAmount AS `payment.paymentAmount`,
+			pm.status AS `payment.status`,
+			pm.payTime AS `payment.payTime`,
+			oe.orderExpressId AS `orderExpress.orderExpressId`,
+			oe.expressName AS `orderExpress.expressName`,
+			oe.receiverName AS `address.receiverName`,
+			ort.orderReturnId AS `orderReturn.orderReturnId`,
+      		ori.`status` AS `orderReturn.item.status`,
+      		orpy.`status` AS `orderReturn.orderReturnPayment.status`,
+        oi.orderSource AS `item.orderSource`
+		FROM order_head oh
+		LEFT JOIN order_payment pm ON oh.orderId = pm.orderId
+		LEFT JOIN order_express oe ON oh.orderId = oe.orderId
+	    join order_return ort on oh.orderId = ort.orderId
+        join order_return_item ori on ort.orderReturnId = ori.orderReturnId 
+        LEFT join order_return_payment orpy on ort.orderReturnId = orpy.orderReturnId
+		join order_item oi on oi.orderItemId = ori.orderItemId
+		<if test="returnStatus!=0">
+			WHERE ori.status = #{index}
+		</if>
+		<if test="returnStatus==0">
+			WHERE 1 = 1 
+		</if>
+		<if test="returnStatus==3">
+         	and	orpy.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_WAITREFUND}
+        </if>
+        <if test="returnStatus==5">
+         	and	orpy.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+        </if>
+		<include refid="searchOrdersReturn4ManagerCondition" />	
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+		limit #{start},#{limit}
+  </select>
+  <select id="searchOrdersReturn4ManagerCount" resultType="java.lang.Integer">
+  		SELECT
+  			count(ort.orderReturnId)
+		FROM order_head oh
+		LEFT JOIN order_payment pm ON oh.orderId = pm.orderId
+		LEFT JOIN order_express oe ON oh.orderId = oe.orderId
+	    join order_return ort on oh.orderId = ort.orderId
+        join order_return_item ori on ort.orderReturnId = ori.orderReturnId 
+        LEFT join order_return_payment orpy on ort.orderReturnId = orpy.orderReturnId
+		<if test="returnStatus!=0">
+			WHERE ori.status = #{index}
+		</if>
+		<if test="returnStatus==0">
+			WHERE 1 = 1 
+		</if>
+		<if test="returnStatus==3">
+         	and	orpy.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_WAITREFUND}
+        </if>
+        <if test="returnStatus==5">
+         	and	orpy.`status`=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+        </if>
+		<include refid="searchOrdersReturn4ManagerCondition" />	
+  </select>
+  <!-- 后台订单查询条件  -->
+  <sql id="searchOrdersReturn4ManagerCondition">
+			AND oh.orderNo IS NOT NULL
+			AND pm.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			<if test="status!=null and status !=''">and oh.status in (${status})</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			AND DATE_FORMAT(oh.createTime,"%Y-%m-%d") between #{beginTime} and #{endTime}	
+			</if>
+			<if test="productCategoryId != null and productCategoryId != ''">
+			AND oh.orderId IN(
+				SELECT order_item.orderId
+					FROM order_item
+				INNER JOIN product_sku ON order_item.productSkuId = product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				WHERE product.productCategoryId IN (SELECT productCategoryId FROM product_category WHERE parentId = #{productCategoryId})
+			)
+			</if>
+			<if test="brandId != null and brandId != ''">
+			AND oh.orderId IN(
+				SELECT order_item.orderId
+					FROM order_item
+				INNER JOIN product_sku ON order_item.productSkuId = product_sku.productSkuId
+				INNER JOIN product ON product_sku.productId = product.productId
+				INNER JOIN brand ON product.brandId = brand.brandId
+				WHERE brand.brandId = #{brandId}
+			)
+			</if>
+			<if test="sellerId != null and sellerId != ''">
+			AND oh.orderId IN(SELECT order_item.orderId FROM order_item WHERE order_item.sellerId=#{sellerId})
+			</if>
+			<if test="buyerId != null and buyerId != ''">
+			AND oh.userId = #{buyerId}
+			</if>
+			<if test="keywords != null and keywords != ''">
+			AND (oh.orderNo like CONCAT('%','${keywords}','%') 
+					OR oe.receiverName like CONCAT('%','${keywords}','%')
+					<if test="sellerId != null and sellerId != ''">
+					OR oe.mobile like CONCAT('%','${keywords}','%')
+					</if>
+				)
+			</if>
+   </sql>
+   <select id="selectOrderReturnByItemId" parameterType="integer" resultType="OrderReturn">
+         SELECT
+		  orderReturn.orderReturnId ,
+		  orderReturn.orderId  ,
+		  orderReturn.customerName,
+		  orderReturn.telephone ,
+		  orderReturn.createTime ,
+		  express.expressName as ` express.expressName`	,		
+		  express.mailNo as `express.mailNo`
+		  from order_return  orderReturn left join order_return_item  
+		  on orderReturn.orderReturnId = order_return_item.orderReturnId
+		left join order_express express on express.orderReturnId = orderReturn.orderReturnId
+		where   order_return_item.orderItemId=#{orderItemId}
+  </select>
+  
+  <select id="getOrderReturnByReturnId" parameterType="integer" resultType="OrderReturn">
+		SELECT ordr.*,
+			ordh.orderNo AS `orderHead.orderNo`,
+			ordh.userId AS `orderHead.userId`,
+			expr.orderExpressId AS `express.orderExpressId`, 
+			expr.expressName AS `express.expressName`,
+			expr.mailNo AS `express.mailNo`,
+			address.receiverName AS `address.receiverName`,	
+			address.telephone AS `address.telephone`,
+			address.mobile AS `address.mobile`,
+			address.regionId AS `address.regionId`,
+			address.receiveAddress AS `address.receiveAddress`
+		FROM order_return ordr 
+		LEFT JOIN order_head ordh ON ordr.orderId = ordh.orderId
+		LEFT JOIN order_express expr ON ordr.orderReturnId = expr.orderReturnId
+		LEFT JOIN receiver_address address ON address.receiverAddressId = ordh.receiverAddressId
+		WHERE  ordr.orderReturnId = #{orderReturnId} 
+  </select>
+  
+   <!-- 查询已申请退货订单总和 -->
+  <select id="searchReturnOrdersCount" parameterType="map" resultType="Integer">
+ 	select count(*)
+		FROM order_return ordr 
+		LEFT JOIN order_head ordh ON ordr.orderId = ordh.orderId
+		LEFT JOIN order_express expr ON ordr.orderReturnId = expr.orderReturnId
+		<where>
+		<if test="beginTime != null and beginTime != ''">
+			AND ordr.createTime &gt; #{beginTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND ordr.createTime &lt; #{endTime}
+		</if>
+		<if test="userId!= null and userId != ''">
+			AND ordh.userId=#{userId}	
+		</if>
+		<if test="orderId!= null and orderId != ''">
+		    AND ordh.orderId=#{orderId}	
+		</if>
+		</where>
+		<if test="sort != null and sort != ''">
+			 ORDER BY ${sort}	
+			<if test="dir != null and dir != ''">
+				 ${dir}	
+			</if>
+		</if>
+  </select>
+  
+  
+  <!-- 查询已经退货的订单列表 -->
+  <select id="searchReturnOrders"  parameterType="map" resultType="OrderReturn">
+        SELECT ordr.*,
+			ordh.orderNo AS `orderHead.orderNo`,
+			expr.orderExpressId AS `express.orderExpressId`, 
+			expr.expressName AS `express.expressName`,
+			expr.mailNo AS `express.mailNo`,
+			orp.status AS `orderReturnPayment.status`
+		FROM order_return ordr 
+		inner JOIN order_head ordh ON ordr.orderId = ordh.orderId
+		LEFT JOIN order_express expr ON ordr.orderReturnId = expr.orderReturnId
+		LEFT JOIN order_return_payment orp On ordr.orderReturnId = orp.orderReturnId
+		<where>
+		<if test="beginTime != null and beginTime != ''">
+			AND ordr.createTime &gt; #{beginTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND ordr.createTime &lt; #{endTime}
+		</if>
+		<if test="userId!= null and userId != ''">
+			AND ordh.userId=#{userId}	
+		</if>
+		<if test="orderId!= null and orderId != ''">
+		    AND ordh.orderId=#{orderId}	
+		</if>
+		</where>
+		<if test="sort != null and sort != ''">
+			 ORDER BY ${sort}	
+			<if test="dir != null and dir != ''">
+				 ${dir}	
+			</if>
+		</if>
+	    LIMIT #{start},#{limit} 
+  </select>
+  
+</mapper>

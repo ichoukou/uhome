@@ -1,0 +1,85 @@
+@charset "utf-8";
+/**
+ * User: jVan
+ * Date: 13-2-15 下午7:40
+ * Description: navigation
+ **/
+
+.navigation {
+  text-align: right;
+  span{
+    display: inline-block;
+	vertical-align:middle;
+    &.cur{
+      a{
+        border: 1px solid #f96619;
+        background-color: #f96619;
+        color: #ffffff;
+      }
+    }
+    &.prev{
+      a{
+        padding-left: 15px;
+        background: url("../../images/navigation/navigation.gif") no-repeat;
+        background-position: 10% 8px;
+        &:hover{
+          background-color: #f96619;
+          color: #ffffff;
+          border: 1px solid #f96619;
+        }
+      }
+    }
+    &.next{
+      a{
+        padding-right: 15px;
+        background: url("../../images/navigation/navigation.gif") no-repeat;
+        background-position: 90% -6px;
+        &:hover{
+          background-color: #f96619;
+          color: #ffffff;
+          border: 1px solid #f96619;
+        }
+      }
+    }
+  }
+  a{
+    display: inline-block;
+    border: 1px solid #d2d2d2;
+    padding: 2px 5px;
+    margin: 0 6px 0 0;
+    min-width: 12px;
+    text-align: center;
+    &:hover{
+      background-color: #f96619;
+      color: #ffffff;
+      border: 1px solid #f96619;
+    }
+  }
+  .reach_page{
+    border: 1px solid #d2d2d2;
+    text-align: center;
+    width: 30px;
+    padding: 3px 2px;
+  }
+  .go_page{
+    background: #ff943e; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ff943e 0%, #ec6e25 50%, #d8450a 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff943e), color-stop(50%,#ec6e25), color-stop(100%,#d8450a)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff943e', endColorstr='#d8450a',GradientType=0 ); /* IE6-9 */
+    padding: 3px 5px;
+    border: 1px solid #c25116;
+    color: #ffffff;
+    border-radius: 2px;
+    margin-right: 10px;
+  }
+  .prev-disable,.next-disable{
+    border: 1px solid #d2d2d2;
+    padding: 2px 5px;
+    cursor: default;
+    margin-right: 4px;
+  }
+}

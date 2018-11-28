@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.CouponConfigMapper">
+	
+	<!--  添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="couponConfigId" parameterType="CouponConfig">
+		insert into coupon_config(allowance,limitCharge,startTime,endTime,couponCount,eventId) 
+		values(#{allowance},#{limitCharge},#{startTime},#{endTime},#{couponCount},#{eventId})
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from coupon_config where couponConfigId=#{id}
+	</delete>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="CouponConfig">
+		update coupon_config b
+		set 
+			b.allowance=#{allowance},
+			b.limitCharge=#{limitCharge},
+			b.startTime=#{startTime},
+			b.endTime=#{endTime},
+			b.couponCount=#{couponCount}
+		where b.couponConfigId=#{couponConfigId}
+	</update>
+	
+	<!-- 根据品牌id查询品牌 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="CouponConfig">
+		select *
+		from coupon_config
+		where couponConfigId=#{couponConfigId}
+	</select>
+	
+	<!-- 根据eventId查询优惠券配置 -->
+	<select id="listCouponConfigByEventId" parameterType="java.lang.Integer" resultType="CouponConfig">
+		SELECT * FROM coupon_config 
+		WHERE eventId = #{eventId}
+	</select>
+	
+	<!-- 查询优惠券金额 -->
+	<select id="listAllowances" resultType="java.math.BigDecimal">
+		SELECT DISTINCT a.allowance 
+			FROM coupon_config a, event b
+		WHERE a.eventId = b.eventId
+			AND b.status != ${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_DELETE}
+		ORDER BY a.allowance
+	</select>
+	
+	<select id="getCouponsAmount" resultType="java.math.BigDecimal">
+		select sum(allowance*couponCount)
+		from coupon_config
+		where eventId=#{eventId}
+	</select>
+	
+</mapper>

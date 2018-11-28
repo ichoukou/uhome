@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="com.ytoxl.module.uhome.uhomereport.mapper.OrderWaitRefundReportMapper">
+
+	<sql id="select">
+		(select prosku.productSkuId as productSkuId,
+				orexp.receiverName as userName,
+				users.username as account,
+				ori.refundAmount as refundAmount,
+				orn.createTime as refundTime,
+				head.createTime as orderCreateTime,
+				op.payTime as orderPayTime,
+				head.orderNo as orderNo,
+				head.`status` as orderStatus,
+				prosku.internationalCode as internationalCode,
+				prosku.skuCode as skuCode,
+				pro.`name` as productName,
+				item.num as num,
+				pro.salePrice as salePrice,
+				IF(item.rebatePrice,item.closingCost*item.num-rebatePrice,NULL) AS rebatePrice,
+				post.postage as postage,
+				IFNULL(item.rebatePrice,item.closingCost*item.num) AS paymentAmount,
+				sell.companyName as companyName,
+				brd.name as brandName,
+				orp.status as returnStatus
+				from order_return_item ori LEFT JOIN order_return orn on ori.orderReturnId = orn.orderReturnId
+				LEFT JOIN order_head head on orn.orderId = head.orderId
+				LEFT JOIN user users on head.userId = users.userId
+				LEFT JOIN order_payment op on head.orderId = op.orderId
+				LEFT JOIN order_item item on head.orderId = item.orderId
+				LEFT JOIN product_sku prosku on item.productSkuId = prosku.productSkuId
+				LEFT JOIN product pro on prosku.productId = pro.productId
+				LEFT JOIN order_postage post ON head.orderId = post.orderId
+				LEFT JOIN seller sell on pro.sellerId = sell.sellerId
+				LEFT JOIN brand brd on pro.brandId = brd.brandId
+				LEFT JOIN order_return_payment orp on orn.orderReturnId = orp.orderReturnId
+				LEFT JOIN order_express orexp on orexp.orderId = head.orderId) t
+	</sql>
+
+	<sql id="where">
+		<where>
+		t.returnStatus = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_WAITREFUND}
+			<if test="time!=null and time!=''">
+				AND DATE_FORMAT(t.refundTime,'%Y-%m-%d') = #{time}
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderBy">
+		<if test="sort != null and sort != ''">
+			ORDER BY ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+	</sql>
+
+	<!-- 查询成功订单数量及总额 -->
+	<select id="searchReports" parameterType="map"
+		resultType="OrderWaitRefundReport">
+		SELECT * FROM
+		<include refid="select" />
+		<include refid="where" />
+		<include refid="orderBy" />
+		LIMIT #{start},#{limit}
+	</select>
+
+	<!-- 查询成功订单数量及总额 -->
+	<select id="searchReportsCount" parameterType="map"
+		resultType="integer">
+		SELECT COUNT(*) FROM
+		<include refid="select" />
+		<include refid="where" />
+		<include refid="orderBy" />
+	</select>
+	
+	  <!-- 报表导出列表 -->
+  	<select id="listReports" parameterType="map" resultType="OrderWaitRefundReport">
+   		SELECT *  FROM 
+   		<include refid="select"/>
+	  	<include refid="where"/>
+  		<include refid="orderBy"/>
+  	</select>	
+  	
+	<!-- 查询尺寸和颜色 -->
+	<select id="searchColourAndSize" parameterType="map"
+		resultType="OrderWaitRefundReport">
+		select skuopt.skuOptionId as skuOptionId,
+				skuoptval.skuOptionValue as skuOptionValue
+		from product_sku_option_value proskuoptval LEFT JOIN sku_option_value skuoptval on proskuoptval.skuOptionValueId = skuoptval.skuOptionValueId
+			LEFT JOIN sku_option skuopt on skuoptval.skuOptionId = skuopt.skuOptionId
+			where proskuoptval.productSkuId = #{productSkuId}
+	</select>
+	
+	
+</mapper>

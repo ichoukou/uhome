@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="auth" extends="uhome-default" namespace="/admin/auth">
+		<action name="auth-*" class="com.ytoxl.uhomemanage.web.action.auth.AuthorityAction" method="{1}">
+			 <result name="listRoles">/WEB-INF/pages/auth/listRoles.jsp</result>
+			 <result name="listUsers">/WEB-INF/pages/auth/listUsers.jsp</result>
+			 <result name="toEditUser">/WEB-INF/pages/auth/toEditUser.jsp</result>
+		</action>
+	</package>
+</struts>

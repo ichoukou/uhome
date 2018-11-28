@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.SpecialtopicAdvPositionMapper">
+	
+	<!-- 查询所有广告位 -->
+	<select id="listAdvPositions" parameterType="map" resultType="SpecialtopicAdvPosition">
+		SELECT 
+		advPosition.specialTopicAdvPositionId,
+		advPosition.`name`,
+		advPosition.positionCode
+		FROM specialtopic_adv_position advPosition
+		ORDER BY advPosition.`name`
+	</select>
+	
+	<!-- 根据专题模板ID，查询还未使用的广告位 -->
+	<select id="listAdvPositionsByTemplateId" parameterType="integer" resultType="SpecialtopicAdvPosition">
+		SELECT 
+		advPosition.specialTopicAdvPositionId,
+		advPosition.`name`,
+		advPosition.positionCode
+		FROM specialtopic_adv_position advPosition
+		WHERE advPosition.specialTopicAdvPositionId NOT IN(
+			SELECT adv.specialTopicAdvPositionId 
+   			FROM specialtopic_advertisement adv 
+   			WHERE adv.specialTopicTempletId = #{templateId})
+		ORDER BY advPosition.`name`
+	</select>
+	
+	<!-- 根据ID，获取广告位 -->
+	<select id="get" parameterType="integer" resultType="SpecialtopicAdvPosition">
+		SELECT 
+		advPosition.specialTopicAdvPositionId,
+		advPosition.`name`,
+		advPosition.positionCode
+		FROM specialtopic_adv_position advPosition
+		WHERE advPosition.specialTopicAdvPositionId = #{specialTopicAdvPositionId}
+	</select>
+</mapper>

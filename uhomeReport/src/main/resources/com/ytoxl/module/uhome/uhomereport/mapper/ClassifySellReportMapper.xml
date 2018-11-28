@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomereport.mapper.ClassifySellReportMapper">
+	
+	<select id="searchClassifySellReports" parameterType="map" resultType="ClassifySellReport">
+		SELECT c.* FROM 
+		<include refid="selectClassifySellInfo"/>
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<select id="listClassifySellReports" parameterType="map" resultType="ClassifySellReport">
+		SELECT c.* FROM 
+		<include refid="selectClassifySellInfo"/>
+	</select>
+	
+	<select id="searchClassifySellCount" parameterType="map" resultType="integer">
+		SELECT COUNT(c.classifyName) FROM 
+		<include refid="selectClassifySellInfo"/>
+	</select>
+	
+	<sql id="selectClassifySellInfo">
+		(SELECT pc.name AS classifyName,b.name AS brandName,SUM(o.num) AS num,SUM(o.price) AS price FROM product_category pc
+				LEFT JOIN product p ON pc.productCategoryId = p.productCategoryId
+	  			LEFT JOIN brand b ON p.brandId = b.brandId
+				LEFT JOIN product_sku psku ON p.productId = psku.productId
+	  			LEFT JOIN (SELECT item.productSkuId,item.closingCost,item.rebatePrice,item.num,
+								CASE WHEN ISNULL(item.rebatePrice) THEN item.closingCost*item.num
+								ELSE item.rebatePrice END AS price,item.productName,head.createTime,head.status
+							 FROM order_item item LEFT JOIN order_head head ON item.orderId = head.orderId WHERE 
+							 head.status IN (
+								${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND},
+								${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND},
+								${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED}
+							 )
+							) o
+				ON psku.productSkuId = o.productSkuId
+			WHERE pc.parentId != 0
+			<include refid="where"/>
+			GROUP BY pc.name,b.name
+		) c
+	</sql>
+	
+	<sql id="where">
+		<if test="brandId != '' and brandId != null">AND b.brandId = #{brandId}</if>
+		<if test="productCategoryId != '' and productCategoryId != null "> AND pc.productCategoryId = #{productCategoryId}</if>
+		<if test="beginTime != null and beginTime != '' ">
+			AND DATE_FORMAT(o.createTime,'%Y-%m-%d') &gt;= #{beginTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(o.createTime,'%Y-%m-%d') &lt;= #{endTime}
+		</if>
+  	</sql>
+  
+</mapper>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.ProductSkuMapper">
+	
+	<!-- 插入一条商品SKU数据 -->
+	<insert id="add" parameterType="ProductSku"  keyProperty="productSkuId" useGeneratedKeys="true">
+		INSERT INTO product_sku
+			(productId, secKillInventory, inventory, internationalCode, skuCode, createTime)
+		VALUES
+		 	(#{productId}, #{secKillInventory}, #{inventory}, #{internationalCode}, #{skuCode}, CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- 更新一条商品SKU数据 -->
+	<update id="update" parameterType="ProductSku">
+		UPDATE product_sku
+		SET
+			secKillInventory = #{secKillInventory},
+			inventory = #{inventory},
+			internationalCode = #{internationalCode},
+			skuCode = #{skuCode}
+		WHERE productSkuId = #{productSkuId}
+	</update>
+	
+	<!-- 逻辑删除一条商品SKU数据 -->
+	<update id="del" parameterType="java.lang.Integer">
+		UPDATE product_sku
+		SET isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_YES}
+		WHERE productSkuId = #{productSkuId}
+	</update>
+	
+	<!-- 逻辑删除多条SKU数据 -->
+	<update id="logicDelBatch">
+		UPDATE product_sku
+		SET isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_YES}
+		WHERE productSkuId IN
+		<foreach item="productSku" collection="list" open="(" separator="," close=")">
+			#{productSku.productSkuId}
+		</foreach>
+	</update>
+	
+	<select id="get" parameterType="java.lang.Integer" resultType="ProductSku">
+		SELECT * FROM product_sku 
+		WHERE productSkuId = #{productSkuId}
+	</select>
+	
+	<!-- 根据productId, sellerId查询商品SKU信息 -->
+	<select id="listProductSkuIdsByProductIdAndSellerId" resultType="java.lang.Integer">
+		SELECT a.productSkuId 
+			FROM product_sku a INNER JOIN product b ON a.productId = b.productId
+		WHERE a.productId = #{productId} 
+			AND b.sellerId = #{sellerId}
+			AND a.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+	</select>
+	
+	<!-- 更新库存为0 -->
+	<update id="updateInventoryByIds">
+		UPDATE product_sku SET inventory = 0
+		WHERE productSkuId IN
+		<foreach item="item" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<!-- 根据商品ID查询商品SKU -->
+	<select id="listProductSkusByProductId" parameterType="java.lang.Integer" resultType="ProductSku">
+		SELECT a.*, COUNT(t.planId) AS seckillPlanNum
+			FROM product_sku a
+		LEFT JOIN (SELECT b.* FROM plan_product b INNER JOIN plan c ON b.planId = c.planId
+					AND c.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+					AND c.status IN (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE},
+							${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE})
+					AND (CURRENT_TIMESTAMP BETWEEN c.startTime AND c.endTime OR CURRENT_TIMESTAMP &lt; c.startTime)) t
+		ON a.productSkuId = t.productSkuId
+		WHERE a.productId = #{productId}
+			AND a.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+		GROUP BY a.productSkuId
+	</select>
+	
+	<!-- 根据商品ID删除ProductSku -->
+	<delete id="delProductSkuByProductId" parameterType="java.lang.Integer">
+		DELETE FROM product_sku 
+		WHERE productId = #{productId}
+	</delete>
+	
+	<!-- 查询卖家可参加秒杀活动的商品 -->
+  	<select id="listSecKillProductsBysellerId" resultType="ProductSku">
+		SELECT t1.* 
+			FROM(SELECT b.*, 
+						a.name AS `product.name`,
+						a.imageUrls AS `product.imageUrls`,
+						a.status AS `product.status`,
+						ROUND(a.secKillPrice/a.marketPrice,1) AS seckillRebate
+					FROM product a, product_sku b
+				WHERE a.productId = b.productId
+					AND a.sellerId = #{sellerId}
+					AND a.brandId = #{brandId}
+					AND a.productCategoryId = #{productCategoryId}
+					AND a.secKillPrice IS NOT NULL
+					<choose>
+						<when test="planId!=null and planId!=''">
+						AND (a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+							OR (a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND}
+								AND a.productId IN (SELECT productId FROM plan_product WHERE planId = #{planId})))
+						</when>
+						<otherwise>
+						AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS}
+						</otherwise>
+					</choose>
+					AND (#{startTime} BETWEEN a.sellStartTime AND a.sellEndTime
+							OR a.sellStartTime = '0000-00-00 00:00:00' AND a.sellEndTime = '0000-00-00 00:00:00')
+					AND b.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+					AND b.secKillInventory &gt; 0) t1
+			LEFT JOIN (SELECT a.planId, b.productSkuId
+								FROM plan a, plan_product b
+						WHERE a.planId = b.planId
+						<if test="planId!=null and planId!=''">AND a.planId != #{planId}</if>
+						AND a.type = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SEC_KILL}
+						AND a.status IN (${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_UNRELEASE},
+								${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE})
+						AND a.startTime = #{startTime}) t2 ON t1.productSkuId = t2.productSkuId
+		GROUP BY t1.productSkuId
+		HAVING(COUNT(t2.planId) = 0)
+  	</select>
+    
+    <!-- 查询购物车里面的商品 -->
+  	<select id="listShoppingCartProducts" parameterType="java.util.List" resultType="ProductSku">
+  		SELECT 
+			sell.sellerId AS `product.seller.sellerId`,
+  			sell.companyName AS `product.seller.companyName`,
+			pro.imageUrls AS `product.imageUrls`,
+			pro.secKillPrice AS `product.secKillPrice`,
+			pro.salePrice AS `product.salePrice`,
+			pro.marketPrice AS `product.marketPrice`,
+			pro.name AS `product.name`,
+			pro.productId AS `product.productId`,
+			sku.productSkuId,
+			sku.inventory,
+			sku.secKillInventory
+		FROM seller sell INNER JOIN  product pro  ON sell.sellerId = pro.sellerId
+		INNER JOIN  product_sku sku ON  pro.productId = sku.productId
+		<where>
+			<if test='list != null'>
+				sku.productSkuId IN 
+				<foreach item="item" collection="list" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY sell.sellerId
+  	</select>
+  	
+  		<!-- 更新一条商品SKU数据 -->
+	<update id="changeProductSkuInventory" >
+		UPDATE product_sku
+		<set>
+			<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@TYPE_SEC_KILL">
+				secKillInventory = secKillInventory - #{num}
+			</if>
+			<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@TYPE_SPECIAL_SELLER">
+				inventory = inventory - #{num}
+			</if>
+		</set>
+		<where>
+			<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@TYPE_SEC_KILL">
+				secKillInventory - #{num} &gt;= 0
+			</if>
+			<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@TYPE_SPECIAL_SELLER">
+				inventory - #{num} &gt;= 0
+			</if>
+			and productSkuId = #{productSkuId}
+		</where>
+	</update>
+	
+	<update id="updateSaleQualtity">
+		update product_sku
+		set salesQuantity=IFNULL(salesQuantity,0) + #{num}
+		where productSkuId=#{productSkuId}
+	</update>
+	
+	<!-- 取消订单时,归还库存 -->
+	<update id="revertProductSkuInventory" >
+		UPDATE product_sku
+		<set>
+			<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@TYPE_SEC_KILL">
+				secKillInventory = secKillInventory + #{num}
+			</if>
+			<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@TYPE_SPECIAL_SELLER">
+				inventory = inventory + #{num}
+			</if>
+		</set>
+		WHERE productSkuId = #{productSkuId}
+	</update>
+	
+	<sql id="productSkuProductInfo">
+		pro.productId AS `product.productId`,
+		pro.brandId AS `product.brandId`,
+		pro.productCategoryId AS `product.productCategoryId`,
+		pro.sellerId AS `product.sellerId`,
+		pro.name AS `product.name`,
+		pro.imageUrls AS `product.imageUrls`,
+		pro.secKillDescribe AS `product.secKillDescribe`,
+		pro.secKillPrice AS `product.secKillPrice`, 
+		pro.salePrice AS `product.salePrice`,
+		pro.marketPrice AS `product.marketPrice`,     
+		pro.isImport AS `product.isImport`, 
+		pro.rank AS `product.rank`,
+		pro.status AS `product.status`,   
+		pro.keyWord AS `product.keyWord`,  
+		pro.hits AS `product.hits`,
+		pro.rebate AS `product.rebate`,  
+		pro.sellStartTime AS `product.sellStartTime`,  
+		pro.sellEndTime AS `product.sellEndTime`,     
+		pro.createTime AS `product.createTime` 
+	</sql>
+	<!-- 根据skuId查询商品信息 -->
+  	<select id="getProductSkuById" parameterType="Integer" resultType="ProductSku">
+  		SELECT <include refid="productSkuProductInfo"/>,
+  			b.name as `product.brand.name`,
+  			sku.productSkuId,
+			sku.inventory,
+			sku.secKillInventory
+		FROM  product_sku sku INNER JOIN  product pro  ON  pro.productId = sku.productId
+			  inner join brand b on b.brandId=pro.brandId
+		where sku.productSkuId = #{productSkuId}
+  	</select>
+  	<!-- 根据skuId 和productId查询商品信息 -->
+  	<select id="getProductSkuByIdMap" parameterType="map" resultType="ProductSku">
+  		SELECT 
+			pro.imageUrls AS `product.imageUrls`,
+			pro.salePrice AS `product.salePrice`,
+			pro.marketPrice AS `product.marketPrice`,
+			pro.name AS `product.name`,
+			pro.productId AS `product.productId`,
+			sku.productSkuId,
+			sku.inventory,
+			sku.secKillInventory
+		FROM  product_sku sku INNER JOIN  product pro  ON  pro.productId = sku.productId
+		where 1=1
+		<if test="productSkuId!=null and productSkuId!='' ">
+			and sku.productSkuId = #{productSkuId}
+		</if>
+		<if test="productId!=null and productId.size()>0 ">
+				and sku.productId in 
+		 <foreach collection="productId" item="productIds"  open="(" separator="," close=")"> 
+          		(#{productIds})  
+          </foreach>
+		</if>
+  	</select>
+  	
+  	<!--  -->
+  	<select id="getProductSkuInventoryByProductSkuId" resultType="java.lang.Integer">
+  		select inventory
+  		from product_sku
+  		where productSkuId=#{productSkuId}
+  	</select>
+  	
+</mapper>

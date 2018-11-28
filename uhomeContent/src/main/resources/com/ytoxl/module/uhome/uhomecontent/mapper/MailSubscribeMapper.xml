@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.MailSubscribeMapper">
+	
+	<!-- 查询用户订阅的品牌信息 -->
+	<select id="searchMailSubBrands" parameterType="map" resultType="MailSubscribe">
+		SELECT ms.mailSubscribeId, ms.email, ms.type, GROUP_CONCAT(brand.name) brandNames, ms.`status`
+				FROM brand brand INNER JOIN mail_subscribe ms ON brand.brandId=ms.brandId
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+				</if>
+		</if>
+		limit #{start},#{limit}
+	</select>
+	
+	<select id="searchMailSubBrandsCount" parameterType="map" resultType="integer">
+		SELECT count(mailSubscribeId)
+				FROM brand brand INNER JOIN mail_subscribe ms ON brand.brandId=ms.brandId
+	</select>
+	
+	<update id="updateMailSubscribeStatus" parameterType="MailSubscribe">
+		update mail_subscribe set  status=#{status} where mailSubscribeId=#{mailSubscribeId} 
+	</update>
+	
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="mailSubscribeId" parameterType="MailSubscribe">
+		insert into mail_subscribe(msgTemplateId,brandId,type,status,email,createTime,planId) 
+		values(#{msgTemplateId},#{brandId},#{type},#{status},#{email},CURRENT_TIMESTAMP,#{planId})
+	</insert>  
+	
+	<!-- 获取所有订阅的 -->
+	<select id="getAllMailSubscribeByStatus" resultType="MailSubscribe">
+		select ms.*
+		from mail_subscribe ms
+		where ms.status=#{status}
+	</select>
+	
+	<!-- 根据类型查找所有的已经订阅的 -->
+	<select id="listMailSubscribeByType" resultType="MailSubscribe">
+		select ms.*
+		from mail_subscribe ms                                               
+		where ms.status=${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailSubscribe@STATUS_SUBSCRIBE}
+			  and ms.typ=#{type}
+	</select>
+	
+	<!-- 通过email,brandId,type,status查询 -->
+	<select id="listMailSubscribeByEmailAndBrandIdAndType" resultType="MailSubscribe">
+		select ms.*
+		from mail_subscribe ms
+		where ms.status=${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailSubscribe@STATUS_SUBSCRIBE}
+			  and ms.email=#{email}
+			  and ms.brandId=#{brandId}
+			  and ms.type=#{type}
+	</select>
+		<!-- 通过email,planid,type,status查询 -->
+	<select id="listMailSubscribeByEmailAndPlanIdAndType" resultType="MailSubscribe">
+		select ms.*
+		from mail_subscribe ms
+		where ms.status=${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailSubscribe@STATUS_SUBSCRIBE}
+			  and ms.email=#{email}
+			  and ms.planId=#{planId}
+			  and ms.type=#{type}
+	</select>
+	
+	<!-- 通过email,type,status查询判断是否重复 -->
+	<select id="listMailSubscribeByEmailAndType" resultType="MailSubscribe">
+		select ms.*
+		from mail_subscribe ms
+		where ms.status=${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailSubscribe@STATUS_SUBSCRIBE}
+			  and ms.email=#{email}
+			  and ms.type=#{type}
+	</select>
+	
+	<select id="searchMailSubscribe" resultType="MailSubscribe">
+		SELECT * FROM mail_subscribe
+		WHERE status = ${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailSubscribe@STATUS_SUBSCRIBE}
+			AND type = #{type}
+		ORDER BY createTime LIMIT #{start}, #{limit}
+	</select>
+	
+	<select id="searchMailSubscribeCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM mail_subscribe
+		WHERE status = ${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailSubscribe@STATUS_SUBSCRIBE}
+			AND type = #{type}
+	</select>
+	
+	<!-- 更新邮件订阅状态为取消 -->
+	<update id="updateMailSubscribeStatus2Cancel">
+	     update mail_subscribe ms
+	        set ms.status=${@com.ytoxl.module.uhome.uhomecontent.dataobject.MailSubscribe@STATUS_CANCEL}
+		    where ms.email=#{email}
+			      and ms.type=#{type}
+	</update>
+	
+	<!-- 根据邮箱和类型查询订阅数量 -->
+	<select id="listCountByEmailAndTypeAndStatus" resultType="java.lang.Integer">
+		select count(*)
+		from mail_subscribe
+		where status = #{status}
+			  and email=#{email}
+			  and type=#{type}
+	</select>
+	
+	<select id="listCountByEmailAndType" resultType="java.lang.Integer">
+		select count(*) from mail_subscribe
+		where email=#{email} and type=#{type}
+	</select>
+	
+</mapper>

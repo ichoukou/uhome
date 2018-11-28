@@ -1,0 +1,1 @@
+var onShowHtml="",onFocusHtml="<span class='$class$_top'>$data$</span><span class='$class$_bot'></span>",onErrorHtml="<span class='$class$_top'>$data$</span><span class='$class$_bot'></span>",onCorrectHtml="<span class='$class$'></span>",onShowClass="",onFocusClass="",onErrorClass="",onCorrectClass=""

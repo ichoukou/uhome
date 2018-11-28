@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderExpressMapper">
+
+  <insert id="add" parameterType="OrderExpress" keyProperty="orderExpressId" useGeneratedKeys="true">
+		INSERT INTO order_express
+            (orderId,
+             expressId,
+             orderReturnId,
+             mailNo,
+             receiverAddressId,
+             expressName,
+             createTime,
+             regionId,
+  			 receiverName,
+  			 receiveAddress,
+  			 mobile,
+  			 telephone,
+  			 postCode)
+		VALUES (
+             #{orderId},
+             #{expressId},
+             #{orderReturnId},
+             #{mailNo},
+             #{receiverAddressId},
+             #{expressName},
+             CURRENT_TIMESTAMP,
+             #{regionId},
+  			 #{receiverName},
+  			 #{receiveAddress},
+  			 #{mobile},
+  			 #{telephone},
+  			 #{postCode})                  
+  </insert>
+  
+  <!-- 根据删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_express WHERE orderExpressId = #{orderExpressId}
+  </delete>
+  
+  <!-- 修改payment信息 -->
+  <update id="update" parameterType="OrderExpress">
+		UPDATE order_express
+		SET 
+		  expressId = #{expressId},
+		  mailNo = #{mailNo}
+		WHERE orderExpressId = #{orderExpressId}
+  </update>
+  
+  <select id="get" parameterType="integer" resultType="OrderExpress">
+        SELECT
+		  orderExpressId,
+		  orderId,
+		  expressId,
+		  mailNo,
+		  receiverAddressId,
+		  createTime,
+		  regionId,
+  		  receiverName,
+  		  receiveAddress,
+  	      mobile,
+  	      telephone,
+		  postCode
+		FROM order_express 
+		WHERE orderExpressId = #{orderExpressId}
+  </select>
+  <!-- 根据订单信息获取发运信息 -->
+  <select id="getOrderExpressById" parameterType="integer" resultType="OrderExpress">
+        SELECT
+			  order_exp.orderExpressId,
+			  order_exp.orderId,
+			  order_exp.expressName,
+			  order_exp.expressId,
+			  order_exp.mailNo,
+			  order_exp.receiverAddressId,
+			  order_exp.createTime,
+			  order_exp.regionId,
+			  order_exp.receiverName,
+			  order_exp.receiveAddress,
+			  order_exp.mobile,
+			  order_exp.expressName,
+			  order_exp.telephone,
+  			  order_exp.postCode,
+			  express.expressName as `express.expressName`,
+			  express.companyCode AS `express.companyCode`
+		FROM order_express  order_exp left JOIN express express ON order_exp.expressId = express.expressId
+		WHERE order_exp.orderId = #{orderId}
+  </select>
+  
+  <!-- 确认发货 -->
+  <select id="updateOrderExpressByOrderId" parameterType="OrderExpress">
+  		UPDATE order_express
+		SET 
+		  expressId = #{expressId},
+		  mailNo = #{mailNo},
+		  expressName = #{expressName}
+		WHERE orderId = #{orderId}
+  </select>
+  
+  <!--  -->
+  <select id="getOrderExpressByOrderReturnId" resultType="OrderExpress">
+  		select *
+  		from order_express
+  		where orderReturnId=#{orderReturnId}
+  </select>
+  
+  <select id="deleteOrderExpressByOrderId" resultType="java.lang.Integer">
+  		delete from order_express where orderId=#{orderId}
+  </select>
+</mapper>

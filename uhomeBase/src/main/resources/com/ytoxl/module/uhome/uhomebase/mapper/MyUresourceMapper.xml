@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.MyUresourceMapper">
+
+  <insert id="add" parameterType="Uresource" keyProperty="uresourceId" useGeneratedKeys="true">
+		insert into uresource(uresourceName,url,isMenu,rank,parentId,status) values (#{uresourceName},#{url},#{isMenu},#{rank},#{parentId},#{status});                     
+  </insert>
+  
+  <select id="get" parameterType="integer" resultType="Uresource">
+		select * from uresource where  uresourceId = #{uresourceId}	
+  </select>
+  
+  <update id="update" parameterType="Uresource">
+		update uresource set uresourceName=#{uresourceName} where uresourceId=#{uresourceId}
+  </update>
+  
+  <delete id="del" parameterType="integer">
+        delete from uresource where uresourceId=#{uresourceId}
+  </delete>
+  <!-- 根据角色ID获取对应资源 -->
+  <select id="getUresourcesByUroleId" parameterType="integer" resultType="Uresource">
+		select * from uresource ur inner join urole_uresource uu on ur.uresourceId=uu.uresourceId where uu.uroleId=#{uroleId} order by ur.rank	
+  </select>
+  <!-- 根据角色ID删除角色资源对应关系 -->
+  <delete id="deleteUroleUresourceByUroleId" parameterType="integer">
+        delete from urole_uresource where uroleId=#{uroleId}
+  </delete>
+    <!-- 批量新增角色资源对应关系-->
+  <insert id="addUroleUresources"  keyProperty="uroleUresourceId" useGeneratedKeys="true">
+		insert into urole_uresource(uroleId,uresourceId) values 
+		 <foreach collection="uresourceIds" item="uresourceId" index="index" separator=",">
+		(#{uroleId},#{uresourceId})
+		 </foreach>                   
+  </insert>
+</mapper>

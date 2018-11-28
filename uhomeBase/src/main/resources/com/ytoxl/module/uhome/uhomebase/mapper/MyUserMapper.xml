@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.MyUserMapper">
+
+  <insert id="add" parameterType="MyUser" keyProperty="userId" useGeneratedKeys="true">
+		insert into user(username,password,operateName,tel,email,status,createByUserId,createTime,updateTime,employCard) values (#{username},#{password},#{operateName},#{tel},#{email},#{status},#{createByUserId},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,#{employCard});                     
+  </insert>
+  
+  <select id="get" parameterType="integer" resultType="MyUser">
+		select userId,username,password,operateName,tel,email,status,createByUserId,createTime,updateTime,employCard from user where  userId = #{userId}	
+  </select>
+  
+  <update id="update" parameterType="MyUser">
+		update user set updateTime=CURRENT_TIMESTAMP
+		<if test="username!=null and username!=''">
+		    ,username=#{username} 
+		</if>
+		<if test="password!=null and password!=''">
+		    ,password=#{password} 
+		</if>
+		<if test="operateName!=null and operateName!=''">
+		    ,operateName=#{operateName}
+		</if>
+		<if test="tel!=null and tel!=''">
+		    ,tel=#{tel}
+		</if>
+		<if test="email!=null and email!=''">
+		    ,email=#{email}
+		</if>
+		<if test="employCard!=null and employCard!=''">
+		    ,employCard=#{employCard}
+		</if>
+		where userId=#{userId} 
+		<if test="updateTime!=null and updateTime!=''">
+		   and updateTime=#{updateTime}
+		</if>
+  </update>
+  
+  <delete id="del" parameterType="integer">
+        delete from user where userId=#{userId}
+  </delete>
+  
+  <select id="listUserBycreateUserId" parameterType="integer" resultType="MyUser">
+		select * from user where createByUserId = #{createUserId}	
+  </select>
+   
+  <insert id="addUserUroles"  parameterType="MyUser">
+		insert into user_urole(uroleId,userId) values 
+		(#{uroleId},#{userId})
+  </insert>
+    <delete id="delUserUroles" parameterType="integer">
+        delete from user_urole where userId=#{userId}
+  </delete>
+    <!-- 根据用户Ids 更新用户状态 -->
+  <update id="updateStatusByUserId"  parameterType="MyUser">
+		update user set status=#{status} 
+        where   userId =
+             #{userId}  
+  </update>
+</mapper>

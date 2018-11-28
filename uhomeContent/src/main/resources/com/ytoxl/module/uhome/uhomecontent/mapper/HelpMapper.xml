@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.HelpMapper">
+	
+	<select id="listHelpCategorys" resultType="HelpCategory">
+		select helpCategoryId,
+			   name,
+			   parentId,
+			   rank
+			  from help_category 
+			  where parentId=0 order by rank
+	</select>
+	<select id="listHelps" parameterType="integer" resultType="HelpCategory">
+		select hc.helpCategoryId,
+			   name,
+			   parentId,
+			   rank,
+			   helpId as `help.helpId`,
+			   <!-- content as `help.content`, -->
+			   h.helpCategoryId as `help.helpCategoryId`			   
+			  from help_category hc inner join help h on hc.helpCategoryId=h.helpCategoryId
+			  where parentId=#{helpCategoryId} order by rank
+	</select>
+	
+	<select id="getContentByHelpId" parameterType="integer" resultType="Help">
+		select 
+			   helpId ,
+			   content ,
+			   helpCategoryId			   
+			  from  help
+			  where helpId=#{helpId}
+	</select>
+	
+	<update id="updateContent" parameterType="Help">
+		update help set content=#{content} where helpId=#{helpId}	
+	</update>
+	
+</mapper>

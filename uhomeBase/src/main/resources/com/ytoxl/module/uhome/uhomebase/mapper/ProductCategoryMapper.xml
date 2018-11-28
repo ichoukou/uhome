@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.ProductCategoryMapper">
+	<insert id="add" parameterType="ProductCategory" keyProperty="productCategoryId" useGeneratedKeys="true">
+			insert into product_category (productCategoryId,  name ) 
+			values ( #{productCategoryId},  #{name} )                    
+	</insert>
+	
+	<select id="get" parameterType="integer" resultType="ProductCategory">
+        SELECT  productCategoryId,  name
+		FROM product_category 
+		where productCategoryId = #{productCategoryId}
+  	</select>
+  	
+  	<!-- 根据所有产品类别 -->
+	<select id="listProductCategory" resultType="ProductCategory">
+	      select pc.*
+		  from product_category pc 
+		  where pc.parentId=0
+		  order by rank
+	</select>
+	
+	<!-- 查询所有子类别 -->
+	<select id="listChildProductCategory" resultType="ProductCategory">
+	      select pc.*
+		  from product_category pc 
+		  where pc.parentId != 0
+		  order by rank
+	</select>
+  
+    <!-- 根据主键修改产品类别名称 -->
+    <update id="update" parameterType="ProductCategory">
+		  update product_category 
+		  set 
+			  name=#{name}
+		  where  productCategoryId = #{productCategoryId}
+    </update>
+    
+	<delete id="del" parameterType="integer">
+        delete from product_category where productCategoryId=#{productCategoryId}
+    </delete>
+    
+    <!-- 根据目录的名字查找目录 -->
+    <select id="listProductCategroyByCategoryName" resultType="ProductCategory">
+    	select pc.* 
+    	from product_category pc
+    	where pc.name like concat('%',#{name},'%')
+    </select>
+    
+    <!--  -->
+    <select id="getProductCategoryByName" resultType="ProductCategory">
+    	select pc.* 
+    	from product_category pc
+    	where pc.name = #{name}
+    </select>
+  
+  	<!-- 根据目录的id查询目录 -->
+  	<select id="listProductCategroyByCategoryId" resultType="ProductCategory">
+    	select pc.* 
+    	from product_category pc
+    	where pc.productCategoryId=#{productCategoryId}
+    </select>
+    
+    <!-- 根据cateId查询父类的cate -->
+    <select id="getParentProdcutCategoryById" resultType="ProductCategory">
+    	select pc.*
+    	from product_category pc
+    	where pc.productCategoryId = (select parentId from product_category where productCategoryId=#{pcId})
+    </select>
+</mapper>

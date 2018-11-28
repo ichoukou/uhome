@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.PointDetailMapper">
+	
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="pointDetailId" parameterType="PointDetail">
+		insert into point_detail (pointId,pointSource,point,createTime) 
+		values (#{pointId},#{pointSource},#{point},CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from point_detail where pointDetailId = #{pointDetailId}
+	</delete>
+	
+	
+	<!-- 查询会员积分明细 -->
+	<select id="listPointDetailsByPointId" parameterType="java.lang.Integer" resultType="PointDetail">
+		SELECT *
+			FROM point_detail
+		WHERE pointId = #{pointId}
+  	</select>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.MyUroleMapper">
+
+  <insert id="add" parameterType="MyUrole" keyProperty="uroleId" useGeneratedKeys="true">
+		insert into urole(uroleName,status,createByUserId,createTime) values (#{uroleName},#{status},#{createByUserId},CURRENT_TIMESTAMP);                     
+  </insert>
+  
+  <select id="get" parameterType="integer" resultType="MyUrole">
+		select * from urole where  uroleId = #{uroleId}	
+  </select>
+  
+  <update id="update" parameterType="String">
+		update urole set uroleName=#{uroleName} where uroleId=#{uroleId}
+  </update>
+  
+  <delete id="del" parameterType="integer">
+        delete from urole where uroleId=#{uroleId}
+  </delete>
+  
+    <!-- 根据角色Id 获取用户Ids-->
+  <select id="listUserIdsByUroleId" parameterType="Integer" resultType="Integer">
+		select userId from user_urole where uroleId=#{uroleId} 
+  </select>
+  
+  <select id="searchUroleByCreateUserId" parameterType="Integer" resultType="MyUrole">
+  		select * from urole u where u.createByUserId = #{createByUserId}
+  </select>
+  
+  <select id="checkUroleName" parameterType="MyUrole" resultType="MyUrole">
+		select * from urole where uroleName = #{uroleName}	
+		<if test="uroleId!=null">
+          and  uroleId != #{uroleId} 
+        </if>
+        <if test="createByUserId!=null">
+         and createByUserId =#{createByUserId}
+        </if>
+  </select>
+  
+   <!-- 根据用户Id 获取角色-->
+  <select id="getUroleByuserId" parameterType="Integer" resultType="MyUrole">
+		select * from urole u inner join user_urole uu on u.uroleId=uu.uroleId where uu.userId=#{userId} 
+  </select>
+</mapper>

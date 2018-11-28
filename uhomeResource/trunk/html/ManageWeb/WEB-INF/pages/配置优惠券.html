@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/orderManagement.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="body-nav arr-nav">
+    <ul class="layout">
+      <li><a href="#">查看优惠券</a></li>
+      <li><a class="current-chose">配置优惠券</a></li>
+      <li><a href="#">微信优惠券</a></li>
+    </ul>
+  </div>
+<!--start 新增活动table-->
+<div class="order-management">
+	<table id="tab" class="tab-bor" width="100%">
+		<thead class="tab-control">
+		<tr>
+			<th width="18%">活动名称</th>
+			<th width="16%">金额（元）</th>
+			<th width="19%">最小消费金额（元）</th>
+			<th width="33%">活动时间</th>
+			<th width="14%">数量</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr class="list-tr">
+				<td><input type="text" class="input-nobor" value="喜狼狼与会太阳" /></td>
+				<td><input type="text" class="input-nobor" value="50" /></td>
+				<td><input type="text" class="input-nobor" value="50" /></td>
+				<td><input value="" class="Wdate" type="text" readonly="" /> 至 <input value="" class="Wdate" type="text" readonly="" /></td>
+				<td><input type="text" class="input-nobor" value="10000" /></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="operation">
+		<input type="button" class="btn btn-danger outer" value="生成">
+		<input type="button" class="btn btn-danger outer" value="取消">
+	</div>
+</div>
+<!--end 新增活动table-->
+<!--start 已添加活动table-->
+<div class="order-management">
+	<table id="tab" class="tab-bor" width="100%">
+		<thead class="tab-control">
+		<tr>
+			<th width="13%">活动名称</th>
+			<th width="10%">金额（元）</th>
+			<th width="14%">最小消费金额（元）</th>
+			<th width="30%">活动时间</th>
+			<th width="11%">数量</th>
+			<th width="9%">状态</th>
+			<th width="13%">操作</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr class="list-tr">
+				<td><span class="j-normal">喜狼狼与会太阳</span><input type="text" class="j-edited input-nobor hide" value="喜狼狼与会太阳" /></td>
+				<td><span class="j-normal">50</span><input type="text" class="j-edited input-nobor hide" value="50" /></td>
+				<td><span class="j-normal">50</span><input type="text" class="j-edited input-nobor hide" value="50" /></td>
+				<td><label class="j-normal">2013-5-11</label><input type="text" class="j-edited Wdate hide" value="2013-5-11" /> 至 <label class="j-normal">2013-6-11</label><input type="text" class="j-edited Wdate hide" value="2013-6-11" /></td>
+				<td><span class="j-normal">1000</span><input type="text" class="j-edited input-nobor hide" value="1000" /></td>
+				<td>未开始</td>
+				<td>
+					<div class="j-normal">
+						<a href="javascript:void(0);">导出</a>
+						<a href="javascript:void(0);" class="j-edit">编辑</a>
+					</div>
+					<div class="j-edited hide">
+						<a href="javascript:void(0);" class="j-done">完成</a>
+						<a href="javascript:void(0);" class="j-cencal">取消</a>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!--end 已添加活动table-->
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+<script>
+$(function(){
+	//编辑按钮
+	$(".j-edit").on("click",function(){
+		$(".list-tr .j-cencal").click();
+		var parent_tr = $(this).parents(".list-tr");
+		parent_tr.find(".j-normal").hide();
+		parent_tr.find(".j-edited").show();
+	});
+	//取消按钮
+	$(".list-tr").on("click",".j-cencal",function(){
+		var parent_tr = $(this).parents(".list-tr");
+		parent_tr.find(".j-normal").show();
+		parent_tr.find(".j-edited").hide();
+	});
+	//完成按钮
+	$(".list-tr").on("click",".j-done",function(){
+		var parent_tr = $(this).parents(".list-tr");
+		parent_tr.find("input.j-edited").each(function(){
+			var $this = $(this),
+			temp_txt = $this.val();
+			$this.prev(".j-normal").text(temp_txt);
+		});
+		parent_tr.find(".j-normal").show();
+		parent_tr.find(".j-edited").hide();
+	});
+	//回车事件
+	document.onkeydown = function(e){
+    var ev = document.all ? window.event : e;
+    if(ev.keyCode==13) {
+    	$(".list-tr .j-done").click();
+    }
+  }
+});
+
+
+</script>
+</body>
+</html>

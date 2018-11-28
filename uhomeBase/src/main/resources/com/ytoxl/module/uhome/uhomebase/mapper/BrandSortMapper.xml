@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.BrandSortMapper">
+		
+	<!--  添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="brandSortId" parameterType="BrandSort">
+		 insert into brand_sort(brandId,sort,createTime,updateTime,type) values (#{brandId},#{sort},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,#{type})
+	</insert>
+	
+	<!-- 删除所有数据 -->
+	<delete id="delAllBrandSort">
+		delete from brand_sort where type = #{type}
+	</delete>
+ 	 
+ 	 <!--查询所有排序的品牌  -->
+	<select id="getBrandListGroupByType" resultType="BrandSort">
+		select b.brandId as `brand.brandId`,
+			   b.logoImageUrl as `brand.logoImageUrl`,
+			   b.`name` as `brand.name`,
+			   b.englishName as `brand.englishName`,
+			   b.brandImageUrl as `brand.brandImageUrl`,
+			   b.brandBannerImageUrl as `brand.brandBannerImageUrl`,
+			   bs.type,
+			   bs.sort
+	     from brand_sort bs inner join  brand b
+	     on bs.brandId=b.brandId 
+	     where  b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+	</select>
+	
+</mapper>

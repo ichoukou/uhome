@@ -1,0 +1,157 @@
+/** 
+ * Created by JetBrains PhpStorm.
+ * User: admin
+ * Date: 13-3-12
+ * Time: 下午1:38
+ * To change this template use File | Settings | File Templates.
+ */
+@import '../lib/global.less';
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../lib/navigation.less';
+@import '../common.less';
+@import '../lib/crumbs.less';
+
+/*搜索框*/
+.ret-select{
+    margin:10px 10px 0;
+    select {
+        width: 125px;
+        height:26px;
+        border: solid 1px #ddd;
+    }
+    .submit{
+      background: #ff943e; /* Old browsers */
+      background: -moz-linear-gradient(top,  #ff943e 0%, #ec6e25 50%, #d8450a 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff943e), color-stop(50%,#ec6e25), color-stop(100%,#d8450a)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* IE10+ */
+      background: linear-gradient(to bottom,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff943e', endColorstr='#d8450a',GradientType=0 ); /* IE6-9 */
+      padding: 0 5px;
+      height: 26px;
+      line-height: 24px;
+      border: 1px solid #c25116;
+      color: #ffffff;
+      border-radius: 2px;
+    }
+}
+/*分页*/
+.navigation {
+    margin: 15px 0;
+}
+
+/*申请退货*/
+.ret-btn {
+   margin:15px auto;
+    a {
+        font-size: 14px;
+        font-weight: 700;
+    }
+}
+.user-tab .ret-sales {
+    padding: 0;
+    margin: 0;
+}
+.ret-sales{
+    li {
+        border-top: solid 1px #ddd;
+
+    }
+    .bor-none {
+        border-top:none;
+	list-style:none;
+    }
+}
+.user-tab .ret-sales-table{border:0 none;margin:0 -1px -1px 0;}
+.user-tab .ret-sales-table .no-border{border-right:0 none;}
+.ret-bgimg {
+    margin: 0 10px 0 0;
+    border: solid 1px #ddd;
+    width: 65px;
+    height: 65px;
+    position: relative;
+    .ret-ck {
+        position: absolute;
+        right: 0;
+        bottom: 0px;
+    }
+}
+.ret-ifo{float:left;width:150px;
+	label{display:block;}
+}
+.ret-discrb {
+    margin:10px;
+    a {
+        width: 200px;
+        display: inline-block;
+        text-decoration: underline;
+    }
+    label{
+        margin-right:20px;
+    }
+}
+.return-tab td{height:30px;padding:5px 0;}
+/*退货列表排版*/
+.return-item li{float:left;*display: inline;margin-right: 20px;}
+.return-item li img{display: block;margin-bottom: 8px;}
+.return-item li a{display: inline-block;background: url('../../images/return_btn.png') no-repeat;width: 55px;height: 22px;line-height: 22px;text-align: center;color: #fff;}
+/*退货记录*/
+.ret-tda a {
+    display: block;
+    text-decoration: underline;
+}
+/*弹出框*/
+.write-table{width:400px;font-size:14px;td{padding:10px 0;}.td-right{text-align:right;}}
+.ret-altab{
+    table {
+        margin:50px 30px;
+    }
+    td {
+        padding: 5px;
+    }
+input {
+    padding: 5px;
+    width: 147px;
+    border: solid 1px #ddd;
+}
+    .td-right {
+        text-align: right;
+    }
+}
+.btn-c {
+    margin-right: 50px;
+}
+
+.ret-kdbtn {
+    padding: 0 0px 20px 90px;
+    margin-top:20px;
+    a {
+        font-size: 14px;
+        font-weight: 700;
+    }
+}
+.return-info{
+table{width:100%;}
+    tr{
+        line-height:40px;
+    }
+}
+.describe-text,.text-r{width:598px;height:20px;line-height:20px;border:1px solid #ddd;padding:0 3px;}
+.describe-textarea{width:440px;height:40px;line-height:20px;border:1px solid #ddd;padding:3px;}
+.text-r{width:185px;}
+.d-content{font-size:18px;color:#282828;}
+.return-submit{text-align:center;}
+.btn-r,.btn-cencal,.d-buttons .d-button{display:inline-block;width:91px;height:29px;margin:0 14px;line-height:29px;color:#fff;background:url(../../images/btn/return-btn.png) 0 0;cursor:pointer;_overflow:hidden;}
+.btn-r:hover,.btn-cencal:hover{color:#fff;}
+.btn-cencal{background-position:-91px 0;}
+.d-buttons .d-button{border-radius:0;border:0 none;box-shadow:none;filter:none;}
+/*upload_btn*/
+.upload_btn{width:95px;height:25px;overflow:hidden;}
+.default-img{margin-top:10px;width:88px;height:88px;border:1px solid #ccc;position:relative;background:url(../../images/default.jpg) no-repeat;}
+.default-img img{width:88px;height:88px;border:solid 1px #d8d8d8;}
+.del-img{display:none;width:14px;height:14px;background:url(../../images/del-img.gif) no-repeat;position:absolute;top:2px;right:3px;cursor:pointer;}
+.cf .onShow,.cf .onFocus,.cf .onError,.cf .onCorrect{position:static;}
+//修改退货数量框位置
+.user-tab .key_press{width:50px;}

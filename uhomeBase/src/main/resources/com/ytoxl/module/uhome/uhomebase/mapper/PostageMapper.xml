@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.PostageMapper">
+
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="postageId" parameterType="postage">
+		INSERT INTO postage(
+			outId,
+			postage,
+			startTime,
+			endTime,
+			type,
+			createTime
+		)
+		VALUES(
+			#{outId}, 
+			#{postage}, 
+			IFNULL(#{startTime},'0000-00-00 00:00:00'),
+			IFNULL(#{endTime},'0000-00-00 00:00:00'), 
+			#{type}, 
+			CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from postage where postageId = #{postageId}
+	</delete>
+	
+	<!-- 根据id查询数据 -->
+	<select id="getPostageByOutIdAndType" resultType="Postage">
+		SELECT postageId,
+			   outId,
+			   postage,
+			   startTime,
+			   endTime,
+			   type 
+		FROM postage
+		WHERE outId = #{outId} AND type = #{type}
+	</select>
+	
+	<!-- 根据id查询数据 -->
+	<select id="getPostagesByOutIdsAndType" resultType="Postage">
+		SELECT postageId,
+			   outId,
+			   postage,
+			   startTime,
+			   endTime,
+			   type 
+		FROM postage
+		WHERE outId in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and type = #{type}
+	</select>
+	
+	<!-- 将productSkuId转换成productId -->
+	<select id="productSkuIdToProuctId" resultType="Integer">
+		SELECT DISTINCT a.productId FROM product a,product_sku b WHERE a.productId=b.productId and b.productSkuId in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!--查询商品当前所在排期-->
+	<select id="getPlansByProductIds" resultType="Integer">
+		SELECT DISTINCT a.planId FROM plan a, plan_product b 
+			WHERE a.planId = b.planId
+				AND a.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} 
+				AND (CURRENT_TIMESTAMP BETWEEN startTime AND endTime OR CURRENT_TIMESTAMP &lt; startTime)
+ 				AND b.productId IN
+			   (SELECT p.productId FROM plan_product p,product_sku s WHERE p.productId=s.productId and s.productId in
+					<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				) 
+		ORDER BY a.startTime
+	</select>
+	<!-- 根据productId按排期查询邮费 -->
+	<select id="getPostageByProductIdInPlan" resultType="java.math.BigDecimal">
+		SELECT IFNULL(postage.postage,-1) FROM plan plan 
+		INNER JOIN plan_product planProduct ON plan.planId=planProduct.planId 
+			AND plan.status = ${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} 
+			AND (CURRENT_TIMESTAMP BETWEEN plan.startTime AND endTime OR CURRENT_TIMESTAMP &lt; plan.startTime) 
+			AND planProduct.productId=#{productId} 
+		LEFT JOIN postage postage ON plan.planId=postage.outId limit 1
+	</select>
+	<!-- 查询商品当前所在排期id -->
+	<select id="getPostageByProductIdInsSelf" resultType="java.math.BigDecimal">
+		SELECT IFNULL(postage.postage,0) FROM product product 
+		LEFT JOIN postage postage ON product.productId=postage.outId WHERE product.productId=#{productId}
+	</select>
+</mapper>

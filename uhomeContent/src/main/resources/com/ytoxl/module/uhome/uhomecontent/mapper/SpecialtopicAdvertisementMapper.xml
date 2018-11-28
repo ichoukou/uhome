@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.SpecialtopicAdvertisementMapper">
+
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="specialTopicAdvId"
+		parameterType="SpecialtopicAdvertisement">
+		insert into specialtopic_advertisement(
+		specialTopicAdvPositionId,
+		specialTopicTempletId,
+		imageUrl,
+		turnUrl,
+		productIds,
+		productImageUrls,
+		productLinkUrls,
+		createTime,
+		updateTime)
+		values(
+		#{specialTopicAdvPositionId},
+		#{specialTopicTempletId},
+		#{imageUrl},
+		#{turnUrl},
+		#{productIds},
+		#{productImageUrls},
+		#{productLinkUrls},
+		CURRENT_TIMESTAMP,
+		CURRENT_TIMESTAMP
+		)
+	</insert>
+
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="SpecialtopicAdvertisement">
+		update specialtopic_advertisement
+		set
+				specialTopicAdvPositionId=#{specialTopicAdvPositionId},
+				specialTopicTempletId=#{specialTopicTempletId},
+				imageUrl=#{imageUrl},
+				turnUrl=#{turnUrl},
+				productIds=#{productIds},
+				productImageUrls=#{productImageUrls},
+				productLinkUrls=#{productLinkUrls},
+				updateTime=CURRENT_TIMESTAMP
+		where specialTopicAdvId=#{specialTopicAdvId}
+	</update>
+	
+	<!-- 查询广告信息 -->
+	<sql id="listAdv">
+		SELECT
+		adv.specialTopicAdvId,
+		adv.specialTopicAdvPositionId,
+		adv.specialTopicTempletId,
+		adv.imageUrl,
+		adv.turnUrl,
+		advp.`name` AS `advPosition.name`,
+		advp.positionCode AS `advPosition.positionCode`,
+		advt.`name` AS `topicTemplate.name`
+		FROM specialtopic_advertisement adv
+		JOIN specialtopic_adv_position advp ON advp.specialTopicAdvPositionId = adv.specialTopicAdvPositionId
+		JOIN special_topic_templet advt ON advt.specialTopicTempletId = adv.specialTopicTempletId
+	</sql>
+	
+	<sql id="where">
+		<where>
+			<if test="specialTopicTempletId !=null and specialTopicTempletId !=''">
+			adv.specialTopicTempletId = #{specialTopicTempletId}
+			</if>
+			<if test="specialTopicAdvPositionId !=null and specialTopicAdvPositionId !=''">
+			AND adv.specialTopicAdvPositionId = #{specialTopicAdvPositionId}
+			</if>
+		</where>
+		
+	</sql>
+	
+	<!-- 数据排序 -->
+	<sql id="order">
+		ORDER BY advp.positionCode
+	</sql>
+	
+	<!-- 根据广告id获取广告信息 -->
+	<select id="get" parameterType="integer" resultType="SpecialtopicAdvertisement">
+		SELECT
+		adv.specialTopicAdvId,
+		adv.imageUrl,
+		adv.turnUrl,
+		adv.specialTopicAdvPositionId,
+		adv.productIds,
+		adv.productImageUrls,
+		adv.productLinkUrls
+		FROM specialtopic_advertisement adv
+		WHERE specialTopicAdvId = #{specialTopicAdvId}
+	</select>
+	
+
+	<!-- 分页查询广告 信息-->
+	<select id="searchAdvertisement" parameterType="map"
+		resultType="SpecialtopicAdvertisement">
+		SELECT temp.* FROM (
+		<include refid="listAdv"/>
+		<include refid="where"/>
+		<include refid="order"/>
+		) temp 
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<!-- 查询广告 信息总数 -->
+	<select id="getAdvertisementCount" parameterType="map" resultType="integer">
+		SELECT COUNT(*) FROM (
+		<include refid="listAdv"/>
+		<include refid="where"/>
+		) temp 
+	</select>
+	
+	<!-- 根据广告id获取广告信息 -->
+	<select id="listAdvertisementById" parameterType="integer" resultType="SpecialtopicAdvertisement">
+		 select sap.positionCode as `advPosition.positionCode`,
+				sa.imageUrl as imageUrl,
+				sa.turnUrl as turnUrl,
+				sa.productImageUrls as productImageUrls,
+				sa.productLinkUrls as productLinkUrls,
+				sa.productIds as productIds
+				from specialtopic_advertisement sa 
+				LEFT JOIN specialtopic_adv_position sap 
+				ON sa.specialTopicAdvPositionId = sap.specialTopicAdvPositionId
+				LEFT JOIN  special_topic_templet stt 
+				ON sa.specialTopicTempletId = stt.specialTopicTempletId
+				where stt.specialTopicTempletId = #{templetId}
+				and DATE_FORMAT(CURRENT_TIMESTAMP,'%Y-%m-%d') BETWEEN stt.startTime and stt.endTime
+	</select>
+	
+	<!-- 根据广告商品id获取广告商品图片信息 -->
+	<select id="findProductByIds" resultType="SpecialtopicAdvertisementProduct">
+		SELECT p.productId,p.imageUrls,p.`name`,p.salePrice,p.rebate,p.marketPrice
+		FROM product p
+		WHERE p.productId IN
+		<foreach item="item" index="index" collection="array" 
+                open="(" separator="," close=")">
+               #{item}
+        </foreach>
+        ORDER BY FIELD(p.productId, 
+        <foreach item="item" index="index" collection="array" 
+                separator="," close=")">
+               #{item}
+        </foreach>
+	</select>
+	
+</mapper>

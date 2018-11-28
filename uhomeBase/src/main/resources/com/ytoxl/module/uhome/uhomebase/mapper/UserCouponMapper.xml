@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.UserCouponMapper">
+
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="userCouponId"
+		parameterType="UserCoupon">
+		insert into
+		user_coupon(userId,username,couponNo,couponStatus,couponId,couponConfigId,activeCode)
+		values(#{userId},#{username},#{couponNo},#{couponStatus},#{couponId},#{couponConfigId},#{activeCode})
+	</insert>
+
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from user_coupon where
+		userCouponId=#{id}
+	</delete>
+
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="UserCoupon">
+		update user_coupon u
+		set
+		u.userId=#{userId},
+		u.username=#{username},
+		u.couponNo=#{couponNo},
+		u.couponStatus=#{couponStatus},
+		u.couponId=#{couponId},
+		u.couponConfigId=#{couponConfigId}
+		where u.userCouponId=#{userCouponId}
+	</update>
+	<!-- 更新一条数据 -->
+	<update id="updateCouponStatus" parameterType="UserCoupon">
+		update user_coupon u
+		set
+		u.couponStatus=#{couponStatus}
+		where u.userCouponId=#{userCouponId}
+	</update>
+
+	<!-- 根据id查询 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="UserCoupon">
+		select *
+		from user_coupon
+		where userCouponId=#{userCouponId}
+	</select>
+	
+	
+	<!--  检查用户是否使用激活码-->
+	<select id="checkUserActiveCode" resultType="java.lang.Integer">
+		select count(*)
+		from user_coupon
+		where userId=#{userId} and activeCode=#{activeCode}
+	</select>
+	
+	<!-- 根据优惠券号查询用户优惠券信息 -->
+	<select id="getUserCouponByCouponNo" parameterType="java.lang.String" resultType="UserCoupon">
+		select *
+		from user_coupon
+		where couponNo=#{couponNo}
+	</select>
+
+	<!-- 根据状态 分页查询用户优惠券信息 -->
+	<select id="searchUserCouponsByStatus" parameterType="map"
+		resultType="UserCoupon">
+		select uc.*,
+		cc.allowance as `couponConfig.allowance`,
+		cc.limitCharge as `couponConfig.limitCharge`,
+		cc.startTime as `couponConfig.startTime`,
+		cc.endTime as `couponConfig.endTime`,
+		e.eventName as `event.eventName`,
+		e.eventId as `event.eventId`
+		from user_coupon uc ,coupon_config cc,event e
+		where uc.couponConfigId = cc.couponConfigId
+		and cc.eventId = e.eventId
+		and uc.userId = #{userId}
+		<include refid="searchUserCouponsByStatusWhere"/>
+		<if test="isPage==null">
+			order by cc.startTime desc
+			limit #{start},#{limit}
+		</if>
+	</select>
+
+	<!-- 根据状态 分页查询用户优惠券信息 统计 -->
+	<select id="searchUserCouponsByStatusCount" resultType="java.lang.Integer">
+		select count(uc.userCouponId)
+		from user_coupon uc ,coupon_config cc,event e where uc.couponConfigId =
+		cc.couponConfigId
+		and cc.eventId = e.eventId
+		and uc.userId = #{userId}
+	<include refid="searchUserCouponsByStatusWhere"/>
+		limit #{start},#{limit}
+  	</select>
+  	<!-- 分页查询用户优惠券 条件 -->
+	<sql id="searchUserCouponsByStatusWhere">
+		<choose>
+			<when
+				test="couponStatus == @com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0">
+				and uc.couponStatus =
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0} and cc.endTime &gt; CURRENT_TIMESTAMP
+			</when>
+			<when
+				test="couponStatus == @com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_1">
+				and uc.couponStatus =
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_1}
+			</when>
+			<when
+				test="couponStatus == @com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_2">
+				and cc.endTime &lt; CURRENT_TIMESTAMP and uc.couponStatus !=
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_1}
+			</when>
+		</choose>
+		and uc.couponStatus !=
+				${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_7}
+	</sql>
+	
+    <!-- 获取优惠券信息 -->
+	<select id="getUserCouponById" parameterType="java.lang.Integer" resultType="UserCoupon">
+		select <include refid="userCouponInfo"/>,<include refid="userCouponCouponConfigInfo"/>,<include refid="userCouponEventInfo"/> 
+		from user_coupon userCoupon ,coupon_config couponConfig,event couponEvent
+		where userCoupon.couponConfigId = couponConfig.couponConfigId
+			and couponConfig.eventId = couponEvent.eventId
+			and userCoupon.userCouponId=#{userCouponId}
+	</select>
+	
+	<!-- 修改已激活但未使用的优惠券状态为已删除 -->
+	<update id="updateCouponStatus2Deleted" parameterType="java.lang.Integer">
+		UPDATE user_coupon
+		SET couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_7}
+		WHERE couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0}
+			AND couponConfigId IN (
+				SELECT couponConfigId FROM coupon_config WHERE eventId = #{eventId}
+			)
+	</update>
+	
+	<sql id="userCouponInfo">
+		userCoupon.userCouponId,
+		userCoupon.userId,
+		userCoupon.username,
+		userCoupon.couponNo,
+		userCoupon.couponStatus,
+		userCoupon.couponId,
+		userCoupon.couponConfigId,
+		userCoupon.activeCode
+	</sql>
+	<sql id="userCouponCouponConfigInfo">
+		couponConfig.couponConfigId as `couponConfig.couponConfigId`,
+		couponConfig.allowance as `couponConfig.allowance`,
+		couponConfig.limitCharge as `couponConfig.limitCharge`,
+		couponConfig.startTime as `couponConfig.startTime`,
+		couponConfig.endTime as `couponConfig.endTime`
+	</sql>
+	<sql id="userCouponEventInfo">
+		couponEvent.eventId as `event.eventId`,
+		couponEvent.eventName as `event.eventName`
+	</sql>
+	<!-- 根据用户id,couponConfigIds获得用户优惠劵(不包括全场) -->
+	<select id="getUserCouponByCouponConfigAndUserId" resultType="UserCoupon">
+		select <include refid="userCouponInfo"/>,<include refid="userCouponCouponConfigInfo"/>,<include refid="userCouponEventInfo"/>
+		from user_coupon userCoupon ,coupon_config couponConfig,event couponEvent 
+		where userCoupon.couponConfigId = couponConfig.couponConfigId
+			and couponConfig.eventId = couponEvent.eventId
+			and userCoupon.userId=#{userId} 
+			and userCoupon.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0} 
+			and couponEvent.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_NORMAL}  
+			and userCoupon.couponConfigId in 	
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</select>
+	
+	<select id="getUserCouponByUserIdWithAll" resultType="UserCoupon">
+		select <include refid="userCouponInfo"/>,<include refid="userCouponCouponConfigInfo"/>,<include refid="userCouponEventInfo"/> 
+		from user_coupon userCoupon ,coupon_config couponConfig,event couponEvent,event_range eventRange 
+		where userCoupon.couponConfigId = couponConfig.couponConfigId
+			and couponConfig.eventId = couponEvent.eventId 
+			and couponEvent.eventId = eventRange.eventId
+			and eventRange.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.EventRange@TYPE_ALLPLAN}
+			and userCoupon.userId=#{userId} 
+			and userCoupon.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0} 
+			and couponEvent.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_NORMAL}  
+		union all
+		select <include refid="userCouponInfo"/>,<include refid="userCouponCouponConfigInfo"/>,<include refid="userCouponEventInfo"/> 
+		from user_coupon userCoupon ,coupon_config couponConfig,event couponEvent 
+		where userCoupon.couponConfigId = couponConfig.couponConfigId
+			and couponConfig.eventId = couponEvent.eventId 
+			and userCoupon.userId=#{userId} 
+			and userCoupon.couponStatus = ${@com.ytoxl.module.uhome.uhomebase.dataobject.UserCoupon@COUPON_STATUS_0} 
+			and couponEvent.type !=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@TYPE_COMMON} 
+			and couponEvent.status=${@com.ytoxl.module.uhome.uhomebase.dataobject.Event@STATUS_NORMAL}   
+			and couponConfig.endTime &gt; CURRENT_TIMESTAMP
+	</select>
+</mapper>

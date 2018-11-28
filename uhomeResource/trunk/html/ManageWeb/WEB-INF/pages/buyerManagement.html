@@ -1,0 +1,486 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>客户管理</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/buyerManagement.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/My97DatePicker/skins/WdatePicker.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+    <script src="../../web-resource/js/plugin/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+<!--start form-->
+<form class="sub-form layout">
+    <div class="m-fl order-form-fl">
+        <div>
+            <ul>
+                <li>
+                    <label>创建时间：</label>
+                    <input  name="inventoryMovementPage.params.startCreateTime" value="" class="Wdate" type="text" readonly="">
+                    <label>至 </label>
+                    <input  name="inventoryMovementPage.params.startCreateTime" value="" class="Wdate" type="text" readonly="">
+                </li>
+                <li>
+                    <input type="button" class="btn btn-danger" value="查 询"/>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="m-fr curr-num">
+        <label>当前显示： </label>
+        <select>
+            <option>10条</option>
+            <option>10条</option>
+            <option>10条</option>
+            <option>10条</option>
+        </select>
+    </div>
+</form>
+<!--end form-->
+<div class="examine layout">
+    <div class="m-fl buyer-form-fl">
+        <ul>
+            <li><a>消费总额</a><span><i></i></span><span><i class="down"></i></span></li>
+            <li><a>消费次数</a><span><i></i></span><span><i class="down"></i></span></li>
+            <li><a>注册时间</a><span><i></i></span><span><i class="down"></i></span></li>
+            <li><a>最后登录时间</a><span><i></i></span><span><i class="down"></i></span></li>
+            <li><a>年龄</a><span><i></i></span><span><i class="down"></i></span></li>
+        </ul>
+    </div>
+        <div class="pagination m-fr">
+            <a href="#">&nbsp;<span class="disable"></span></a>
+            <a href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <span class="etc">...</span>
+            <a href="#">10</a>
+            <a href="#" >&nbsp;<span class="next"></span></a>
+            <span class="current">8</span>
+            <span class="goto">转到</span>
+        </div>
+</div>
+<!--start 买家管理table-->
+<div class="order-management">
+<table id="tab">
+<thead class="tab-control">
+<tr>
+    <th width="12%">登录名</th>
+    <th width="8%">姓名</th>
+    <th width="8%">性别</th>
+    <th width="10%">生日</th>
+    <th width="8%">电话</th>
+    <th width="10%">所在地</th>
+    <th width="10%">注册日期</th>
+    <th width="11%">消费记录/总额</th>
+    <th width="12%">最后登录时间</th>
+    <th width="11%">最后消费时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control " >
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i class="change"></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+            <tr class="show-tr">
+                <td colspan="10" class="show-tab">
+                    <p class="order-info">当前积分：458654555<br/>
+                        地址：浙江省杭州市桐庐县城南街道大奇山居南香园24幢101室<br/>
+                        默认收货地址：浙江省杭州市桐庐县城南街道大奇山居南香园24幢101室<br/>
+                        收货地址1：浙江省杭州市桐庐县城南街道大奇山居南香园24幢101室<br/>
+                        收货地址2：浙江省杭州市桐庐县城南街道大奇山居南香园24幢101室<br/>
+                        喜欢的品牌：哈根达斯<br/>
+                        订阅的品牌：哈根达斯<br/>
+                        友好：熊熊熊熊熊熊熊熊熊熊熊熊<br/>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="10" class="td-nobor">
+        <table class="tab-control">
+            <tr class="tr-height list-tr"  width="12%">
+                <td class="num-icon">
+                    <i></i><a href="#">D4567qq.com</a>
+                </td>
+                <td  width="8%">
+                    文凯
+                </td>
+                <td  width="8%">
+                    男
+                </td>
+                <td width="10%">
+                    1990.5.1
+                </td>
+                <td  width="8%">
+                    15002569856
+                </td>
+                <td  width="10%">浙江</td>
+                <td width="10%">2.12.5</td>
+                <td width="11%">
+                    100/300
+                </td>
+                <td width="12%">
+                    2012.5.2
+                </td>
+                <td width="11%">
+                    2012.5.2
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+</tbody>
+</table>
+</div>
+<!--end 买家管理table-->
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+</body>
+</html>

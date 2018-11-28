@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ytoxl.module.uhome.uhomereport.mapper.BuyerOperationsReportMapper">
+
+	<!-- 查询买家运营信息-->
+	<select id="searchBuyerOperationsReports" parameterType="map"
+		resultType="BuyerOperationsReport">
+		select (select COUNT(DISTINCT(head.userId)) from order_item item LEFT JOIN order_head head
+			on item.orderId = head.orderId
+			where not EXISTS 
+			(select 1 from order_head inHead 
+			where head.userId = inHead.userId
+			and inHead.createTime &lt; #{startTime})
+			and DATE_FORMAT(head.createTime,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
+			) as newBuyers,
+			COUNT(DISTINCT(head.userId)) as buyers,
+			(select COUNT(DISTINCT(newUser.userId)) from user_info newUser
+			where DATE_FORMAT(newUser.createTime,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}) as newUsers,
+			COUNT(DISTINCT(users.userId)) as users,
+			(select COUNT(*) from 
+			(select count(userId) from order_item item LEFT JOIN order_head head
+			on item.orderId = head.orderId
+			where DATE_FORMAT(head.createTime,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
+			GROUP BY head.userId
+			HAVING count(head.userId) &gt; 1) t) as moreBuy
+			from order_head head,user_info users
+	</select>
+
+</mapper>

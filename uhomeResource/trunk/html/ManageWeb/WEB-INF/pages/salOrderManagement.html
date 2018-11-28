@@ -1,0 +1,773 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/orderManagement.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+<!--start form-->
+<form class="sub-form layout">
+    <div class="m-fl order-form-fl">
+            <ul class="layout">
+                <li>
+                    <select>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                    </select>
+                </li>
+                <li>
+                    <select>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                    </select>
+                </li>
+                <li>
+                    <label>交易日期：</label>
+                    <input  name="inventoryMovementPage.params.startCreateTime" value="" class="Wdate" type="text" readonly="">
+                    <label>至 </label>
+                    <input  name="inventoryMovementPage.params.startCreateTime" value="" class="Wdate" type="text" readonly="">
+                </li>
+                <li>
+                    <select>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                        <option>全部品牌</option>
+                    </select>
+                </li>
+                <li>
+                    <input type="text" data-default="输入品牌名称，商品名称" class="txt-Keywords input-marks" id="txtKeywords"/>
+                    <input type="button" class="btn btn-danger btn-search" value="查 询"/>
+                </li>
+            </ul>
+
+    </div>
+    <div class="m-fr curr-num">
+        <label>当前显示： </label>
+            <select>
+                <option>10条</option>
+                <option>10条</option>
+                <option>10条</option>
+                <option>10条</option>
+            </select>
+    </div>
+</form>
+<!--end form-->
+<div class="examine body-nav layout">
+    <div class="m-fl">
+        <ul>
+            <li><a class="current-chose">全部订单</a></li>
+            <li><a>未付款</a></li>
+            <li><a>代发货</a></li>
+            <li><a>已发货</a></li>
+            <li><a>已完成</a></li>
+            <li><a>已取消</a></li>
+            <li><a>退货订款</a></li>
+        </ul>
+    </div>
+    <div class="m-fr outerpage">
+    	<input type="button" class="btn btn-danger outer" value="导出"/>
+    	<img src="../../web-resource/images/batch.jpg" alt="批量发货" />
+    	<a href="#" class="c-blue">下载模板</a>
+        <div class="pagination">
+            <a href="#"><span class="disable"></span></a>
+            <a href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <span class="etc">...</span>
+            <a href="#">10</a>
+            <a href="#" ><span class="next"></span></a>
+            <span class="current">8</span>
+            <span class="goto">转到</span>
+        </div>
+    </div>
+</div>
+<!---star 弹层的图标--->
+<i class="up-succseed"></i>
+<i class="up-fail"></i>
+<!---end 弹层的图标--->
+<!--start 下单管理table-->
+<div class="order-management">
+<table id="tab">
+	<thead class="tab-control">
+	<tr>
+		<th width="10%">订单编号</th>
+		<th width="12%">下单时间</th>
+		<th width="10%">总金额</th>
+		<th width="10%">收货人</th>
+		<th width="10%">支付方式</th>
+		<th width="10%">配送方式</th>
+		<th width="10%">支付状态</th>
+		<th width="10%">订单状态</th>
+		<th width="10%">订单来源</th>
+		<th width="8%">操作</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+				<tr class="tr-height" >
+					<td class="num-icon" width="10%">
+						<i></i><label><a>D1234567</a></label>
+					</td>
+					<td  width="12%">
+						2013-01-10 14.13
+					</td>
+					<td width="10%">
+						￥3406.65
+					</td>
+					<td width="10%">
+						啊毛毛
+					</td>
+					<td width="10%">
+						支付宝支付
+					</td>
+					<td width="10%">圆通快递</td>
+					<td width="10%">已支付</td>
+					<td width="10%">
+						未支付
+					</td>
+					<td width="10%">
+						特卖
+					</td>
+					<td width="8%">
+						<a href="#" class="c-blue">退货审核</a>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="list-tr">
+		<td colspan="10" class="td-nobor">
+			<table class="tab-control">
+                <tr class="tr-height" >
+                    <td class="num-icon" width="10%">
+                        <i></i><label><a>D1234567</a></label>
+                    </td>
+                    <td  width="12%">
+                        2013-01-10 14.13
+                    </td>
+                    <td width="10%">
+                        ￥3406.65
+                    </td>
+                    <td width="10%">
+                        啊毛毛
+                    </td>
+                    <td width="10%">
+                        支付宝支付
+                    </td>
+                    <td width="10%">圆通快递</td>
+                    <td width="10%">已支付</td>
+                    <td width="10%">
+                        未支付
+                    </td>
+                    <td width="10%">
+                        特卖
+                    </td>
+                    <td width="8%">
+                        <a href="#" class="c-blue">退货审核</a>
+                    </td>
+                </tr>
+			</table>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</div>
+<!--end 下单管理table-->
+<!---star 订单详细信息展示--->
+<div class="show-order-info hide">
+		<div class="order-info">
+			<div class="layout">
+				<div class="m-fl f-wl">
+					<div class="order-botcolor order-tdwidth">
+						<h4>订单详情</h4>
+						<ul class="layout">
+							<li>
+								<table>
+									<tr>
+										<td rowspan="2" width="70px"><img src="../../web-resource/images/imgtu.gif" border=""/></td>
+										<td width="15%">品牌</td>
+										<td width="42%">商品信息商品信息商品信息</td>
+										<td width="15%">￥<label>49.00</label></td>
+										<td width="10%">X1</td>
+									</tr>
+									<tr>
+										<td colspan="4">
+											尺寸：<label>40</label>
+											颜色：<label>黑色</label>
+										</td>
+	
+									</tr>
+								</table>
+							</li>
+							<li>
+								<table>
+									<tr>
+										<td rowspan="2" width="70px"><img src="../../web-resource/images/imgtu.gif" border=""/></td>
+										<td width="15%">品牌</td>
+										<td width="42%">商品信息商品信息商品信息</td>
+										<td width="15%">￥<label>49.00</label></td>
+										<td width="10%">X1</td>
+									</tr>
+									<tr>
+										<td colspan="4">
+											尺寸：<label>40</label>
+											颜色：<label>黑色</label>
+										</td>
+	
+									</tr>
+								</table>
+							</li>
+						</ul>
+					</div>
+					<div class="order-botcolor order-tdwidth">
+						<table>
+							<tr>
+								<td width="20%">商品金额：</td>
+								<td width="25%">￥<label>49.00</label></td>
+								<td width="15%">运费：</td>
+								<td width="25%">￥<label>49.00</label></td>
+								<td width="20%">总金额：</td>
+							</tr>
+							<tr>
+								<td width="20%">发票信息：</td>
+								<td colspan="3">
+									<label>上海圆通新龙电子商务有限公司</label>
+								</td>
+								<td width="20%" class="c-red"><span>$￥263.9</span></td>
+	
+							</tr>
+							<tr>
+								<td width="20%">支付宝帐号：</td>
+								<td colspan="4">
+									123456789@qq.com
+								</td>
+	
+							</tr>
+						</table>
+					</div>
+					<div class="order-tdwidth">
+						<h4>商品信息</h4>
+						<table>
+							<tr>
+								<td width="20%">李毛毛</td>
+								<td width="25%"><label>15678765</label></td>
+								<td width="25%"><label>67654567@qq.com</label></td>
+								<td width="25%"><label>2343234</label></td>
+							</tr>
+							<tr>
+								<td  colspan="2"><label>中国，上海市，徐家汇，漕溪路</label></td>
+								<td colspan="2">
+									<label>宾阳路28弄保利星苑3号楼604路</label>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div  class="m-fr f-wr tab-change">
+					<div class="fr-tab">
+						<ul class="layout">
+							<li class="bot-no">物流状态</li>
+							<li>退货审核</li>
+						</ul>
+	
+					</div>
+					<div class="order-tdwidth fr-tabcont tabcont-item">
+	              <table>
+	                  <tr>
+	                      <td width="30%">
+	                      	<label>发货：</label>
+	                      	<select class="select-mail">
+	                      		<option>圆通快递</option>
+	                      		<option>圆通快递</option>
+	                      		<option>圆通快递</option>
+	                      	</select>
+	                      </td>
+	                      <td width="30%"><input type="text" class="odd-numbers" value="请输入快递单号" /></td>
+	                      <td width="30%"><input type="button" class="confirm-btn" value="确认发货" /></td>
+	                  </tr>
+	              </table>
+	              <ul>
+	                  <li><label>2013.02.24 17:50</label><span class="c-green">已签收，签收人是门把手</span></li>
+	                  <li><label>2013.02.24 17:50</label><span>【上海徐汇公司】的派件员【祝三礼】 手机(15800569743)正在派件</span></li>
+	                  <li><label>2013.02.24 17:50</label><span>【上海徐汇公司】的派件员【祝三礼】 手机(15800569743)正在派件</span></li>
+	                  <li><label>2013.02.24 17:50</label><span>【上海徐汇公司】的派件员【祝三礼】 手机(15800569743)正在派件</span></li>
+	                  <li><label>2013.02.24 17:50</label><span>【上海徐汇公司】的派件员【祝三礼】 手机(15800569743)正在派件</span></li>
+	                  <li><label>2013.02.24 17:50</label><span>【上海徐汇公司】的派件员【祝三礼】 手机(15800569743)正在派件</span></li>
+	              </ul>
+	
+	          </div>
+	          <div class="order-tdwidth fr-tabcont tabcont-item">
+	          	<table>
+	          		<tr>
+	          			<td colspan="6"><b>退货商品</b></td>
+	          		</tr>
+	          		<tr>
+	          			<td width="75" align="right">【ZARA】 </td>
+	          			<td colspan="5">呆呆兽牛仔裤 175/92 黑色  X1</td>
+	          		</tr>
+	          		<tr>
+	          			<td align="right">【品牌】 </td>
+	          			<td colspan="5">商品品牌 规格 颜色 数量</td>
+	          		</tr>
+	          		<tr valign="top">
+	          			<td align="right">问题描述：</td>
+	          			<td colspan="5"><textarea class="problem-text"></textarea></td>
+	          		</tr>
+	          		<tr>
+	          			<td align="right">应退金额：</td>
+	          			<td width="90">&yen;628.00</td>
+	          			<td align="right">联系人：</td>
+	          			<td>翁小小</td>
+	          			<td align="right">联系人：</td>
+	          			<td>1389980028</td>
+	          		</tr>
+	          		<tr>
+	          			<td align="right">申请日期：</td>
+	          			<td colspan="2">2013-10-10 16：23：43</td>
+	          			<td>圆通速递</td>
+	          			<td colspan="2">1827907742</td>
+	          		</tr>
+	          		<tr>
+	          			<td colspan="6"><textarea class="refuse-text"></textarea></td>
+	          		</tr>
+	          		<tr>
+	          			<td colspan="4"><input type="button" class="examine-btn" value="审核通过"/><input type="button" class="examine-btn" value="审核不通过"/></td>
+	          			<td colspan="2"><span class="c-red">请填写不通过原因</span></td>
+	          		</tr>
+	          	</table>
+	          </div>
+				</div>
+			</div>
+			<div class="order-tdwidth order-shops ">
+				<h4>商品信息</h4>
+				<table>
+					<tr>
+						<td width="15%">龙宝宝育儿专卖店</td>
+						<td width="20%"><label>登录帐号：</label>67654567@qq.com</td>
+						<td width="15%"><label>姓名：</label>翁小龙</td>
+						<td width="15%"><label>&nbsp;&nbsp;生日：</label>1990.1</td>
+						<td width="25%"><label>最后登录时间：</label>2013.1.2</td>
+						<td width="10%"><label>当前积分：</label>56666</td>
+					</tr>
+					<tr>
+						<td width="15%"><label>注册时间：</label>2013.1.2</td>
+						<td width="20%"><label>&nbsp;&nbsp;&nbsp;&nbsp;电话：</label>翁小龙</td>
+						<td width="15%"><label>邮箱：</label>67654567@qq.com</td>
+						<td width="15%"><label>所在地：</label>司法解释将大</td>
+						<td width="20%"><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地址：</label>三级分类数据大</td>
+						<td  width="15%"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+</div>
+<!---end 订单详细信息展示--->
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+<script>
+$(document).ready(function(){
+	$(".tr-height").on("click",function(){
+		var temp_html ="<tr class=\"show-tr\"><td colspan=\"10\" class=\"show-tab\">";
+		temp_html += $(".show-order-info").html();
+		temp_html += "</td></tr>";
+		if(!$(this).next(".show-tr")[0]){
+			$(this).after($(temp_html));
+		}
+	});
+});
+</script>
+</body>
+</html>

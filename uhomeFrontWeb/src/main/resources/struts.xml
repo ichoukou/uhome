@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.objectFactory.spring.useClassCache" value="true" />
+	<constant name="struts.locale" value="zh_CN" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.custom.i18n.resources" value="messages" />
+	<constant name="struts.action.extension" value="htm" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.multipart.saveDir" value="/tmp"/>
+	<constant name="struts.multipart.paeser" value="cos"/>
+	
+	<package name="uhome-default" extends="struts-default">
+		<result-types>
+			<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
+			<result-type name="captchaImage" class="com.google.code.jcaptcha4struts2.core.actions.support.CaptchaImageResult" />
+		</result-types>
+		<interceptors>
+			<interceptor name="json" class="org.apache.struts2.json.JSONInterceptor" />
+			<!-- <interceptor name="jcaptchaValidation" class="com.google.code.jcaptcha4struts2.core.interceptors.JCaptchaValidationIntercepter" /> -->
+			<!-- 自定义错误拦截器 -->
+			<interceptor name="errorInterceptor" class="com.ytoxl.uhomefront.web.interceptor.ErrorInterceptor"/>
+			<interceptor-stack name="jcaptchaDefaultStack">
+				<interceptor-ref name="errorInterceptor"/>
+				<interceptor-ref name="defaultStack" />
+				<!-- <interceptor-ref name="jcaptchaValidation" /> -->
+			</interceptor-stack>				
+		</interceptors>
+		
+        <default-interceptor-ref name="jcaptchaDefaultStack"/>
+        <default-action-ref name="acctionError"></default-action-ref>
+       
+        <global-results>
+        	<result name="jsonMsg" type="json">
+        		<param name="root">message</param>
+        	</result>
+        	<!-- 找不到那件商品或者排期 用户通过改变url地址-->
+        	<result name="error">/WEB-INF/pages/error/404.jsp</result>
+        	<result name="505">/WEB-INF/pages/error/505.jsp</result>
+        </global-results>
+        <!-- struts2 异常配置 
+        <global-exception-mappings>
+        	<exception-mapping result="505" exception="java.lang.Exception"/>
+        </global-exception-mappings>
+        -->
+        <action name="jcaptcha_image" class="com.google.code.jcaptcha4struts2.core.actions.JCaptchaImageAction">
+			<result type="captchaImage" />
+		</action> 
+         <action name="acctionError" >
+            <result>/WEB-INF/pages/error/404.jsp</result>
+        </action>  
+ 
+	</package>
+	
+	<!-- 关注微信 -->
+	<package name="weixin" namespace="/weixin" extends="uhome-default">
+		<action name="attention" class="com.ytoxl.module.weixin.action.WeixinAction">
+			<result name="success">/WEB-INF/pages/weixin/WeiXinResult.jsp</result>
+		</action>
+		<action name="requestData" class="com.ytoxl.module.weixin.action.WeixinAction">
+			<result name="success">/WEB-INF/pages/weixin/WeiXinResult.jsp</result>
+		</action>
+	</package>
+	
+	<include file="struts/struts-index.xml"></include>
+	<include file="struts/struts-order.xml"></include>
+	<include file="struts/struts-upload.xml"></include>
+	<include file="struts/struts-product.xml"></include>
+	<include file="struts/struts-ReceiverAddress.xml"></include>
+	<include file="struts/struts-brand.xml"></include>
+	<include file="struts/struts-user.xml"></include>
+	<include file="struts/struts-help.xml"></include>
+	<include file="struts/struts-returnOrder.xml"></include>
+	<include file="struts/struts-partner.xml"></include>
+	<include file="struts/struts-linkageSel.xml"></include>
+	<include file="struts/struts-notice.xml"></include>
+</struts>

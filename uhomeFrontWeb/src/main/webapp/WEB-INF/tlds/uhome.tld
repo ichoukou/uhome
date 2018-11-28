@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"   
+    version="2.0">    
+    <tlib-version>1.0</tlib-version>    
+    <short-name>uhome</short-name>    
+    
+    <function>    
+        <description>根据金额计算积分</description>    
+        <name>computerPoint</name>    
+        <function-class>com.ytoxl.module.uhome.uhomebase.service.impl.PointServiceImpl</function-class>    
+        <function-signature>    
+            java.lang.Integer computerPoint4Front(java.math.BigDecimal)    
+        </function-signature>   
+        <example>${uhome:computerPoint(money)}</example> 
+    </function>
+    <function>    
+        <description>根据传入的字符串截取长度</description>    
+        <name>cutString</name>    
+        <function-class>com.ytoxl.module.uhome.uhomebase.service.impl.ProductServiceImpl</function-class>    
+        <function-signature>    
+            java.lang.String cutString(java.lang.String,java.lang.Integer)    
+        </function-signature>   
+        <example>${uhome:cutString(str,len)}</example> 
+    </function>
+        
+</taglib>

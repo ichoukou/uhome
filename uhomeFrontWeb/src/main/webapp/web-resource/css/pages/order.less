@@ -1,0 +1,282 @@
+/**
+ * Created by JetBrains PhpStorm.
+ * User: admin
+ * Date: 13-3-4
+ * Time: 下午5:40
+ * To change this template use File | Settings | File Templates.
+ */
+@import '../lib/global.less';
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../lib/navigation.less';
+@import '../common.less';
+@import '../lib/crumbs.less';
+
+/*我的订单*/
+.li-hover i {
+    right: 30px;
+}
+.inf-mine {
+}
+.ord-select{
+  margin-top: 20px;
+  select{
+    width: 133px;
+    height: 26px;
+    line-height: 26px;
+    border: solid 1px #ddd;
+    *margin-top: 4px;
+    _margin-top: 4px;
+  }
+  .ord-submit{
+    background: #ff943e; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ff943e 0%, #ec6e25 50%, #d8450a 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff943e), color-stop(50%,#ec6e25), color-stop(100%,#d8450a)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ff943e 0%,#ec6e25 50%,#d8450a 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff943e', endColorstr='#d8450a',GradientType=0 ); /* IE6-9 */
+    padding: 0 5px;
+    height: 26px;
+    line-height: 24px;
+    border: 1px solid #c25116;
+    color: #ffffff;
+    border-radius: 2px;
+  }
+}
+.ord-search {
+    float: left;
+    display: inline;
+    margin: 0 5px 0 0;
+    position: relative;
+}
+.order-tab {
+    margin-top: 10px;
+    table {
+        border: solid 1px #d8d8d8;
+        border-right: none;
+        width: 100%;
+	word-break: break-all;
+    }
+    th {
+        background-color: #f2f2f2;
+        border-right:solid 1px #d8d8d8;
+        border-bottom:solid 1px #d8d8d8;
+        height: 35px;
+        text-align: left;
+        padding-left: 8px;
+        font-weight: normal;
+      .ord-checkbox{
+        vertical-align: -2px;
+      }
+    }
+    td {
+        border-bottom:solid 1px #d8d8d8;
+        border-right:solid 1px #d8d8d8;
+        padding: 8px;
+    }
+  .ord-sales{
+    padding: 0;
+  }
+}
+.ord-sales{
+    ul{
+      overflow: hidden;
+    }
+    li {
+      border-top: solid 1px #d8d8d8;
+      padding: 10px;
+      margin-top: -1px;
+      a{
+          text-decoration: underline;
+      }
+    }
+}
+.ord-sales label {
+  margin-right: 5px;
+  color: #666666;
+}
+.cor-red{
+  color: #f96619;
+  font-size: 12px;
+  font-family: "arial";
+}
+.ord-operation{
+    a {
+        display: block;
+        text-decoration: underline;
+    }
+}
+/*订单详情*/
+.inf-detail {
+    span {
+      font-family: "arial";
+    }
+    p{
+        margin: 15px 0 0px 30px;
+    }
+}
+.ord-num {
+    height:30px;
+    padding:0 10px;
+    line-height:30px;
+    border:1px solid #d8d8d8;
+    background:#fffceb;
+    span{
+        margin-right:30px;
+    }
+    .orange{
+        color: #ff5702;
+    }
+}
+.f-weight{
+        font-weight: 700;
+        font-family: "宋体";
+        font-size: 14px;
+    }
+.ord-detail {
+    margin:0 10px;
+    border-bottom:  solid 1px #d8d8d8;
+    padding: 20px 0;
+    .ord-mtb {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    ul {
+        margin: 15px 0 0px 30px;
+
+    }
+    li {
+         line-height: 20px;
+     }
+    .ord-address{
+       
+    }
+    table{
+	th{
+	    text-align:left;
+	    padding-left:5px;
+	    line-height:24px;
+	    border-bottom:1px solid #ccc;
+	    background:#f3f3f3;
+	}
+	td{
+	   line-height:20px;
+	   padding-left:5px;
+	}
+    }
+}
+.odr-title{
+    border-bottom:  solid 1px #d8d8d8;
+    padding: 0 0 10px 0;
+}
+.ord-logistics{
+    margin:0 50px 0 10px;
+    padding:18px;
+
+    .f-weight{
+        font-size: 14px;
+    }
+    .ode-news{
+        padding: 10px 0 0;
+
+        p{
+            padding:5px 0 0;
+            margin: 0;
+        }
+    }
+    .ord-ul{
+        margin-top:16px;
+    }
+    .ord-lab{
+        font-weight: 700;
+    }
+    .ord-time{
+        width:148px;
+    }
+
+}
+.ord-ul{
+   .ord-time li,.ord-bd li{
+        line-height: 28px;
+    }
+}
+.bor-none {
+    border-bottom: none;
+}
+.ord-detailtab {
+    margin: 10px;
+}
+
+.ord-money {
+    margin: 10px;
+    table {
+      float:right;
+      font-family: "arial";
+    }
+    .ord-mtr {
+      text-align: right;
+    }
+    var {
+      font-size: 18px;
+    }
+    em {
+      font-size: 25px;
+    }
+}
+/*退货订单*/
+.ord-thtitle {
+     span {
+         font-size: 16px;
+         color: #131313;
+         font-weight: 700;
+     }
+    .onshow {
+        float: right;
+        margin-right: 10px;
+        color: #1a1a1a;
+        cursor: pointer;
+        display: inline-block;
+    }
+}
+.hide {
+    display: none;
+}
+/*----- 我的订单列表 -----*/
+.order-tab .order-item{margin-bottom: 10px;}
+.order-tab .pic{float: left;margin-right: 10px;}
+.order-tab .info{overflow: hidden;*zoom: 1;}
+.order-tab .tit{margin-bottom: 10px;}
+.order-tab .high-light{color: #ec6820;}
+.order-tab .normal{color: #3366cc;}
+/*分页*/
+.navigation {
+    margin-top:30px;
+    span {
+        margin: 0;
+    }
+}
+/*底部操作栏*/
+.bm-control{
+  margin-top: 10px;
+  padding: 8px 9px;
+  background-color: #f2f2f2;
+  ul{
+    overflow: hidden;
+    *zoom: 1;
+  }
+  li{
+    float: left;
+    display: inline;
+    margin-right: 20px;
+    .ord-checked-all{
+      vertical-align: -2px;
+    }
+    a{
+      color: #ec6820;
+    }
+  }
+}
+
+

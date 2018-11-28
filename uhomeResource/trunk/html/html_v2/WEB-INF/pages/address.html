@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link type="text/css"  rel="stylesheet" href="../../web-resource/css/pages/address.css"/>
+</head>
+<body class="m-w980p">
+<div class="m-fl person-bread m-mt20p">
+    <ul>
+        <li><a href="order.html">我的订单</a></li>
+        <li ><a href="information.html">我的资料</a></li>
+        <li class="li-hover"><a href="#">我的收获地址（2）<i></i></a></li>
+        <li><a  href="#">邀请好友</a></li>
+        <li><a  href="#">退换货管理 </a></li>
+        <li><a  href="#">修改密码 </a></li>
+        <li><a  href="#">积分管理</a></li>
+    </ul>
+</div>
+<div class="inf-detail m-mt20p">
+    <div class="inf-title fon-big">已保存的收获地址</div>
+    <div class="m-mt30p addr-tab">
+        <table>
+            <thead>
+                <tr>
+                    <th width="15%">收货人</th>
+                    <th width="15%">所在地区</th>
+                    <th width="15%">街道地址</th>
+                    <th width="15%">邮编</th>
+                    <th width="15%">联系电话</th>
+                    <th width="25%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="list-tr">
+                    <td>王晓王</td>
+                    <td >上海市 松江区</td>
+                    <td>文汇路3906号2号楼188
+                        为各位苟富贵</td>
+                    <td >40015245</td>
+                    <td>1500000012</td>
+                    <td class="addr-operation"><a href="#">设为默认地址</a><a href="#">修改</a><a href="#">删除</a></td>
+
+                </tr>
+                <tr class="list-tr">
+                    <td >王晓王</td>
+                    <td>上海市 松江区</td>
+                    <td >文汇路3906号2号楼188
+                        为各位苟富贵</td>
+                    <td>40015245</td>
+                    <td>1500000012</td>
+                    <td class="addr-operation"><a href="#">设为默认地址</a><a href="#">修改</a><a href="#">删除</a></td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+    <div class="inf-detail m-mt20p">
+    <div class="inf-title fon-big">新增收获地址</div>
+        <div class="user-formdetail layout">
+        <form id="form1" action="post" method="#">
+            <p> <label>*收货人姓名：</label><input type="text" class="add-name"/> <span id="addNameTips"></span></p>
+            <p> <label>*所在地区：</label>
+                <select class="addr-province" id="province"></select> <span id="provinceTips"></span>
+            </p>
+            <p class="inf-addr"> <label>*街道地址：</label><textarea class="add-address" id="addAddress"></textarea><span id="addressTips"></span></p>
+            <p> <label>邮编：</label><input type="text" /></p>
+            <p> <label>*移动电话：</label><input type="text" class="add-telephone" id="telephone" maxlength="11"/><span id="telephoneTips"></span></p>
+            <p> <label>固定电话：</label><input type="text" size="3"/><input type="text" class="add-phone"/><span>（格式如：021-5485624）</span></p>
+            <p> <label>验证码：</label><span class="add-vinput layout"><input type="text" /><img src="../../web-resource/images/uploadfolder/validate.gif"/></span><a href="#" class="add-validate">看不清，换一张</a></p>
+            <p> <label>设为默认：</label><input type="checkbox" class="addr-ck"/></p>
+            <p class="layout"><a class="btn-c btn-save" id="save"><span>保   存</span></a>
+            </p>
+        </form>
+        </div>
+</div>
+<script src="../../web-resource/js/jquery/jquery.1.8.1.js"></script>
+<script src="../../web-resource/js/plugin/plugin.js"></script>
+<script src="../../web-resource/js/plugin/formvalidator/formValidator-4.1.3.js"></script>
+<script src="../../web-resource/js/plugin/formvalidator/formValidatorRegex.js"></script>
+<script src="../../web-resource/js/plugin/select/district-all.js"></script>
+<script src="../../web-resource/js/plugin/select/jquery.linkagesel-min.js"></script>
+<script src="../../web-resource/js/pages/userinfo.js"></script>
+</body>
+</html>

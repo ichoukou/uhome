@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SEO信息</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/arrangement.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+</head>
+
+<body>
+    <!--start header-->
+    
+    <!--end header-->
+    <!--start body-->
+    <div class="body m-w980p">
+        <div class="body-nav arr-nav">
+          <ul class="layout" id="arrangeMent">
+            <li><a class="current-chose">SEO信息</a></li>
+          </ul>
+        </div>
+        <div class="examine m-mt10p layout">
+            <div><input type="button" id="addSale-btn" class="btn btn-danger J-edit-seo" value="新增SEO页面"/></div>
+        </div>
+      	<!--start SEO信息-->
+        <div class="m-mt10p arrange-management">
+            <table class="tab-control" id="tab">
+                <thead>
+                    <tr>
+                        <th width="15%">Key</th>
+                        <th width="15%">标题</th>
+                        <th width="15%">关键词</th>
+                        <th width="30%">描述</th>
+                        <th width="15%">创建时间</th>
+                        <th width="10%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="list-tr">
+                    <td><span>首页</span></td>
+                    <td>
+                        <span>新龙直销（xlbuy365）_新龙直销是一家天天特价的网上特卖商城，品牌折扣，正品保障，限时抢购。</span>
+                    </td>
+                    <td>
+                    	新龙直销，xlbuy365，天天特价，正品，特卖，限时抢购，品牌折扣
+                    </td>
+                    <td>
+                    	新龙直销xlbuy365_是一个以天天特价、品牌折扣、限时抢购为特色的网上特卖商城，全球各大品牌官方授权入驻，全国配送，100%正品保障，超值购物，首选新龙直销。
+                    </td>
+                    <td>2013.06.25</td>
+                    <td>
+                        <a href="javascript:;" class="J-edit-seo">编辑</a><a href="javascript:;">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><span>首页</span></td>
+                    <td>
+                        <span>新龙直销（xlbuy365）_新龙直销是一家天天特价的网上特卖商城，品牌折扣，正品保障，限时抢购。</span>
+                    </td>
+                    <td>
+                    	新龙直销，xlbuy365，天天特价，正品，特卖，限时抢购，品牌折扣
+                    </td>
+                    <td>
+                    	新龙直销xlbuy365_是一个以天天特价、品牌折扣、限时抢购为特色的网上特卖商城，全球各大品牌官方授权入驻，全国配送，100%正品保障，超值购物，首选新龙直销。
+                    </td>
+                    <td>2013.06.25</td>
+                    <td>
+                        <a href="javascript:;" class="J-edit-seo">编辑</a><a href="javascript:;">删除</a>
+                    </td>
+                </tr>
+                <tr class="list-tr">
+                    <td><span>首页</span></td>
+                    <td>
+                        <span>新龙直销（xlbuy365）_新龙直销是一家天天特价的网上特卖商城，品牌折扣，正品保障，限时抢购。</span>
+                    </td>
+                    <td>
+                    	新龙直销，xlbuy365，天天特价，正品，特卖，限时抢购，品牌折扣
+                    </td>
+                    <td>
+                    	新龙直销xlbuy365_是一个以天天特价、品牌折扣、限时抢购为特色的网上特卖商城，全球各大品牌官方授权入驻，全国配送，100%正品保障，超值购物，首选新龙直销。
+                    </td>
+                    <td>2013.06.25</td>
+                    <td>
+                        <a href="javascript:;" class="J-edit-seo">编辑</a><a href="javascript:;">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+      	<!--end SEO信息-->
+      	<!--start 新增、编辑SEO弹出层-->
+      		<div class="add-seo-info">
+      			<table>
+      				<tr>
+      					<td width="60" align="right">Key：</td>
+      					<td><input type="text" class="input-key" /></td>
+      				</tr>
+      				<tr>
+      					<td width="20%" align="right">标题：</td>
+      					<td><textarea type="text" class="input-text"></textarea></td>
+      				</tr>
+      				<tr>
+      					<td width="20%" align="right">关键字：</td>
+      					<td><textarea type="text" class="input-text"></textarea></td>
+      				</tr>
+      				<tr>
+      					<td width="20%" align="right">描述：</td>
+      					<td><textarea type="text" class="input-text"></textarea></td>
+      				</tr>
+      			</table>
+      		</div>
+      	<!--end 新增、编辑SEO弹出层-->
+    </div>
+    <!--end body-->
+    <!--start footer-->
+    <!--end footer-->
+<script>
+$(function(){
+	//弹层
+	$('.J-edit-seo').on("click", function () {
+	  var html = $(".add-seo-info").get([0]);
+	  $.dialog({
+	    lock: true,
+	    padding: "10px",
+	    title:"新增SEO页面",
+	    content:html,
+	    fixed: true,
+	    cancel: true,
+	    cancelValue:"取  消",
+	    ok:function(){},
+	    okValue:"保  存"
+	  });
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.SuggestMapper">
+	
+	<!--  添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="suggestId" parameterType="Suggest">
+		insert into suggest(`suggestId`,`type`,`title`,`content`,`status`,`createTime`, userId) 
+			values(	#{suggestId},#{type},#{title},#{content},#{status},CURRENT_TIMESTAMP, #{userId})
+	</insert>
+	
+	<sql id="searchSuggestsCondition">
+		<where>
+			<if test="status!=null and status!=''">
+				and s.status=#{status}
+        	</if>
+		</where>
+
+	</sql>
+	
+	<select id="searchSuggests" parameterType="map" resultType="Suggest">
+		select suggestId,
+			   type,
+			   title,
+			   content,
+			   s.status,
+			   s.createTime,
+			   username as `user.username`
+		from suggest s left join user u on s.userId=u.userId
+		<include refid="searchSuggestsCondition"/>
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+				</if>
+		</if>
+		<if test="sort == null or sort == ''">
+			order by s.createTime desc
+		</if>
+		limit #{start},#{limit}
+	</select>
+	
+	<!-- 根据分页查询建议数量 -->
+	<select id="searchSuggestsCount" parameterType="map" resultType="Integer">
+		select
+		count(suggestId)
+		from suggest s left join user u on s.userId=u.userId
+		<include refid="searchSuggestsCondition" />
+	</select>
+	
+	<delete id="del" parameterType="integer">
+		delete from suggest where suggestId=#{suggestId}
+	</delete>
+	<update id="update" parameterType="Suggest">
+		update suggest set status=#{status} where suggestId=#{suggestId}	
+	</update>
+	
+</mapper>

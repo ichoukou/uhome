@@ -1,0 +1,65 @@
+@charset "utf-8";
+/**
+ * User: jVan
+ * Date: 13-2-15 下午7:21
+ * Description: header
+ **/
+@import '../lib/reset.less';
+@import '../lib/search.less';
+@import '../lib/btn.less';
+/*钱币符号*/
+.symbol{font-family:microsoft yahei;}
+.price{font:bold 14px microsoft yahei;color:#ff5702;}
+/*头部*/
+/*topbar*/
+.topbar-wrap{width:100%;height:25px;background:#e6e6e6;font:normal 12px/25px "宋体,Arial";}
+.topbar-info{width:960px;margin:0 auto;}
+.top-mini-menu{float:left;}
+.top-mini-menu li{float:left;color:#333;}
+.top-mini-menu a{display:block;width:62px;height:21px;float:left;margin:2px 0px 0;padding-top:2px;line-height:21px;text-align:center;color:#333;}
+.top-mini-menu .act a,.top-mini-menu a:hover{border-top:2px solid #009a78;background:#fff;padding:0;}
+.topbar-right{float:right;color:#333;}
+.topbar-right li{float:left;}
+.login a,.topbar-right span{color:#333;margin:0 5px;}
+.login a:hover{color:#f50;text-decoration:underline;}
+.weibo a{display:inline-block;width:42px;height:20px;margin:0;padding-left:20px;line-height:20px;background:url(../../images/index-bg.gif) 0 0 no-repeat;}
+.weibo a:hover{background-position:-62px 0;color:#333;}
+.weibo a:active{background-position:-124px 0;text-decoration:none;color:#333;}
+.hot-line b{color:#d90048;margin-left:8px;}
+/*top-info*/
+.top-info-wrap{width:960px;height:89px;margin:0 auto;}
+.logo{width:319px;height:89px;float:left;background:url(../../images/uploadfolder/logo.jpg) no-repeat;}
+.logo a{display:block;width:319px;height:89px;}
+.agreement{float:right;}
+.agreement-ico{width:222px;height:48px;margin-top:25px;background:url(../../images/index-bg.gif) 0 -22px no-repeat;}
+/*menu*/
+.menu-wrap{width:100%;background:#ff5702;}
+.menu{width:960px;height:35px;margin:0 auto;}
+.menu-list{float:left;position:relative;}
+.menu-list li{width:122px;float:left;}
+.menu-item a{display:block;width:120px;margin:0 1px;color:#fff;font:normal 16px/35px SimSun;text-align:center;}
+.menu-item a:hover{background:#009a78;margin:0;border-left:1px solid #fff;border-right:1px solid #fff;}
+.menu-barnd-list{display:none;width:900px;border:1px solid #009a78;position:absolute;left:1px;}
+.menu-barnd-list a{display:block;float:left;width:98px;height:48px;border:1px solid #009a78;}
+/*shopping-cart*/
+.shopping-cart{width:200px;height:35px;float:right;position:relative;}
+.cart-sum{text-align:center;}
+.cart-sum i{display:inline-block;width:20px;height:18px;background:url(../../images/index-bg.gif) -186px -1px no-repeat;vertical-align:-5px;margin-right:17px;}
+.cart-sum a{display:block;color:#fff;font-size:14px;line-height:35px;}
+.cart-sum a:hover{background:#009a78;}
+.cart-list{display:none;width:270px;position:absolute;right:0;border:2px solid #009a78;background:#fff;}
+.cart-list ul{max-height:300px;overflow-y:auto;overflow-x:hidden;}
+.cart-list li{width:232px;height:84px;border-bottom:2px solid #e6e6e6;margin:0 auto;padding:7px 0;position:relative;}
+.cart-pro-img{width:64px;height:84px;float:left;}
+.cart-pro-img a{display:block;border:2px solid #fff;}
+.cart-pro-img a:hover{border-color:#ff5702;;}
+.cart-pro-img img{width:60px;height:80px;}
+.cart-pro-info{height:54px;}
+.cart-pro-info,.cart-pro-info a{color:#f50;}
+.cart-pro-price span{font-family:microsoft yahei;font-size:16px;color:#f50;}
+.cart-pro-price b{font-weight:normal;font-family:simsun;font-size:14px;}
+.cart-total{text-align:right;margin:0 20px;}
+.cart-total span{font-size:16px;font-family:microsoft yahei;color:#f50;}
+.clearing{width:125px;height:31px;border:0 none;text-align:center;color:#fff;font-size:14px;line-height:31px;background:#f50;margin:10px 0px;}
+.del{width:7px;height:7px;background:url(../../images/index-bg.gif) -210px 0 no-repeat;position:absolute;right:0px;top:7px;cursor:pointer;}
+.cart-empty{padding:25px 0;text-align:center;}

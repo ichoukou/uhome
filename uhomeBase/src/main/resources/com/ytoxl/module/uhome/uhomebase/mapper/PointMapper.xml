@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.PointMapper">
+	
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="pointId" parameterType="Point">
+		insert into point (userId,total,createTime) 
+		values (#{userId},#{total},CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from point where pointId = #{pointId}
+	</delete>
+	
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="Point">
+		update point
+		set
+			total = #{total}
+		where pointId = #{pointId}
+	</update>
+	
+	<!-- 查询会员积分 -->
+	<select id="getPointByUserId" parameterType="java.lang.Integer" resultType="Point">
+		SELECT *
+		FROM point
+		WHERE userId = #{userId}
+  	</select>
+  	
+  	<!-- 增减用户积分 -->
+  	<update id="updatePointByUserId">
+  		UPDATE point
+  		<set>
+	  		<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.Point@TYPE_MINUS">
+	  			total = total - #{num}
+	  		</if>
+	  		<if test="type==@com.ytoxl.module.uhome.uhomebase.dataobject.Point@TYPE_ADD">
+	  			total = total + #{num}
+	  		</if>
+  		</set>
+  		WHERE
+  			userId = #{userId}
+  	</update>
+  	
+  	
+
+</mapper>

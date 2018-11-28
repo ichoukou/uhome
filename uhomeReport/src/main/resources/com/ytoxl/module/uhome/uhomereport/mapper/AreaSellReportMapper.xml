@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomereport.mapper.AreaSellReportMapper">
+ 
+ 	<!-- 按区域品牌统计销售情况 -->
+  <select id="searchAreaSellByBrand" parameterType="map" resultType="AreaSellReport">
+		select temp.name,concat(region.regionProvince ,"-",region.regionCity,"-",region.regionArea) as adress,count(distinct temp.orderId) as orderNum,sum(temp.num) as itemNum from order_express express ,
+		(select item.orderId,item.num,item.productSkuId,brand.name,brand.brandId from order_item item ,order_head head ,
+		(select sku.productSkuId, br.name,br.brandId from product_sku sku,product pro,brand br where 
+			sku.productId = pro.productId and 
+			pro.brandId = br.brandId ) brand
+			where item.orderId = head.orderId and head.status in (
+			${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND},
+			${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND},
+			${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED}) 
+			and item.productSkuId = brand.productSkuId
+		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			and DATE_FORMAT(head.createTime,'%Y-%m-%d') BETWEEN   #{beginTime} and #{endTime}
+		</if>
+		) temp , 
+		(select province.regionId as provinceId ,province.regionName as regionProvince,city.regionId as cityId,city.regionName as regionCity,area.regionId as areaId,area.regionName as regionArea
+		 from region area,region city ,region province
+		where area.parentRegionId = city.regionId  and city.parentRegionId = province.regionId ) region
+		where express.orderId = temp.orderId and region.areaId =  express.regionId
+		<if test="brandId != null and brandId != ''">
+			and temp.brandId = #{brandId}
+		</if>
+		group by express.regionId , temp.name 
+		order by adress
+	 limit #{start},#{limit}
+  </select>
+  
+   <select id="searchAreaSellByBrandCount" parameterType="map" resultType="java.lang.Integer">
+	 select count(*) from (
+		select temp.name,region.regionProvince,region.regionCity,region.regionArea,count(temp.orderId) as orderNum,sum(temp.num) as itemNum from order_express express ,
+		(select item.orderId,item.num,item.productSkuId,brand.name,brand.brandId from order_item item ,order_head head ,
+		(select sku.productSkuId, br.name,br.brandId from product_sku sku,product pro,brand br where 
+			sku.productId = pro.productId and 
+			pro.brandId = br.brandId ) brand
+			where item.orderId = head.orderId and head.status in (
+			${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND},
+			${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND},
+			${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED}) 
+			and item.productSkuId = brand.productSkuId
+		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			and DATE_FORMAT(head.createTime,'%Y-%m-%d') BETWEEN   #{beginTime} and #{endTime}
+		</if>
+		) temp , 
+		(select province.regionId as provinceId ,province.regionName as regionProvince,city.regionId as cityId,city.regionName as regionCity,area.regionId as areaId,area.regionName as regionArea
+		 from region area,region city ,region province
+		where area.parentRegionId = city.regionId  and city.parentRegionId = province.regionId ) region
+		where express.orderId = temp.orderId and region.areaId =  express.regionId
+		<if test="brandId != null and brandId != ''">
+				and temp.brandId = #{brandId}
+		</if>
+		group by express.regionId , temp.name )countTbl
+  </select>
+  
+</mapper>

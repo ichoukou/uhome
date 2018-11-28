@@ -1,0 +1,222 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<style type="text/css">
+.txt-wrap{
+	width:200px;
+	margin:200px auto 0;
+}
+.animation{
+	-webkit-animation:spaceboots .8s infinite;
+	-moz-animation:spaceboots .8s infinite;
+	-o-animation:spaceboots .8s infinite;
+	-ms-animation:spaceboots .8s infinite;
+	animation:spaceboots .8s infinite;
+	text-align:center;
+	background:#f3623a;
+	color:#ffffff;
+}
+@-moz-keyframes spaceboots{
+	0%{
+		-webkit-transform:translate(0px,0);
+		-moz-transform:translate(0px,0);
+		-o-transform:translate(0px,0);
+		-ms-transform:translate(0px,0);
+		transform:translate(0px,0)
+	}30%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}45%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}50%{
+		-webkit-transform:translate(0px,3px);
+		-moz-transform:translate(0px,3px);
+		-o-transform:translate(0px,3px);
+		-ms-transform:translate(0px,3px);
+	transform:translate(0px,3px)
+	}60%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}80%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}
+}
+@-webkit-keyframes spaceboots{
+	0%{
+		-webkit-transform:translate(0px,0);
+		-moz-transform:translate(0px,0);
+		-o-transform:translate(0px,0);
+		-ms-transform:translate(0px,0);
+		transform:translate(0px,0)
+	}30%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}45%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}50%{
+		-webkit-transform:translate(0px,3px);
+		-moz-transform:translate(0px,3px);
+		-o-transform:translate(0px,3px);
+		-ms-transform:translate(0px,3px);
+		transform:translate(0px,3px)
+	}60%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}80%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}
+}
+@-o-keyframes spaceboots{
+	0%{
+		-webkit-transform:translate(0px,0);
+		-moz-transform:translate(0px,0);
+		-o-transform:translate(0px,0);
+		-ms-transform:translate(0px,0);
+		transform:translate(0px,0)
+	}30%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}45%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}50%{
+		-webkit-transform:translate(0px,3px);
+		-moz-transform:translate(0px,3px);
+		-o-transform:translate(0px,3px);
+		-ms-transform:translate(0px,3px);
+		transform:translate(0px,3px)
+	}60%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}80%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}
+}
+@-ms-keyframes spaceboots{
+	0%{
+		-webkit-transform:translate(0px,0);
+		-moz-transform:translate(0px,0);
+		-o-transform:translate(0px,0);
+		-ms-transform:translate(0px,0);
+		transform:translate(0px,0)
+	}30%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}45%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}50%{
+		-webkit-transform:translate(0px,3px);
+		-moz-transform:translate(0px,3px);
+		-o-transform:translate(0px,3px);
+		-ms-transform:translate(0px,3px);
+		transform:translate(0px,3px)
+	}60%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}80%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}
+}
+@keyframes spaceboots{
+	0%{
+		-webkit-transform:translate(0px,0);
+		-moz-transform:translate(0px,0);
+		-o-transform:translate(0px,0);
+		-ms-transform:translate(0px,0);
+		transform:translate(0px,0)
+	}30%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}45%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}50%{
+		-webkit-transform:translate(0px,3px);
+		-moz-transform:translate(0px,3px);
+		-o-transform:translate(0px,3px);
+		-ms-transform:translate(0px,3px);
+		transform:translate(0px,3px)
+	}60%{
+		-webkit-transform:translate(0px,2px);
+		-moz-transform:translate(0px,2px);
+		-o-transform:translate(0px,2px);
+		-ms-transform:translate(0px,2px);
+		transform:translate(0px,2px)
+	}80%{
+		-webkit-transform:translate(0px,1px);
+		-moz-transform:translate(0px,1px);
+		-o-transform:translate(0px,1px);
+		-ms-transform:translate(0px,1px);
+		transform:translate(0px,1px)
+	}
+}
+</style>
+</head>
+<body> 
+	<div class="txt-wrap">
+		<h2 class="animation">新龙直销接口</h2>
+	</div>
+</body>
+</html>

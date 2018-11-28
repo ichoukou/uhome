@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/orderManagement.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="body-nav arr-nav">
+    <ul class="layout">
+      <li><a class="current-chose">查看优惠券</a></li>
+      <li><a href="#">配置优惠券</a></li>
+      <li><a href="#">微信优惠券</a></li>
+    </ul>
+  </div>
+<!--start form-->
+<form class="sub-form layout">
+    <div class="m-fl">
+      <ul class="layout">
+      	<li>
+            <label>开始日期：</label>
+            <input value="" class="Wdate" type="text" readonly="">
+        </li>
+        <li>
+            <select>
+                <option>全部状态</option>
+                <option>全部状态</option>
+                <option>全部状态</option>
+                <option>全部状态</option>
+            </select>
+        </li>
+        <li>
+            <select>
+                <option>全部金额</option>
+                <option>全部金额</option>
+                <option>全部金额</option>
+                <option>全部金额</option>
+            </select>
+        </li>
+        
+        <li>
+            <select>
+                <option>激活状态</option>
+                <option>激活状态</option>
+                <option>激活状态</option>
+                <option>激活状态</option>
+            </select>
+        </li>
+        <li>
+            <input type="text"  data-default="输入品牌名称，商品名称" class="txt-Keywords input-marks" id="txtKeywords"/>
+            <input type="button" class="btn btn-danger btn-search" value="查 询"/>
+        </li>
+      </ul>
+    </div>
+</form>
+<!--end form-->
+<div class="examine body-nav layout">
+    <div class="m-fr outerpage">
+        <div class="pagination">
+            <a href="#"><span class="disable"></span></a>
+            <a href="#" ><span class="next"></span></a>
+        </div>
+    </div>
+    <div class="m-fr curr-num">
+      <label>当前显示： </label>
+      <select>
+          <option>10条</option>
+          <option>10条</option>
+          <option>10条</option>
+          <option>10条</option>
+      </select>
+      &nbsp;
+    </div>
+    <div class="m-fr">
+    	<label>
+      	共 <span class="c-red">42</span> 条 第 <span class="c-red">3/5</span> 页
+      </label>
+      &nbsp;
+    </div>
+</div>
+<!--start 下单管理table-->
+<div class="order-management">
+<table id="tab" class="tab-bor" width="100%">
+	<thead class="tab-control">
+	<tr>
+		<th width="11%">用户名</th>
+		<th width="15%">优惠券号</th>
+		<th width="9%">金额（元）</th>
+		<th width="15%">最小消费金额（元）</th>
+		<th width="14%">活动名称</th>
+		<th width="18%">有效期</th>
+		<th width="10%">激活状态</th>
+		<th width="8%">状态</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr class="list-tr">
+			<td>喜狼狼与会太阳</td>
+			<td>201301112013.55519</td>
+			<td>50</td>
+			<td>50</td>
+			<td>微信</td>
+			<td><span>2013-5-11</span>至<span>2013-6-11</span></td>
+			<td>已激活</td>
+			<td>已使用</td>
+		</tr>
+		<tr class="list-tr">
+			<td></td>
+			<td>201301112013.55519</td>
+			<td>50</td>
+			<td>50</td>
+			<td>微信</td>
+			<td><span>2013-5-11</span>至<span>2013-6-11</span></td>
+			<td>未激活</td>
+			<td>未使用</td>
+		</tr>
+		<tr class="list-tr">
+			<td>喜狼狼与会太阳</td>
+			<td>201301112013.55519</td>
+			<td>50</td>
+			<td>50</td>
+			<td>微信</td>
+			<td><span>2013-5-11</span>至<span>2013-6-11</span></td>
+			<td>已激活</td>
+			<td>未使用</td>
+		</tr>
+		<tr class="list-tr">
+			<td>喜狼狼与会太阳</td>
+			<td>201301112013.55519</td>
+			<td>50</td>
+			<td>50</td>
+			<td>微信</td>
+			<td><span>2013-5-11</span>至<span>2013-6-11</span></td>
+			<td>未激活</td>
+			<td>已过期</td>
+		</tr>
+	</tbody>
+</table>
+<div class="pagination pagination-right">
+	<div class="pagination">	
+		<span>
+		  共 <span>42</span> 条 第 <span>3/5</span> 页
+		</span>
+		<a class="prev_no" href="javascript:;"><span class="disable"></span></a>
+		<a href="#"><span class="current">1</span></a>
+		<a href="#"><span class="">2</span></a>
+		<a href="#"><span class="">3</span></a>
+		<a href="#"><span class="next"></span></a>
+		<span>到 <input type="text" class="goto-num" id="pageIndex" value="1" onfocus="this.value='';" maxlength="8">页</span>
+		<input type="button" value="转到" class="goto" id="go_page" onclick="window.location = '?orderPage.total=42&amp;orderPage.limit=20&amp;orderPage.sort=&amp;orderPage.dir=asc&amp;orderPage.currentPage=' + (document.getElementById('pageIndex').value - 1 );">
+	</div>
+</div>
+</div>
+<!--end 下单管理table-->
+</div>
+<!--end body-->
+<!--start footer-->
+<!--end footer-->
+<script>
+//广告预览
+$('.small-img').on("click", function () {
+  var html = $(".big-img").html();
+  $.dialog({
+    lock: true,
+    padding: "5px",
+    title:false,
+    content:html,
+    fixed: true,
+    cancel: true,
+    cancelValue: "关  闭"
+  });
+  $(".d-close").hide();
+});
+</script>
+</body>
+</html>

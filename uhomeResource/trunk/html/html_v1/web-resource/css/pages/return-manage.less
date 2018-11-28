@@ -1,0 +1,155 @@
+/**
+ * Created by JetBrains PhpStorm.
+ * User: admin
+ * Date: 13-3-12
+ * Time: 下午1:38
+ * To change this template use File | Settings | File Templates.
+ */
+@import '../lib/global.less';
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../lib/navigation.less';
+@import '../common.less';
+@import '../lib/crumbs.less';
+
+.li-hover i {
+    right: 25px;
+}
+//绿色tab选项卡
+.tab-gn{
+    padding:10px;
+    .tab-gnul{
+        height: 32px;
+        border-bottom: 2px solid #88cbcd;
+    }
+    .tab-gnul li{
+        float: left;
+        height: 32px;
+        line-height: 32px;
+        padding: 0 22px;
+        color: #1a1a1a;
+        font-size: 14px;
+        cursor: pointer;
+        &.cur{
+            color: #ffffff;
+            background-color: #88cbcd;
+            position: relative;
+            b{
+                position: absolute;
+                border-top: 6px solid #88cbcd;
+                border-left: 6px solid #ffffff;
+                border-right: 6px solid #ffffff;
+                line-height: 0;
+                width: 0;
+                height: 0;
+                bottom: -8px;
+                left: 45px;
+            }
+        }
+    }
+}
+/*搜索框*/
+.ret-select{
+    margin:10px 10px 0;
+    select {
+        width: 125px;
+        height:26px;
+        border: solid 1px #ddd;
+    }
+
+}
+/*分页*/
+.navigation {
+    margin: 15px 0;
+}
+
+/*申请退货*/
+.ret-btn {
+   margin:15px auto;
+    a {
+        font-size: 14px;
+        font-weight: 700;
+    }
+}
+.user-tab .ret-sales {
+    padding: 0;
+    margin: 0;
+}
+.ret-sales{
+    li {
+        border-top: solid 1px #ddd;
+
+    }
+    .bor-none {
+        border-top:none;
+    }
+}
+.ret-bgimg {
+    margin: 5px 10px;
+    border: solid 1px #ddd;
+    width: 65px;
+    height: 65px;
+    position: relative;
+    .ret-ck {
+        position: absolute;
+        right: 0;
+        bottom: 0px;
+    }
+}
+
+.ret-discrb {
+    margin:10px 15px;
+    a {
+        width: 200px;
+        display: inline-block;
+        text-decoration: underline;
+    }
+    label{
+        margin-right:20px;
+    }
+}
+/*退货记录*/
+.ret-tda a {
+    display: block;
+    text-decoration: underline;
+}
+/*弹出框*/
+.ret-altab{
+    table {
+        margin:50px 30px;
+    }
+    td {
+        padding: 5px;
+    }
+input {
+    padding: 5px;
+    width: 147px;
+    border: solid 1px #ddd;
+}
+    .td-right {
+        text-align: right;
+    }
+}
+.btn-c {
+    margin-right: 50px;
+}
+
+.ret-kdbtn {
+    padding: 0 0px 20px 90px;
+    a {
+        font-size: 14px;
+        font-weight: 700;
+    }
+}
+.return-info{
+    tr{
+        line-height:40px;
+    }
+}
+.describe-text,.text-r{width:598px;height:20px;line-height:20px;border:1px solid #ddd;padding:0 3px;}
+.text-r{width:185px;}
+.d-content{font-size:18px;color:#282828;}
+.return-submit{text-align:center;}
+.btn-r,.btn-cencal,.d-buttons .d-button{display:inline-block;width:91px;height:29px;margin:0 14px;line-height:29px;color:#fff;background:url(../../images/btn/return-btn.png) 0 0;cursor:pointer;}
+.btn-cencal{background-position:-91px 0;}
+.d-buttons .d-button{border-radius:0;border:0 none;box-shadow:none;filter:none;}

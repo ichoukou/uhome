@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.BrandMapper">
+	
+	<!--  添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="brandId" parameterType="Brand">
+		insert into brand(name,brandPinYin,englishName,founder,country,foundationTime,feature,
+						  logoImageUrl,brandImageUrl,brandBannerImageUrl,`describe`,createTime,isHotSeller) 
+		values(#{name},#{brandPinYin},#{englishName},#{founder},#{country},#{foundationTime},
+		#{feature},#{logoImageUrl},#{brandImageUrl},#{brandBannerImageUrl},#{describe},CURRENT_TIMESTAMP,#{isHotSeller})
+	</insert>
+	
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from brand where brandId=#{id}
+	</delete>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="Brand">
+		update brand b
+		set 
+			b.name=#{name},
+			b.brandPinYin=#{brandPinYin},
+			b.englishName=#{englishName},
+			b.founder=#{founder},
+			b.country=#{country},
+			<if test="foundationTime!=null">
+				b.foundationTime=#{foundationTime},
+			</if>
+			b.feature=#{feature},
+			b.logoImageUrl=#{logoImageUrl},
+			b.brandImageUrl=#{brandImageUrl},
+			b.brandBannerImageUrl = #{brandBannerImageUrl},
+			b.isHotSeller=#{isHotSeller},
+			b.updateTime=CURRENT_TIMESTAMP ,
+			b.`describe`=#{describe},
+			b.`productCategoryId`=#{productCategoryId}
+		where b.brandId=#{brandId}
+	</update>
+	
+	<!-- 根据品牌id查询品牌 
+	<select id="get" parameterType="Brand" resultType="Brand">
+		select *
+		from brand
+		where brandId=#{brandId}
+	</select>
+	-->
+	
+	<!-- 根据品牌id查询品牌 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="Brand">
+		select *
+		from brand
+		where brandId=#{brandId}
+	</select>
+	
+	<!-- 查询所有的品牌 -->
+	<select id="getBrandList" resultType="Brand">
+		select brandId,
+			   name,
+			   englishName,
+			   isHotSeller,
+			   logoImageUrl,
+			   brandImageUrl,
+			   brandBannerImageUrl,
+			   createTime,
+			   updateTime,
+			   brandPinYin,
+			   isForbidden
+		from brand
+		where isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+		 
+	</select>
+	
+	<!-- 查询所有的品牌按品牌排序 -->
+	<select id="getBrandListBySort" resultType="Brand">
+		select brand.*   from brand brand
+				 
+		left join brand_sort brandSort on brand.brandId=brandSort.brandId and brandSort.type=#{type}
+				
+		where  brand.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+
+		order by brandSort.sort is null , brandSort.sort  , brand.createTime desc
+		
+	</select>
+	
+	<!--  根据卖家的id查询其所有的品牌 -->
+	<select id="getBrandListBySeller" parameterType="java.lang.Integer" resultType="Brand">
+		select DISTINCT b.* 
+		from brand b left join seller_brand sb on sb.brandId=b.brandId
+		where sb.sellerId=#{sellerId}
+	</select>
+	
+	<!-- 根据品牌的排序和所要的个数返回品牌列表 -->
+	<select id="getBrandListByRank" parameterType="java.lang.Integer" resultType="Brand">
+		select *
+		from brand 
+		order by rank asc
+		limit #{num}
+	</select>
+	
+	<!-- 根据品怕的名字查询品牌 -->
+	<select id="searchBrandByName" parameterType="java.lang.String" resultType="Brand">
+		select *
+		from brand
+		where name=#{name}
+	</select>
+	
+	<!-- 更加品牌id找到那个品牌 -->
+	<select id="getBrandByBrandId" parameterType="java.lang.Integer" resultType="Brand">
+		select *
+		from brand
+		where brandId=#{brandId}
+	</select>
+	
+	<!-- 更加品牌id找到那个品牌 不查详细字段-->
+	<select id="getBrandById" parameterType="java.lang.Integer" resultType="Brand">
+		select brandId,
+			   productCategoryId,
+			   name,
+			   englishName,
+			   brandPinYin,
+			   founder,
+			   country,
+			   foundationTime,
+			   feature,
+			   isHotSeller,
+			   logoImageUrl,
+			   brandImageUrl,
+			   brandBannerImageUrl,
+			   createTime,
+			   updateTime,
+			   rank			   
+		from brand
+		where brandId=#{brandId}
+	</select>
+	
+	<!--  热卖品牌 按照更新时间排期倒序 最多多少个 -->
+	<select id="getHotBrands" resultType="Brand">
+		select brandId,
+			   productCategoryId,
+			   name,
+			   englishName,
+			   isHotSeller,
+			   logoImageUrl,
+			   brandImageUrl,
+			   brandBannerImageUrl,
+			   createTime,
+			   updateTime,
+			   rank			   
+		from brand 
+		where isHotSeller=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISHOTSELLER_HOT_SALE}
+		and isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+		order by updateTime desc
+		limit #{maxNum}
+	</select>
+	
+	<!-- 品牌预约 按照更新时间排期倒序 最多多少个 -->
+	<select id="getlistSubscribeBrands" resultType="Brand">
+		select * 
+		from brand 
+		order by createTime desc
+		limit #{maxNum}
+	</select>
+	
+	<!-- 查询卖家可售品牌 -->
+	<select id="listBrandsBySellerId" parameterType="java.lang.Integer" resultType="Brand">
+		SELECT a.brandId, a.`name`, a.brandPinYin
+			FROM brand a
+		WHERE a.brandId IN (SELECT b.brandId 
+								FROM seller_brand b 
+							WHERE b.sellerId = #{sellerId})
+		and a.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+				
+	</select>
+	
+	<!-- 根据brandPinYin来查询品牌 -->
+	<select id="listBrandsByBrandPinYin" parameterType="Brand" resultType="Brand">
+		SELECT brandId, name, englishName
+			FROM brand 
+		WHERE isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+			<if test="brandPinYin != null and brandPinYin != ''">
+				and brandPinYin like CONCAT('%','${brandPinYin}','%' )
+			</if>
+			<if test="brandPinYin == null">
+				and brandPinYin IS NULL
+			</if>
+	</select>
+	
+	<!-- 管理员查询pinpai -->
+  	<select id="searchBrands" parameterType="map" resultType="Brand">
+  		select a.*
+ 		FROM  brand  a  
+        where 1=1
+			<if test="name!=null and name!=''">
+				and a.name  like concat('%',#{name},'%') OR a.englishName like concat('%',#{name},'%')
+			</if>
+			<if test="sort != null and sort != ''">
+				ORDER BY ${sort}	
+			</if>	
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+	  	LIMIT #{start}, #{limit}
+  	</select>
+  	<!-- 管理员查询pinpaitotal-->
+  	<select id="searchBrandsTotal" parameterType="map" resultType="java.lang.Integer">
+  		select count(*)
+ 		FROM  brand  a  
+        where 1=1
+			<if test="name!=null and name!=''">
+				and a.name  like concat('%',#{name},'%') OR a.englishName like concat('%',#{name},'%')
+			</if>
+			<if test="sort != null and sort != ''">
+				ORDER BY ${sort}	
+			</if>	
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+  	</select>
+  	
+  	<!-- 查询所有唯一的品牌 -->
+	<select id="getDistinctList" resultType="Brand">
+	  select 
+	  distinct  name ,brandId from brand 
+	</select>
+	
+	<!-- 品牌唯一性 -->
+	<select id="getBrandByName" parameterType="Brand" resultType="Brand">
+		select *
+		from brand
+		where 
+		<if test="name !='' and englishName == '' ">
+			name=#{name}
+		</if>
+		<if test="name == '' and englishName != '' ">
+			englishName=#{englishName}
+		</if> 
+		<if test="brandId!=null">
+			and brandId !=#{brandId}
+		</if>
+	</select>
+	<update id="updateIsForbbdenByBrandId">
+		update brand
+		set 
+		isForbidden=#{isForbidden}
+		where brandId=#{brandId}
+	</update>
+	
+	<!-- 查询所有排序的品牌 -->
+	<select id="getBrandListOrderBySort" parameterType="java.lang.Integer" resultType="Brand">
+		select b.brandId,
+			   b.logoImageUrl,
+			   b.`name`,
+			   b.englishName,
+			   b.brandImageUrl,
+			   b.brandBannerImageUrl
+	     from  brand b right join  brand_sort bs 
+	     on b.brandId=bs.brandId 
+	     where  b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN} and bs.type=#{type}
+	     order by bs.sort
+	</select>
+</mapper>

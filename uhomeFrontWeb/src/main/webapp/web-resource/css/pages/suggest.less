@@ -1,0 +1,55 @@
+@charset "utf-8";
+/**
+ * Created by JetBrains PhpStorm.
+ * User: jVan
+ * Date: 13-3-4
+ * Time: 下午4:50
+ * Description: 
+ */
+@import '../lib/global.less';
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../lib/crumbs.less';
+
+.suggest{
+  margin-top:10px;
+  .suggest-title{
+    line-height:28px;
+    padding:0 7px 0 16px;
+    border-bottom:4px solid #009a78;
+    b{
+     font-size:14px;
+     color:#009a78;
+    }
+  }
+  table{
+    margin-top:30px;
+  }
+  td{
+    padding: 10px 0;
+    .input-txt,.input-img,textarea{
+      border:1px solid #009a78;padding:0 3px;
+      padding: 3px 5px;
+    }
+    .input-txt{
+      width: 280px;
+    }
+    .input-img{
+      width:60px;
+    }
+    textarea{
+      width: 720px;
+      border:1px solid #009a78;padding:3px;
+      width:645px;
+      height:260px;
+    }
+    .btn-c{
+      font-family:"黑体";
+      font-size:16px;
+    }
+    .c-red{
+      color:#e60012;
+    }
+  }
+  .onShow, .onFocus, .onError, .onCorrect{position:static;margin:0;}
+}

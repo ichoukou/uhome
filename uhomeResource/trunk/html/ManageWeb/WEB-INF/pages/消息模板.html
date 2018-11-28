@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>消息模板</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/message.css" rel="stylesheet" />
+    <link href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+</head>
+<body>
+	<input type="button" class="m-btn J-click" value="弹出" />
+<div class="m-hide">
+	<div class="msg">
+		<!--<div class="msg-title">
+			<span>客服事件管理 - 13091300008</span>
+			<a class="close" href="javascript:;">X</a>
+		</div>-->
+		<div class="msg-main">
+			<ul>
+				<li>
+					<p><b>翁小龙</b><span>2013/9/16 14:37:55</span></p>
+					<p>买家说心情不好</p>
+				</li>
+				<li>
+					<p><b>葛诗其</b><span>2013/9/16 14:39:24</span></p>
+					<p>买家说心情好点了</p>
+				</li>
+				<li>
+					<p><b>翁小龙</b><span>2013/9/16 14:37:55</span></p>
+					<p>买家说你能不能多写点，看看记录多了会不会出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题</p>
+				</li>
+				<li>
+					<p><b>翁小龙</b><span>2013/9/16 14:37:55</span></p>
+					<p>买家说你能不能多写点，看看记录多了会不会出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题</p>
+				</li>
+				<li>
+					<p><b>翁小龙</b><span>2013/9/16 14:37:55</span></p>
+					<p>买家说你能不能多写点，看看记录多了会不会出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题，出问题</p>
+				</li>
+				<li>
+					<p><b>葛诗其</b><span>2013/9/18 10:49:07</span></p>
+					<p>sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</p>
+				</li>
+			</ul>
+		</div>
+		<div class="msg-foot">
+			<textarea class="J-txt"></textarea>
+			<a class="save-msg J-save" href="javascript:void(0);">记 录</a>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$(".J-click").on("click",function(){
+		var orderNum = "13091600001";
+		var html = $(".msg").get(0);
+		$.dialog({
+	    lock: true,
+	    padding: "0px 5px",
+	    title:"客服事件管理 - " + orderNum,
+	    content:html,
+	    fixed: false,
+	    cancel:function(){
+	    	var temp = $(".J-txt").val();
+	    	if(temp!=""){
+	    		var r = confirm("离开之后您输入的信息将会丢失，确定离开吗？");
+	    		if(!r){
+	    			return false;
+	    		}else{
+	    			$(".J-txt").val("");
+	    		}
+	    	}
+	    },
+	    ok:false
+	  });
+	  //滚动条到最底部，显示最新记录的信息
+	  scrollBottom();
+		//隐藏取消按钮
+	  $(".d-button").hide();
+	});
+	$(".J-save").on("click",function(){
+		var userName = "翁小龙",
+				myDate = new Date();
+		myDate = ChangeTimeToString(myDate);
+		var temp = $(".J-txt").val();
+    	if(temp!=""){
+    		var temp_html = "<li><p><b>"+userName+"</b><span>"+myDate+"</span></p><p>"+temp+"</p></li>";
+    		$(".msg-main ul").append(temp_html);
+    		//保存信息之后清空输入框
+    		$(".J-txt").val("");
+    		//滚动条到最底部，显示最新记录的信息
+				scrollBottom();
+    	}
+	});
+});
+function ChangeTimeToString(DateIn){
+	var Year =Month = Day = Hour =Minute = 0,
+			CurrentDate="";
+	//初始化时间
+	Year=DateIn.getFullYear();
+	Month=DateIn.getMonth()+1;
+	Day=DateIn.getDate();
+	Hour=DateIn.getHours();
+	Minute=DateIn.getMinutes();
+	Seconds=DateIn.getSeconds()
+	CurrentDate=Year+"/";
+	/*if(Month>=10){
+		CurrentDate=CurrentDate+Month+"/";
+	}
+	else{
+		CurrentDate=CurrentDate+"0"+Month+"/";
+	}*/
+	CurrentDate=CurrentDate+Month+"/";
+	if(Day>=10){
+		CurrentDate=CurrentDate+Day;
+	}
+	else{
+		CurrentDate=CurrentDate+"0"+Day;
+	}
+	if(Hour>=10){
+		CurrentDate=CurrentDate+" "+Hour;
+	}
+	else{
+		CurrentDate=CurrentDate+"0"+Hour;
+	}
+	if(Minute >=10){
+		CurrentDate = CurrentDate +":"+Minute;
+	}
+	else{
+		CurrentDate =CurrentDate+":0"+ Minute;
+	}
+	if(Seconds>=10){
+		CurrentDate = CurrentDate +":"+Seconds;
+	}
+	else{
+		CurrentDate =CurrentDate+":0"+ Seconds;
+	}
+	return CurrentDate;
+}
+
+//滚动条到底部，显示最新消息
+var scrollBottom = function(){
+  var $li = $(".msg-main li:last"),
+  		thisTop =0;
+  thisTop = $li.position().top + $(".msg-main").scrollTop();
+	$(".msg-main").scrollTop(thisTop);
+	console.log(thisTop+"   "+$li.find("span").text());
+}
+</script>
+</body>
+</html>

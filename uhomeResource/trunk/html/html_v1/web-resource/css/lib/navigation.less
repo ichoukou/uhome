@@ -1,0 +1,42 @@
+@charset "utf-8";
+/**
+ * User: jVan
+ * Date: 13-2-15 下午7:40
+ * Description: navigation
+ **/
+
+.navigation {
+  text-align: right;
+  span{
+    display: inline-block;
+    &.cur{
+      a{
+        border: 1px solid #f96619;
+        background-color: #f96619;
+        color: #ffffff;
+      }
+    }
+    &.prev{
+      a{
+        padding-left: 15px;
+        background: url("../../images/navigation/navigation.gif") no-repeat;
+        background-position: 10% 8px;
+      }
+    }
+    &.next{
+      a{
+        padding-right: 15px;
+        background: url("../../images/navigation/navigation.gif") no-repeat;
+        background-position: 90% -6px;
+      }
+    }
+  }
+  a{
+    display: inline-block;
+    border: 1px solid #d2d2d2;
+    padding: 2px 5px;
+    margin: 0 6px 0 0;
+    min-width: 12px;
+    text-align: center;
+  }
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.PlanProductMapper">
+	
+	<!-- 添加一条数据 -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="planProductId" parameterType="PlanProduct">
+		insert into plan_product (productId, productSkuId, planId, rank) 
+		values (#{productId}, #{productSkuId}, #{planId}, #{rank})
+	</insert>
+	
+	<!-- 根据planId删除排期商品数据 -->
+	<delete id="deletePlanProductByPlanId" parameterType="java.lang.Integer">
+		delete from plan_product where planId = #{planId}
+	</delete>
+	
+	<!-- 修改排期商品权重 -->
+	<update id="updatePlanProductRank" parameterType="PlanProduct">
+		UPDATE plan_product SET rank = #{rank}
+		WHERE planProductId = #{planProductId}
+	</update>
+	
+	<select id="listPlanProuductsByPlanIds" resultType="PlanProduct">
+		SELECT a.planId, a.productId 
+		FROM plan_product a INNER JOIN product b ON a.productId = b.productId
+		WHERE b.status IN (
+			${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND},
+			${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS})
+			AND a.planId IN 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 根据planId查询排期商品 -->
+	<select id="listPlanProductsByPlanId" parameterType="java.lang.Integer" resultType="PlanProduct">
+		SELECT t1.*, COUNT(t2.orderId) AS `product.salesNum`
+			FROM(SELECT  a.*,
+						b.name AS `product.name`,
+						b.imageUrls AS `product.imageUrls`,
+						b.status AS `product.status`,
+						SUM(c.inventory) AS `product.saleInventoryCount`
+					FROM plan_product a 
+				INNER JOIN product b ON a.productId = b.productId 
+				LEFT JOIN product_sku c ON a.productId = c.productId
+					AND c.isDelete = ${@com.ytoxl.module.uhome.uhomebase.dataobject.ProductSku@ISDELETE_NO}
+				WHERE a.planId = #{planId}
+					AND b.status IN (${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_PASS},
+									${@com.ytoxl.module.uhome.uhomebase.dataobject.Product@STATUS_CHECK_PEND})
+				GROUP BY a.productId) t1
+		LEFT JOIN (SELECT DISTINCT a.orderId, b.productId
+						FROM  order_item a, product_sku b
+					WHERE a.productSkuId = b.productSkuId) t2 ON t1.productId = t2.productId
+		GROUP BY t1.productId
+	</select>
+	
+</mapper>

@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.UserInfoMapper">
+
+  <insert id="add" parameterType="User" keyProperty="userId" useGeneratedKeys="true">
+		insert into user(
+					username,
+					password,  
+					tel,  
+					email,
+					status,
+					createByUserId,
+					createTime,
+					operateName ) 
+				values ( 
+					#{username},  
+					#{password},  
+					#{tel},  
+					#{email},
+					#{status},
+					#{createByUserId},
+					CURRENT_TIMESTAMP,
+					#{operateName}
+				)                    
+  </insert>
+  <!-- 增加商家的时候判断邮箱是否重复 -->
+  <select id="validateEmailIsRepate" parameterType="java.lang.String" resultType="User" >
+      SELECT * from user us
+      where us.email = #{email}
+  </select>
+  <insert id="addSeller" parameterType="Seller" keyProperty="sellerId" useGeneratedKeys="true">
+		insert into seller(
+					userId,
+				    contactName,    
+				    tel,            
+				    mobile,          
+				    qq, 
+				    email,           
+				    fax,            
+				    companyName,     
+				    companyType,    
+				    supplierType,    
+				    registerDate,      
+				    registerCapital,   
+				    paidUpCapital,     
+				    businessScope,         
+				    companyWebSite,        
+				    shiperAddress,          
+				    shiperRegionId,        
+				    receiverAddress,       
+				    receiverRegionId,      
+				    companyCorporation, 
+				    licenseImageUrl,     
+				    taxNo,               
+				    companyCode,         
+				    companyNo,           
+				    alipayNo,            
+				    alipayName,          
+				    bankName,             
+				    bankAccount,           
+				    companyAddress,       
+				    companyRegionId,      
+				    remark, 
+				    createTime
+			    ) 
+				values ( 
+					#{userId},
+				    #{contactName},    
+				    #{tel},            
+				    #{mobile},          
+				    #{qq}, 
+				    #{email},           
+				    #{fax},            
+				    #{companyName},     
+				    #{companyType},    
+				    #{supplierType},    
+				    #{registerDate},      
+				    #{registerCapital},   
+				    #{paidUpCapital},     
+				    #{businessScope},         
+				    #{companyWebSite},        
+				    #{shiperAddress},          
+				    #{shiperRegionId},        
+				    #{receiverAddress},       
+				    #{receiverRegionId},      
+				    #{companyCorporation}, 
+				    #{licenseImageUrl},     
+				    #{taxNo},               
+				    #{companyCode},         
+				    #{companyNo},           
+				    #{alipayNo},            
+				    #{alipayName},          
+				    #{bankName},             
+				    #{bankAccount},           
+				    #{companyAddress},       
+				    #{companyRegionId},      
+				    #{remark}, 
+					CURRENT_TIMESTAMP
+				)                    
+  </insert>
+  <insert id="addBuyer" parameterType="UserInfo" keyProperty="userInfoId" useGeneratedKeys="true">
+		insert into user_info(
+					userId ,
+					name,  
+					mobile,  
+					telephone,
+					email,
+					gender,
+					birthday,
+					friendIds,
+					createTime) 
+				values ( 
+					#{userId},  
+					#{name},  
+					#{mobile},  
+					#{telephone},
+					#{email},
+					#{gender},
+					#{birthday},
+					#{friendIds},
+					CURRENT_TIMESTAMP
+				)                    
+  </insert>
+  
+   <!-- 更新用户 -->
+  <update id="update" parameterType="User">
+		update user 
+		<set>	
+			<if test="password!=null and password!=''">
+				password=#{password},
+			</if>
+			<if test="tel!=null and tel!=''">
+				tel=#{tel},
+			</if>
+			<if test="email!=null and email!=''">
+				email=#{email},
+			</if>
+			<if test="status!=null and status!=''">
+				status=#{status},
+			</if>
+			<if test="lastLoginTime!=null and lastLoginTime!=''">
+				lastLoginTime=#{lastLoginTime},
+			</if>
+			<if test="operateName!=null and operateName!=''">
+				operateName=#{operateName},
+			</if>
+			updateTime=CURRENT_TIMESTAMP
+		</set>
+		where  userId = #{userId}
+  </update>
+  
+   <!-- 重置用户密码 -->
+  <update id="resetPassword" parameterType="User">
+		update user set	password=#{password}, updateTime=CURRENT_TIMESTAMP
+		where  userId = #{userId}
+  </update>
+  
+     <!-- 更新卖家信息 -->
+  <update id="updateSeller" parameterType="Seller">
+		update seller 
+			set	contactName=#{contactName},
+				tel=#{tel},
+				mobile=#{mobile},          
+			    qq=#{qq}, 
+			    email=#{email},           
+			    fax=#{fax},            
+			    companyName=#{companyName},     
+			    companyType=#{companyType},    
+			    supplierType=#{supplierType}, 
+			    registerDate=IFNULL(#{registerDate},'0000-00-00 00:00:00'),
+			    registerCapital=#{registerCapital},   
+			    paidUpCapital=#{paidUpCapital},     
+			    businessScope=#{businessScope},         
+			    companyWebSite=#{companyWebSite},        
+			    shiperAddress=#{shiperAddress},          
+			    shiperRegionId=#{shiperRegionId},        
+			    receiverAddress=#{receiverAddress},       
+			    receiverRegionId=#{receiverRegionId},      
+			    companyCorporation=#{companyCorporation}, 
+			    licenseImageUrl=#{licenseImageUrl},     
+			    taxNo=#{taxNo},               
+			    companyCode=#{companyCode},         
+			    companyNo=#{companyNo},           
+			    alipayNo=#{alipayNo},            
+			    alipayName=#{alipayName},          
+			    bankName=#{bankName},             
+			    bankAccount=#{bankAccount},           
+			    companyAddress=#{companyAddress},       
+			    companyRegionId=#{companyRegionId},      
+			    remark=#{remark}, 	
+				updateTime=CURRENT_TIMESTAMP
+		where  sellerId = #{sellerId}
+  </update>
+  
+  <!-- 更新用户信息 -->
+  <update id="updateBuyer" parameterType="UserInfo">
+		update user_info
+		<set>	
+			<if test="name!=null and name!=''">
+				name=#{name},
+			</if>
+			<if test="mobile!=null and mobile!=''">
+				mobile=#{mobile},
+			</if>
+			<if test="telephone!=null and telephone!=''">
+				telephone=#{telephone},
+			</if>
+			<if test="email!=null and email!=''">
+				email=#{email},
+			</if>
+			<if test="gender!=null and gender!=''">
+				gender=#{gender},
+			</if>
+			<if test="birthday!=null and birthday!=''">
+				birthday=#{birthday},
+			</if>
+			<if test="friendIds!=null and friendIds!=''">
+				friendIds=#{friendIds},
+			</if>
+			updateTime=CURRENT_TIMESTAMP
+		</set>
+		where  userInfoId = #{userInfoId}
+  </update>
+  
+  <!-- 根据id查询商家信息 -->
+  <select id="getSellerById" parameterType="Integer" resultType="Seller">
+     SELECT  seller.sellerId,
+        		seller.userId,
+			    contactName,    
+			    seller.tel,            
+			    mobile,          
+			    qq, 
+			    seller.email,           
+			    fax,            
+			    companyName,     
+			    companyType,    
+			    supplierType,    
+			    registerDate,      
+			    registerCapital,   
+			    paidUpCapital,     
+			    businessScope,         
+			    companyWebSite,        
+			    shiperAddress,          
+			    shiperRegionId,        
+			    receiverAddress,       
+			    receiverRegionId,      
+			    companyCorporation, 
+			    licenseImageUrl,     
+			    taxNo,               
+			    companyCode,         
+			    companyNo,           
+			    alipayNo,            
+			    alipayName,          
+			    bankName,             
+			    bankAccount,           
+			    companyAddress,       
+			    companyRegionId,      
+			    remark, 
+				seller.createTime as createTime,
+				seller.updateTime as updateTime,
+				u.userId as `user.userId`,
+				u.username as `user.username`,
+				u.password as `user.password`,  
+				u.tel as `user.tel`,  
+				u.email as `user.email`,
+				u.status as `user.status`,
+				u.createByUserId as `user.createByUserId`,
+				u.createTime as `user.createTime`,
+				u.updateTime as `user.updateTime`,
+				u.lastLoginTime as `user.lastLoginTime`,
+				u.operateName as `user.operateName` ,
+				group_concat(b.name) as brandNames
+		FROM seller seller inner join user u on  seller.userId=u.userId
+		left join seller_brand sb on seller.sellerId=sb.sellerId  
+		left join brand b on sb.brandId=b.brandId and b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+		WHERE seller.sellerId=#{sellerId}
+  </select>
+  <!-- 后台的卖家 -->
+    <select id="getSellerBySellerUserId" parameterType="Integer" resultType="Seller">
+     SELECT  seller.sellerId,
+        		seller.userId,
+			    contactName,    
+			    seller.tel,            
+			    mobile,          
+			    qq, 
+			    seller.email,           
+			    fax,            
+			    companyName,     
+			    companyType,    
+			    supplierType,    
+			    registerDate,      
+			    registerCapital,   
+			    paidUpCapital,     
+			    businessScope,         
+			    companyWebSite,        
+			    shiperAddress,          
+			    shiperRegionId,        
+			    receiverAddress,       
+			    receiverRegionId,      
+			    companyCorporation, 
+			    licenseImageUrl,     
+			    taxNo,               
+			    companyCode,         
+			    companyNo,           
+			    alipayNo,            
+			    alipayName,          
+			    bankName,             
+			    bankAccount,           
+			    companyAddress,       
+			    companyRegionId,      
+			    remark, 
+				seller.createTime as createTime,
+				seller.updateTime as updateTime,
+				u.userId as `user.userId`,
+				u.username as `user.username`,
+				u.password as `user.password`,  
+				u.tel as `user.tel`,  
+				u.email as `user.email`,
+				u.status as `user.status`,
+				u.createByUserId as `user.createByUserId`,
+				u.createTime as `user.createTime`,
+				u.updateTime as `user.updateTime`,
+				u.lastLoginTime as `user.lastLoginTime`,
+				u.operateName as `user.operateName` ,
+				group_concat(b.name) as brandNames
+		FROM seller seller inner join user u on  seller.userId=u.userId
+		left join seller_brand sb on seller.sellerId=sb.sellerId  
+		left join brand b on sb.brandId=b.brandId and b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+		WHERE seller.userId=#{userId}
+  </select>
+  
+  <!-- 根据id查询买家信息 -->
+  <select id="getBuyerById" parameterType="Integer" resultType="UserInfo">
+        SELECT  userInfoId,
+        		userInfo.userId as userId,
+				name,  
+				mobile,  
+				telephone,
+				email,
+				gender,
+				birthday,
+				friendIds,
+				userInfo.createTime as createTime,
+				userInfo.updateTime as updateTime,
+				u.userId as `user.userId`,
+				u.username as `user.username`,
+				u.password as `user.password`,  
+				u.tel as `user.tel`,  
+				u.email as `user.email`,
+				u.status as `user.status`,
+				u.createByUserId as `user.createByUserId`,
+				u.createTime as `user.createTime`,
+				u.updateTime as `user.updateTime`,
+				u.lastLoginTime as `user.lastLoginTime`,
+				u.operateName as `user.operateName`
+		FROM user_info userInfo, user u 
+		WHERE userInfo.userId=u.userId and u.userId=#{userId}
+  </select>
+   
+   <!-- 商家查询条件 -->
+   <sql id="searchSellersCondition">
+		<where>
+			<if test="name!=null and name!=''">
+				u.username like CONCAT('%','${name}','%' )
+				or seller.companyName like CONCAT('%','${name}','%' )
+				or seller.contactName like CONCAT('%','${name}','%' )
+				or seller.companyCorporation like CONCAT('%','${name}','%' )
+				or seller.alipayNo like CONCAT('%','${name}','%' )
+				or seller.tel like CONCAT('%','${name}','%' )
+				or seller.mobile like CONCAT('%','${name}','%' )
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据分页查询商家-->
+	<select id="searchSellers" parameterType="map" resultType="Seller">
+		select
+				seller.sellerId,
+				seller.userId as userId,
+				contactName,  
+				companyName,  
+				companyCorporation,
+				alipayNo,
+				mobile,
+				seller.tel,
+				seller.createTime as createTime,
+				seller.updateTime as updateTime,
+				u.userId as `user.userId`,
+				u.username as `user.username`,
+				u.status as `user.status`,
+				u.createByUserId as `user.createByUserId`,
+				group_concat(b.name) as brandNames
+		FROM seller seller inner join user u on seller.userId=u.userId 
+		left join seller_brand sb on seller.sellerId=sb.sellerId  
+		left join brand b on sb.brandId=b.brandId and b.isForbidden=${@com.ytoxl.module.uhome.uhomebase.dataobject.Brand@ISFORBIDDEN_NO_FORBIDDEN}
+		<include refid="searchSellersCondition" />
+		group by seller.sellerId
+		order by seller.createTime desc
+		limit #{start},#{limit}
+	</select>
+
+	<!-- 根据分页查询商家数量 -->
+	<select id="searchSellersCount" parameterType="map" resultType="Integer">
+		select
+		count(seller.sellerId)
+		FROM seller seller inner join user u on seller.userId=u.userId 
+		<include refid="searchSellersCondition" />
+	</select>
+	
+	<!-- 买家分页查询条件 -->
+	<sql id="searchBuyersCondition">
+		<where>
+			u.createByUserId=0 
+			<if test="startTime!=null and startTime!=''">
+				and u.createTime &gt;=date('${startTime}')
+			</if>
+			<if test="endTime!=null and endTime!=''">
+				and u.createTime &lt;=DATE_ADD(  date('${endTime}'),INTERVAL "1 1" DAY)
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 根据分页查询买家 -->
+	<select id="searchBuyers" parameterType="map" resultType="UserInfo">
+		select
+				userInfoId,
+				userInfo.userId as userId,
+				name,  
+				mobile,  
+				telephone,
+				userInfo.email as email,
+				gender,
+				birthday,
+				friendIds,
+				regionId,
+				address,
+				userInfo.createTime as createTime,
+				userInfo.updateTime as updateTime,
+				u.userId as `user.userId`,
+				u.username as `user.username`,
+				u.password as `user.password`,  
+				u.tel as `user.tel`,  
+				u.email as `user.email`,
+				u.status as `user.status`,
+				u.createByUserId as `user.createByUserId`,
+				u.createTime as `user.createTime`,
+				u.updateTime as `user.updateTime`,
+				u.operateName as `user.operateName`, 
+				max(u.lastLoginTime) as `user.lastLoginTime`,
+				IFNULL(seles.num, 0) as orderCount,
+				IFNULL(seles.total, 0) - IFNULL(pay.total, 0) as totalPrice,
+				seles.payTime as payTime,
+				p.total as `point.total`
+		FROM user_info userInfo inner join user u on userInfo.userId=u.userId
+			left join point p on u.userId=p.userId
+			left join (
+				SELECT
+					order_head.userId,
+					IFNULL(COUNT(order_head.userId),0) num,
+					IFNULL(SUM(order_payment.paymentAmount),0) total,
+					MAX(order_payment.payTime) payTime
+				FROM order_head
+				INNER JOIN order_payment ON order_head.orderId = order_payment.orderId
+				where order_payment.`status` is not null 
+					AND order_payment.documentType = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_PAYED}
+				GROUP BY order_head.userId
+			) seles on seles.userId = u.userId 
+			left join  (
+				SELECT
+					a.userId,
+					IFNULL(SUM(c.paymentAmount), 0) total
+				FROM order_head a
+				LEFT JOIN order_return b ON a.orderId = b.orderId
+				INNER JOIN order_return_payment c ON b.orderReturnId = c.orderReturnId
+				where c.`status` = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+				GROUP BY a.userId
+			) pay on pay.userId=u.userId
+		<include refid="searchBuyersCondition" />
+		group by userInfoId 
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+				</if>
+		</if>
+		<if test="sort == null or sort == ''">
+			order by u.createTime desc
+		</if>
+		limit #{start},#{limit}
+	</select>
+
+	<!-- 根据分页查询买家数量 -->
+	<select id="searchBuyersCount" parameterType="map" resultType="Integer">
+		select
+		count(userInfoId)
+		FROM user_info userInfo inner join user u on userInfo.userId=u.userId
+		left join point p on u.userId=p.userId
+		<include refid="searchBuyersCondition" />
+	</select>
+	
+	<!-- 查询用户订阅的品牌名称 -->
+	<select id="listSubBrands" parameterType="java.lang.Integer" resultType="string">
+		SELECT GROUP_CONCAT(brand.name) brands
+				FROM brand brand INNER JOIN mail_subscribe ms ON brand.brandId=ms.brandId
+		    INNER JOIN user u on ms.email=u.email
+		WHERE u.userId=#{userId}
+	</select>
+	
+	<!-- 根据品牌ID查询卖这个品牌卖家 -->
+	<select id="listSellersByBrandId" parameterType="java.lang.Integer" resultType="Seller">
+		SELECT 	a.sellerId,
+				a.contactName
+			FROM seller a, seller_brand b, user c
+		WHERE a.sellerId = b.sellerId 
+			AND b.brandId = #{brandId}
+			AND a.userId = c.userId
+			AND c.status = ${@com.ytoxl.module.user.dataobject.User@STATUS_ABLE}
+	</select>
+	
+	<!-- 根据userId查询sellerId -->
+	<select id="getSellerIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT sellerId
+		FROM seller
+		WHERE userId = (select createByUserId from `user` where userId =#{userId}) or userId = #{userId}
+	</select>
+	
+	<!-- 查询需要导出的商家 -->
+  <select id="listExportSellers" resultType="SellerTbl">
+  		select companyName, contactName, mobile, tel, email, alipayNo, bankAccount
+  		from seller
+  </select>
+  
+  <select id="getUserByUserId" parameterType="java.lang.Integer" resultType="UserInfo">
+		SELECT *
+		FROM user_info
+		WHERE userId = #{userId}
+	</select>
+	 
+  <update id="updateUser" parameterType="UserInfo">
+		update user_info
+		<set>	
+		name=#{name},mobile=#{mobile},
+		telephone=#{telephone},email=#{email},
+		address=#{address},gender=#{gender},
+		gender=#{gender},birthday=#{birthday},
+		regionId=#{regionId},
+		<!--  	<if test="name!=null and name!=''">
+				name=#{name},
+			</if>
+			<if test="mobile!=null and mobile!=''">
+				mobile=#{mobile},
+			</if>
+			<if test="telephone!=null and telephone!=''">
+				telephone=#{telephone},
+			</if>
+			<if test="email!=null and email!=''">
+				email=#{email},
+			</if>
+			<if test="address!=null and address!=''">
+				address=#{address},
+			</if>-->
+			<!--0 != '' false  -->
+			<!-- <if test="gender!=null and gender!='' or gender==0">
+				gender=#{gender},
+			</if>
+			<if test="birthday!=null and birthday!=''">
+				birthday=#{birthday},
+			</if>
+			<if test="regionId!=null and regionId!=''">
+				regionId=#{regionId},
+			</if> -->
+			updateTime=CURRENT_TIMESTAMP
+		</set>
+		where  userInfoId = #{userInfoId}
+  </update>
+  <!-- 更新用户信息 -->
+  <update id="updateUserRegister" parameterType="UserInfo">
+		update user
+		<set>	
+		tel=#{telephone},
+		operateName=#{name},
+		email=#{email},
+			<!-- <if test="telephone!=null and telephone!=''">
+				tel=#{telephone},
+			</if>
+			<if test="name!=null and name!=''">
+				operateName=#{name},
+			</if>
+			<if test="email!=null and email!=''">
+				email=#{email},
+			</if> -->
+			updateTime=CURRENT_TIMESTAMP
+		</set>
+		where  userId = #{userId}
+  </update>
+   <!--增加用户信息 -->
+    <insert id="addUserInfo" parameterType="User" >
+		insert into user_info(
+					email,
+					userId,
+					createTime,
+					updateTime,
+					telephone ) 
+				values ( 
+					#{email},  
+					#{userId},  
+					CURRENT_TIMESTAMP, 
+					CURRENT_TIMESTAMP, 
+					#{tel}
+				)                    
+  </insert>
+  <!-- 删除用户选择的品牌 -->
+	<delete id="delSellerBrand" parameterType="Seller">
+		delete from seller_brand 
+		where sellerId=#{sellerId}
+		<if test="brandIds!=null and brandIds!='' ">
+			and brandId not in(#{brandIds})
+		</if>
+	</delete>
+	
+	<!-- 查询用户是否添加该品牌 -->
+	<select id="listBrandsCount" parameterType="Seller" resultType="Integer">
+		SELECT count(brandId)
+			FROM seller_brand 
+		WHERE sellerId=#{sellerId} and  brandId=#{brandId}
+	</select>
+	
+	<insert id="addSellerBrand" parameterType="Seller" keyProperty="sellerBrandId" useGeneratedKeys="true">
+		insert into seller_brand (brandId,userId) values (${brandId},#{userId})
+	</insert>
+	
+		<!-- 查询需要所有商家 -->
+	<select id="getSellerList" resultType="Seller">
+	  		select *
+	  		from seller
+	</select>
+	
+	<!-- 根据用户id查找会员信息 -->
+	 <select id="getMemberInfoByUserId" parameterType="java.lang.Integer" resultType="UserInfo">
+          SELECT
+				userInfoId,
+				userInfo.userId AS userId,
+				NAME,  
+				mobile,  
+				telephone,
+				userInfo.email AS email,
+				gender,
+				birthday,
+				friendIds,
+				regionId,
+				address,
+				userInfo.createTime AS createTime,
+				userInfo.updateTime AS updateTime,
+				u.userId AS `user.userId`,
+				u.username AS `user.username`,
+				u.password AS `user.password`,  
+				u.tel AS `user.tel`,  
+				u.email AS `user.email`,
+				u.status AS `user.status`,
+				u.createByUserId AS `user.createByUserId`,
+				u.createTime AS `user.createTime`,
+				u.updateTime AS `user.updateTime`,
+				u.operateName AS `user.operateName`, 
+				MAX(u.lastLoginTime) AS `user.lastLoginTime`,
+				p.total AS `point.total`
+		FROM    user_info userInfo INNER JOIN USER u ON userInfo.userId=u.userId
+			    LEFT JOIN POINT p ON u.userId=p.userId
+		WHERE u.userId = #{userId}
+	</select>
+	
+	<!-- 通过卖家id查询该卖家的基本信息  状态是否被禁用 -->
+	<select id="getUserBySellerId" resultType="User">
+		select u.*
+		from user u
+		where u.userId in(
+			select s.userId
+			from seller s
+			where s.sellerId=#{sellerId}
+		)
+	</select>
+	
+	<!-- 根据userId查询商家信息 -->
+  <select id="getSellerByUserId" parameterType="Integer" resultType="Seller">
+     SELECT  seller.sellerId,
+        		seller.userId			    
+		FROM seller seller inner join user u on  seller.userId=u.userId 
+		WHERE seller.userId=#{userId} or seller.userId=(select createByUserId from `user` where userId =#{userId})
+  </select>
+  
+  <!--  -->
+  <select id="getUserInfoByEmail" resultType="UserInfo">
+  		select *
+  		from user_info
+  		where email=#{email}
+  </select>
+  <!-- /** * 卖家管理订单管理全部品牌只显示曾经卖过或者正在卖的品牌 * @param userInfo * @return * @throws 
+		DataAccessException 测试 */ -->
+	<select id="getUserInfoBrandbyid" parameterType="java.lang.Integer"
+		resultType="Brand">
+	 SELECT product.brandId,brand.name  from order_item , product , product_sku,brand where
+		 product.productId = product_sku.productId
+		 and product.brandId=brand.brandId
+	     and order_item.productSkuId=product_sku.productSkuId and product.sellerId=#{id}
+     union
+     select brand.brandId,brand.name from seller_brand ,brand
+        where brand.brandId=seller_brand.brandId
+        and seller_brand.sellerId=#{id}
+	</select>
+	<!-- 根据id获取user对象，在修改密码后，可以更新密码 -->
+	 <select id="getUserById" parameterType="integer" resultType="User">
+		select userId,username,password,operateName,tel,email,status,createByUserId,createTime,updateTime,employCard from user where  userId = #{userId}	
+  </select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.FormNumberMapper">
+  <insert id="add" parameterType="FormNumber" keyProperty="formNumberId" useGeneratedKeys="true" >
+     insert into form_number (formPrefix,formIndex,updateTime) values (#{formPrefix},#{formIndex},CURRENT_TIMESTAMP)
+  </insert>
+  <select id="getFormNumberByPrefix"  parameterType="String" resultType="FormNumber">
+     select * from  form_number  where formPrefix=#{formPrefix}
+  </select>
+  <update id="updateIndex">
+      update form_number  set formIndex=#{formIndex},updateTime=CURRENT_TIMESTAMP   where formNumberId=#{formNumberId}
+  </update>
+</mapper>

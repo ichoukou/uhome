@@ -1,0 +1,2140 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="ua-window">
+<head>
+    <meta charset="utf-8" />
+    <title>首页</title>
+    <style type="text/css">
+        html{
+            height:100%;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            -webkit-font-smoothing:antialiased;
+        }
+        body{
+            margin:0;
+            padding:0;
+            background-color:#ffffff;
+            min-height:100%;
+            height:auto !important;
+            height:100%;
+            color:#666666;
+            font:12px/1.5 "宋体b8b\4f53","tahoma","arial","Helvetica";
+        }
+        h1,h2,h3,h4,h5,h6,p,figure,form{
+            margin:0;
+        }
+        i,em,var,cite{
+            font-style: normal;
+        }
+        table{
+            border-collapse:collapse;
+            border-spacing:0;
+        }
+        img{
+            border:0;
+            vertical-align:middle;
+            -ms-interpolation-mode: bicubic;
+        }
+        a{
+            text-decoration:none;
+            color:#666666;
+        }
+        a:focus {
+            outline: thin dotted;
+        }
+        a:hover{
+            color:#f99865;
+            text-decoration:none;
+        }
+            /* hn */
+        h1{
+            font-size:20px;
+            line-height:36px;
+        }
+        h2{
+            font-size:18px;
+            line-height:30px;
+        }
+        h3{
+            font-size: 16px;
+            line-height:24px;
+        }
+        h4,h5,h6{
+            font-size:12px;
+        }
+        h1,h2,h3,h4,h5,h6{
+            font-family: "黑体";
+        }
+            /* ul ol dl */
+        ul,li,ol{
+            margin: 0;
+            padding:0;
+            list-style: none outside none;
+        }
+        ul.has-style li,ol li{
+            margin-left:25px;
+        }
+        ul.has-style li{
+            list-style:disc;
+        }
+        ol li{
+            list-style:decimal;
+        }
+        ul.inline-style li{
+            float:left;
+            display:inline;
+        }
+        dl,dd{
+            margin: 0;
+        }
+        dt{
+            font-weight: bold;
+        }
+        svg:not(:root){
+            overflow: hidden;
+        }
+            /* clearfix */
+        .cf{
+            zoom:1;
+        }
+        .cf:before, .cf:after{
+            content:"";
+            display:table;
+        }
+        .cf:after{
+            clear:both;
+            overflow:hidden;
+        }
+        /*头部*/
+        .topbar,.top-info,.menu{
+            width: 980px;
+            margin: 0 auto;
+        }
+        .topbar-wrap{
+            height: 29px;
+            line-height: 29px;
+            background-color: #f2f1ed;
+            border-bottom: 1px solid #cccbc8;
+        }
+        .topbar .wel{
+            float: left;
+        }
+        .topbar .wel a{
+            color: #f99865;
+            margin-right: 6px;
+        }
+        .topbar .about{
+            float: right;
+        }
+        .topbar .about li{
+            float: left;
+            height: 21px;
+            line-height: 12px;
+            margin-top: 8px;
+            position: relative;
+            z-index: 15;
+        }
+        .topbar .about li a{
+            float: left;
+            padding: 0 12px;
+            border-right: 1px solid #b3b2af;
+        }
+        .topbar .about li.follow a{
+            padding: 0 18px 0 12px;
+        }
+        .topbar .about li.follow b{
+            position: absolute;
+            border-top: 5px solid #908b89;
+            border-left: 5px solid #f2f1ed;
+            border-right: 5px solid #f2f1ed;
+            margin-left: -15px;
+            margin-top: 5px;
+            line-height: 0;
+        }
+        .topbar .about li.hover b{
+            border-top: none;
+            border-bottom: 5px solid #908b89;
+            border-left: 5px solid #f2f1ed;
+            border-right: 5px solid #f2f1ed;
+        }
+        .topbar .about li.follow .follow-box{
+            position: absolute;
+            top: 21px;
+            left: 0;
+            width: 90px;
+            border: 1px solid #cccbc8;
+            background-color: #f2f1ed;
+            z-index:10;
+            display: none;
+        }
+        .topbar .follow-box p{
+            padding: 8px 0;
+            border-bottom: 1px solid #cccbc8;
+            margin-bottom: -1px;
+        }
+        .topbar li.follow .follow-box a{
+            float: none;
+            display: block;
+            padding: 0;
+            border: none;
+            line-height: normal;
+        }
+        .topbar .follow-box span{
+            display: inline-block;
+            margin: 0 5px;
+            vertical-align: -4px;
+        }
+        .topbar .follow-box .sina{
+            width: 17px;
+            height: 16px;
+            background-position: -224px -6px;
+        }
+        .topbar .follow-box .qq{
+            width: 16px;
+            height: 16px;
+            background-position: -258px -6px;
+        }
+        .topbar .about li.cs{
+            padding-left: 12px;
+        }
+        .topbar .about li.cs em{
+            color: #f99865;
+            margin-left: 3px;
+        }
+        .top-info{
+            position: relative;
+            height: 106px;
+        }
+        .top-info .logo{
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 156px;
+            height: 68px;
+            background: url("../../web-resource/images/logo.png") left top no-repeat;
+        }
+        .top-info .agreement{
+            position: absolute;
+            right: 0;
+            top: 32px;
+            width: 458px;
+            height: 50px;
+        }
+        .top-info .hot{
+            position: absolute;
+            right: 0;
+            bottom: 5px;
+        }
+        .top-info .hot span{
+            color: #908b89;
+            font-weight: 700;
+        }
+        .top-info .hot a{
+            margin: 0 8px;
+        }
+        .top-info .agreement li{
+            float: left;
+            width: 93px;
+            height: 34px;
+            text-align: center;
+            border-right: 1px solid #908b89;
+            padding: 5px 10px;
+        }
+        .top-info .agreement li.last{
+            border-right: none;
+        }
+        .top-info .agreement li span{
+            float: left;
+            margin: 2px 5px 0 0;
+        }
+        .agreement li .zp{
+            width: 24px;
+            height: 28px;
+            background-position: 0 -6px;
+        }
+        .agreement li .sd{
+            width: 29px;
+            height: 29px;
+            background-position: -53px -6px;
+        }
+        .agreement li .mr{
+            width: 24px;
+            height: 28px;
+            background-position: -111px -6px;
+        }
+        .agreement li .qc{
+            width: 36px;
+            height: 26px;
+            background-position: -167px -6px;
+        }
+        .menu-wrap{
+            background: url("../../web-resource/images/menu_bg.gif") left top repeat-x;
+        }
+        .menu{
+            position: relative;
+        }
+        .m-menu li{
+            float: left;
+            width: 140px;
+            height: 38px;
+            line-height: 38px;
+            text-align: center;
+            display: inline;
+            margin-right: 1px;
+        }
+        .m-menu li a{
+            float: left;
+            width: 140px;
+            height: 38px;
+            line-height: 38px;
+            color: #ffffff;
+            font-size: 18px;
+            font-family: "黑体";
+            font-weight: 700;
+            background: url("../../web-resource/images/menu_a_bg.png") right center no-repeat;
+        }
+        .m-menu li a:hover,.m-menu li.cur a{
+            background: url("../../web-resource/images/menu_bg_cur.gif") left top repeat-x;
+        }
+        .menu .box{
+            position: absolute;
+            right: 0;
+            top: 5px;
+            width: 302px;
+        }
+        /*数据录入框*/
+        .data-frame{
+            float: left;
+            height: 27px;
+            line-height: 27px;
+            border-radius: 5px;
+            border: 1px solid #d2d2d2;
+            padding-left: 3px;
+            background-color: #ffffff;
+        }
+        .data-frame input{
+            border: 0;
+            width: 140px;
+            color: #b2b2b2;
+        }
+        .data-frame a{
+            display: inline-block;
+            width: 70px;
+            height: 27px;
+            color: #ffffff;
+            text-align: center;
+            vertical-align: 2px;
+            line-height: 27px;
+            background: url("../../web-resource/images/search/so-bg.gif") left top repeat-x;
+        }
+        .data-frame a.highlight{
+            background: url("../../web-resource/images/search/so-bg.gif") left -27px repeat-x;
+        }
+        .menu .shopping-cart{
+            float: right;
+            position: relative;
+        }
+        .menu .shopping-cart a.show-sum{
+            display: block;
+            width: 47px;
+            font-size: 14px;
+            padding-left: 30px;
+            height: 29px;
+            line-height: 29px;
+            color: #ffffff;
+            background-position: 0 -206px;
+        }
+        /*购物车list弹层*/
+        .shopping-cart .shopping-box{
+            position: absolute;
+            width: 310px;
+            padding: 8px;
+            left: -251px;
+            border: 1px solid #88cbcd;
+            background-color: #d1eeef;
+            display: none;
+        }
+        .shopping-box .cart-list li{
+            overflow: hidden;
+            *zoom:1;
+            border-bottom: 1px solid #cccbc8;
+            padding: 4px 0;
+            position: relative;
+        }
+        .shopping-box .cart-list .pic{
+            float: left;
+            display: inline;
+            margin-right: 15px;
+        }
+        .shopping-box .cart-list .info{
+            overflow: hidden;
+            *zoom:1;
+        }
+        .shopping-box .cart-list dl{
+            margin-top: 10px;
+        }
+        .shopping-box .cart-list dt{
+            font-size: 13px;
+        }
+        .shopping-box dt a{
+            font-family: "黑体";
+        }
+        .shopping-box dd.price{
+            margin: 10px 10px 0 0;
+            float: right;
+            color: #f96619;
+            font-size: 14px;
+        }
+        .shopping-box .cart-list li .delete{
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            right: 0;
+            top: 10px;
+            line-height: 10px;
+            text-align: center;
+        }
+        .shopping-cart .shopping-box p{
+            text-align: right;
+            color: #000000;
+        }
+        .shopping-cart .shopping-box .show-text{
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .shopping-cart .shopping-box .check-cart{
+            margin-top: 15px;
+        }
+        .shopping-cart .shopping-box .check-cart a{
+            display: inline-block;
+            width: 103px;
+            height: 19px;
+            line-height: 19px;
+            text-align: center;
+            color: #ffffff;
+            font-family: "黑体";
+            background-position: 0 -404px;
+        }
+        /*注册登录*/
+        #log-reg-wrap{
+            width: 580px;
+            display: none;
+        }
+        .log-reg-panel{
+            border-bottom: 1px solid #cccbc8;
+        }
+        .log-reg-panel .tab{
+            padding-left: 80px;
+            height: 40px;
+        }
+        .log-reg-panel .tab li{
+            float: left;
+            display: inline;
+            cursor: pointer;
+            width: 85px;
+            margin: 0 65px;
+            height: 39px;
+            line-height: 39px;
+            text-align: center;
+            font-family: "黑体";
+            font-size: 20px;
+        }
+        .log-reg-panel .tab li.cur{
+            color: #f96619;
+            border-bottom: 2px solid #f96619;
+        }
+        #log-reg-wrap .tab-item{
+            display: none;
+        }
+        #log-reg-wrap .tab-item table{
+            width: 100%;
+        }
+        #log-reg-wrap .tab-item table td{
+            padding-bottom: 20px;
+        }
+        #log-reg-wrap .tab-item{
+            padding: 20px 0 8px 0;
+        }
+        #log-reg-wrap .tab-item .tit{
+            width: 160px;
+            padding-right: 15px;
+            text-align: right;
+            font-size: 18px;
+            color: #282828;
+        }
+        #log-reg-wrap .tab-item input{
+            color: #b4b4b4;
+            margin: 0;
+        }
+        #log-reg-wrap .tab-item .login-name{
+            width: 200px;
+            border: 1px solid #7ea3b8;
+            padding: 6px 0 6px 45px;
+            background: url("../../web-resource/images/log_reg_icon.gif") no-repeat;
+         }
+        #log-reg-wrap .tab-item .password{
+            width: 200px;
+            border: 1px solid #7ea3b8;
+            padding: 6px 0 6px 45px;
+            background: url("../../web-resource/images/log_reg_icon.gif") 0 -50px no-repeat;
+        }
+        #log-reg-wrap .tab-item .input-error{
+            border: 1px solid #e60012;
+        }
+        #log-reg-wrap .tab-item .verific{
+            padding: 7px 6px;
+            width: 110px;
+            float: left;
+            margin: 0;
+            border: 1px solid #cccccc;
+        }
+        #log-reg-wrap .tab-item .verific-img{
+            border: 1px solid #cccccc;
+            border-left: none;
+        }
+        #log-reg-wrap .tab-item .line{
+            padding-top: 8px;
+        }
+        #log-reg-wrap .tab-item .line a{
+            color: #f96619;
+        }
+        .btn-a{
+            float: left;
+            height: 29px;
+            line-height: 29px;
+            padding-left: 24px;
+            background: url("../../web-resource/images/btn/btn_bg.gif") left top no-repeat;
+            color: #ffffff;
+        }
+        .btn-a:hover{
+            color: #ffffff;
+        }
+        .btn-a span{
+            float: left;
+            position: relative;
+            right: -3px;
+            padding-right: 24px;
+            background: url("../../web-resource/images/btn/btn_bg.gif") right top no-repeat;
+        }
+        #log-reg-wrap .tab-item .forget-password{
+            float: left;
+            margin: 5px 0 0 8px;
+            color: #f96619;
+        }
+        #log-reg-wrap .open-login .open-tit{
+            padding: 0 0 10px 50px;
+        }
+        #log-reg-wrap .open-list{
+            padding-bottom: 5px;
+        }
+        #log-reg-wrap .open-list ul{
+            padding-left: 110px;
+        }
+        #log-reg-wrap .open-list ul li{
+            float: left;
+            display: inline;
+            margin-right: 20px;
+        }
+        #log-reg-wrap .open-list ul li a{
+            float: left;
+            padding-left: 18px;
+        }
+        #log-reg-wrap .open-list ul li a.qq{
+            background: url("../../web-resource/images/open_api_icon.gif") no-repeat;
+            background-position: 0 0;
+        }
+        #log-reg-wrap .open-list ul li a.sina{
+            background: url("../../web-resource/images/open_api_icon.gif") no-repeat;
+            background-position: 0 -20px;
+        }
+        #log-reg-wrap .open-list ul li a.alipay{
+            background: url("../../web-resource/images/open_api_icon.gif") no-repeat;
+            background-position: 0 -40px;
+        }
+
+        /*specific layout*/
+        .bread-wrap{
+            background-color: #ffffff;
+            border: 1px solid #d2d2d2;
+        }
+        .bread-crumbs{
+            width: 962px;
+            margin: 0 auto;
+            height: 30px;
+            line-height: 30px;
+        }
+        .bread-crumbs a{
+            color: #999999;
+            margin: 0 30px 0 2px;
+        }
+        .bread-crumbs a:hover{
+            color: #f99865;
+        }
+        /*秒杀*/
+        .spike-block{
+            width: 962px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 8px;
+            padding-right: 8px;
+            border: 1px solid #d2d2d2;
+            border-top: 0;
+            padding-top: 5px;
+            padding-bottom: 12px;
+        }
+        .spike-block h2{
+            padding-bottom: 8px;
+            color: #000000;
+        }
+        .spike-block h2 em{
+            color: #f96619;
+            font-style: normal;
+        }
+        .spike-today{
+            width: 320px;
+            float: left;
+            display: inline;
+            margin-right: 10px;
+            border: 1px solid #d2d2d2;
+        }
+        .spike-today .tit{
+            margin-top: -5px;
+            position: absolute;
+            width: 302px;
+            height: 55px;
+            padding: 5px 0 0 20px;
+            font-size: 18px;
+            font-family: "黑体";
+            color: #ffffff;
+            background-position: 0 -488px;
+        }
+        .spike-today .tit b{
+            font-size: 30px;
+            line-height: 20px;
+            vertical-align: -5px;
+        }
+        .spike-today .img{
+            margin-top: 60px;
+            text-align: center;
+        }
+        .spike-today .main{
+            padding: 8px;
+            font-family: "黑体";
+        }
+        .spike-today .main p span{
+            font-size: 16px;
+            font-style: normal;
+        }
+        .spike-today .main p span i{
+            font-weight: 700;
+            color: #f96619;
+        }
+        .spike-today .main p.quick var{
+            font-size: 30px;
+            font-family: arial;
+            vertical-align: -6px;
+        }
+        .spike-today .main .go-see{
+            position: absolute;
+            margin: -45px 0 0 190px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 14px;
+            text-decoration: none;
+            width: 111px;
+            height: 42px;
+            line-height: 42px;
+            background-position: 0 -291px;
+        }
+        .spike-upcoming{
+            float: right;
+            width: 630px;
+            overflow: hidden;
+        }
+        .spike-upcoming ul{
+            width: 642px;
+        }
+        .spike-upcoming li{
+            float: left;
+            display: inline;
+            width: 202px;;
+            margin-right: 12px;
+            margin-bottom: 20px;
+        }
+        .spike-upcoming li .main-info{
+            padding: 6px 8px;
+            border: 1px solid #d2d2d2;
+        }
+        .spike-upcoming li .forecast-time i{
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            vertical-align: text-bottom;
+            margin: 0 6px;
+            background-position: right -122px;
+        }
+        .spike-upcoming li .main-info .img{
+            text-align: center;
+        }
+        .spike-upcoming li .main-info .price{
+            text-align: center;
+        }
+        .spike-upcoming li .main-info .price .vie{
+            background-position: -304px -169px;
+            display: inline-block;
+            height: 16px;
+            line-height: 16px;
+            padding-left: 20px;
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            font-style: normal;
+            color: #f96619;
+        }
+        .spike-upcoming li .tit{
+            padding: 6px 0;
+        }
+        /*上线商品*/
+        .goods-block{
+            width: 980px;
+            margin: 20px auto 0;
+        }
+        .new-goods-issue{
+            float: left;
+            display: inline;
+            width: 640px;
+            margin-right: 10px;
+        }
+        .new-goods-issue .hd{
+            border: 1px solid #d2d2d2;
+            border-bottom: none;
+            padding: 4px 9px;
+        }
+        .new-goods-issue .hd h2{
+            float: left;
+            display: inline;
+            margin-right: 8px;
+        }
+        .new-goods-issue .hd span{
+            float: left;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        .new-goods-issue .hd span em{
+            color: #f96619;
+        }
+        .new-goods-issue .data-frame{
+            float: right;
+            height: 27px;
+            line-height: 27px;
+            border-radius: 5px;
+            border: 1px solid #d2d2d2;
+            padding-left: 3px;
+        }
+        .new-goods-issue .data-frame input{
+            width: 192px;
+        }
+        .new-goods-issue .bd{
+            border: 1px solid #d2d2d2;
+            padding: 19px 8px 0;
+            position: relative;
+        }
+        .multi-product .tab-item{
+            display: none;
+        }
+        .multi-product .pro-panel{
+            background-position: 0 -608px;
+            height: 381px;
+        }
+        .new-goods-issue li{
+            border: 1px solid #d8d8d8;
+            margin-bottom: 10px;
+        }
+        .new-goods-issue li:hover,.new-goods-issue li.hover{
+            border: 1px solid #f99865;
+        }
+        .new-goods-issue .pic{
+            height: 180px;
+            position: relative;
+        }
+        .new-goods-issue .pic .brand-logo{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .new-goods-issue .pic .brand-img{
+             position: absolute;
+             right: 0;
+             top: 0;
+         }
+        .new-goods-issue .pic .discount{
+            position: absolute;
+            width: 155px;
+            text-align: center;
+            top: 90px;
+            left: 20px;
+        }
+        .new-goods-issue .pic .discount span{
+            display: block;
+        }
+        .new-goods-issue .pic .discount var{
+            font-size: 24px;
+            color: #a70504;
+        }
+        .new-goods-issue .bm-info{
+            color: #333333;
+            height: 22px;
+            line-height: 22px;
+            position: relative;
+            margin-top: -22px;
+            background:rgba(244,241,244,0.7);
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#b2f4f1f4,endColorstr=#b2f4f1f4);zoom:1;
+        }
+        :root .new-goods-issue .bm-info{filter:none\9;}/*for IE9*/
+        .new-goods-issue li:hover .bm-info,.new-goods-issue li.hover .bm-info{
+            color: #ffffff;
+            background:rgba(249,152,101,1);
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#fff99865,endColorstr=#fff99865);zoom:1;
+        }
+        :root .new-goods-issue li:hover .bm-info,:root .new-goods-issue li.hover .bm-info{filter:none\9;}/*for IE9*/
+        .new-goods-issue li:hover .info-story,.new-goods-issue li.hover .info-story{
+            background-position: right -209px;
+        }
+        .new-goods-issue li:hover .bm-info a,.new-goods-issue li.hover .bm-info a{
+            color: #ffffff;
+        }
+        .new-goods-issue .bm-info .info-name{
+            float: left;
+            width: 280px;
+            padding-left: 10px;
+        }
+        .new-goods-issue .bm-info .info-time{
+            float: left;
+        }
+        .new-goods-issue .bm-info .info-story{
+            float: right;
+            padding-right: 20px;
+            background-position: right -252px;
+            margin-right: 10px;
+        }
+        .new-goods-issue .upcom-product{
+            margin-top: 20px;
+        }
+        /*左侧panel条*/
+        .new-goods-issue .pro-panel{
+            position: absolute;
+            top: 19px;
+            left: -26px;
+            _left:-35px;
+            width: 26px;
+        }
+        .upcom-product .pro-panel{
+            background-position: -78px -608px;
+        }
+        .new-goods-issue .pro-fixed-m,.new-goods-issue .pro-fixed-u{
+            position: fixed;
+            top: 32px;
+            left: 50%;
+            margin-left: -516px;
+            z-index: 10;
+        }
+        .new-goods-issue .pro-panel a{
+            display: block;
+            font-size: 18px;
+            font-family: "黑体";
+            line-height: 18px;
+            color: #ffffff;
+            text-align: center;
+        }
+        .pro-panel .popular a{
+            height: 115px;
+        }
+        .pro-panel .popular a.cur{
+            padding-top: 20px;
+            height: 133px;
+        }
+        .pro-panel .latest a{
+            height: 118px;
+        }
+        .pro-panel .latest a.cur{
+            padding-top: 20px;
+            height: 133px;
+        }
+        .pro-panel .discount a{
+        }
+        .pro-panel .discount a.cur{
+            padding-top: 20px;
+            height: 133px;
+        }
+        .notice{
+            float: right;
+            display: inline;
+            width: 330px;
+        }
+        .sale-notice{
+            padding: 8px 7px;
+            border: 1px solid #d2d2d2;
+            background-color: #f2f1ed;
+        }
+        .sale-notice h2{
+            background-position: -294px -60px;
+            padding-left: 35px;
+            color: #88cbcd;
+            margin-bottom: 10px;
+        }
+        .sale-notice .tab{
+            border: 1px solid #88cbcd;
+            background-color: #ffffff;
+        }
+        .sale-notice .tab ul{
+            height: 42px;
+            background: url("../../web-resource/images/tabswitch-bg.gif") left top repeat-x;
+        }
+        .sale-notice .tab li{
+            float: left;
+            width: 104px;
+            height: 40px;
+            padding-top: 2px;
+            text-align: center;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .sale-notice .tab li.cur{
+            background-color: #ffffff;
+        }
+        .sale-notice .tab li.cur span{
+            color: #161111;
+        }
+        .sale-notice .tab li span{
+            display: block;
+        }
+        .sale-notice .tab li span.today{
+            color: #f99865;
+        }
+        .sale-notice .tab-item{
+            display: none;
+        }
+        .sale-notice .tab-item p{
+            border-bottom: 1px solid #88cbcd;
+            padding: 10px 0 10px 5px;
+            font-size: 14px;
+            margin-bottom: -1px;
+        }
+        .sale-notice .tab-item p img{
+            margin-right: 15px;
+        }
+
+        .brand-appointment{
+            margin-top: 20px;
+            border: 1px solid #d2d2d2;
+        }
+        .brand-appointment h2{
+            color: #333333;
+            padding: 0 8px;
+            border-bottom: 1px solid #d2d2d2;
+        }
+        .brand-appointment .main{
+            padding: 10px 14px;
+            margin-bottom: 20px;
+        }
+        .brand-appointment .main li{
+            float: left;
+            padding: 1px;
+            width: 96px;
+            height: 46px;
+            text-align: center;
+        }
+        .brand-appointment .main li.hover{
+            background-position: 0 -128px;
+        }
+        .brand-appointment li .sale-wrap{
+            position: absolute;
+            margin-top: -150px;
+            margin-left: -335px;
+            width: 310px;
+            height: 245px;
+            padding: 8px;
+            border: 1px solid #88cbcd;
+            background-color: #ffffff;
+            border-radius: 3px;
+            display: none;
+            z-index: 10;
+        }
+        .brand-appointment .sale-wrap .sale-info{
+            font-size: 14px;
+            margin: 0 0 15px 0;
+            text-align: left;
+        }
+        .post-us{
+            padding: 0 10px 10px;
+            position: relative;
+        }
+        .post-us p{
+            color: #333333;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .post-us .data-frame{
+            margin-top: 10px;
+        }
+        .post-us .data-frame input{
+            width: 192px;
+        }
+        .ad-block{
+            text-align: center;
+            border: 1px solid #d2d2d2;
+            margin-top: 20px;
+        }
+        /*底部*/
+        .footer{
+            margin-top: 60px;
+            background-color: #f2f1ed;
+        }
+        .footer .footer-info{
+            padding: 30px 0;
+            border-top: 1px solid #cccbc8;
+            border-bottom: 1px solid #cccbc8;
+        }
+        .footer .footer-info ul{
+            overflow: hidden;
+            width: 980px;
+            margin: 0 auto;
+        }
+        .footer .footer-info li{
+            float: left;
+            border-right: 1px dotted #646560;
+            padding: 10px 25px 0;
+            height: 118px;
+        }
+        .footer .footer-info li.first{
+              padding-left: 0;
+        }
+        .footer .footer-info li.last{
+            border-right: none;
+        }
+        .footer .footer-info li.last .telephone{
+            color: #f99865;
+            font-size: 18px;
+        }
+        .footer .footer-info li dl{
+            margin: 0;
+        }
+        .footer .footer-info li dt{
+            margin-bottom: 10px;
+        }
+        .footer .footer-info li dd{
+            margin: 0;
+            line-height: 1.8em;
+        }
+        .footer .copyright{
+            width: 980px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 2em;
+            padding: 20px 0;
+        }
+        /*返回顶部*/
+        .rt-fixed-wrap{
+            position: fixed;
+            top: 60%;
+            left: 50%;
+            margin-left: 500px;
+            width: 50px;
+            height: 34px;
+        }
+        .rt-fixed-wrap .go-top a{
+            text-indent: -9999em;
+            display: block;
+            width: 50px;
+            height: 34px;
+            background-position: 0 -60px;
+        }
+        /*首页sprite*/
+        .menu .shopping-cart a.show-sum,.spike-today .tit,.spike-upcoming li .forecast-time i,.spike-upcoming li .price .vie,.spike-today .main .go-see,
+        .sale-notice h2,.new-goods-issue .bm-info .info-story,.new-goods-issue li:hover .info-story, .new-goods-issue li.hover .info-story,
+        .rt-fixed-wrap .go-top a,.shopping-cart .shopping-box .check-cart a,.top-info .agreement li span,.brand-appointment .main li.hover,
+        .topbar .follow-box span,.multi-product .pro-panel,.upcom-product .pro-panel{
+            background-image: url("../../web-resource/images/index_bg.gif");
+            background-repeat: no-repeat;
+        }
+        /*ie6处理fixed*/
+        *html,*html body{background-image:url(about:blank);background-attachment:fixed}
+        *html .rt-fixed-wrap{
+            position: absolute;
+            top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../../web-resource/js/plugin/artdialog/skins/ytoxl.css" media="all">
+</head>
+<body>
+    <!--头部-->
+    <div class="topbar-wrap">
+        <div class="topbar">
+            <div class="wel">您好，欢迎光临logo网！ <a href="javascript:" class="login">登陆</a><a href="javascript:" class="register">免费注册</a></div>
+            <div class="about">
+                <ul>
+                    <li><a href="javascript:">收藏本站</a></li>
+                    <li><a href="javascript:">建议意见</a></li>
+                    <li class="follow">
+                        <a href="javascript:">关注logo网</a><b></b>
+                        <div class="follow-box">
+                            <p><a href="javascript:"><span class="sina"></span>新浪微博</a></p>
+                            <p><a href="javascript:"><span class="qq"></span>腾讯微博</a></p>
+                        </div>
+                    </li>
+                    <li class="cs">客服热线<em>021-6570311</em></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="top-info-wrap">
+        <div class="top-info">
+            <div class="logo"></div>
+            <div class="agreement">
+                <ul>
+                    <li><span class="zp"></span>100%<br>正品保障</li>
+                    <li><span class="sd"></span>品牌商<br>直接供货</li>
+                    <li><span class="mr"></span>每日<br>10:00上新</li>
+                    <li class="last"><span class="qc"></span>全场包邮</li>
+                </ul>
+            </div>
+            <div class="hot">
+                <span>热搜：</span><a href="javascript:">羽绒服</a><a href="javascript:">雪地靴清仓</a><a href="javascript:">打底裤</a>
+            </div>
+        </div>
+    </div>
+    <div class="menu-wrap">
+        <div class="menu cf">
+            <ul class="m-menu">
+                <li><a href="javascript:">首页</a></li>
+                <li class="cur"><a href="javascript:">品牌特卖</a></li>
+                <li><a href="javascript:">秒杀</a></li>
+                <li><a href="javascript:">品牌集中营</a></li>
+            </ul>
+            <div class="box">
+                <div class="data-frame"><input type="text" value="" data-default="搜索商品/品牌"><a href="javascript:">搜 索</a></div>
+                <div class="shopping-cart">
+                    <a href="javascript:" class="show-sum">12</a>
+                    <div class="shopping-box">
+                        <ul class="cart-list">
+                            <li>
+                                <div class="pic"><img src="../../web-resource/images/uploadfolder/index/8.jpg"/></div>
+                                <div class="info">
+                                    <dl>
+                                        <dt><a href="javascript:">Eaeg Teawefr豹纹性…</a></dt>
+                                        <dd>颜色分类：豹纹（37码）头</dd>
+                                        <dd class="price">￥158.00</dd>
+                                    </dl>
+                                </div>
+                                <a href="javascript:" class="delete">x</a>
+                            </li>
+                            <li>
+                                <div class="pic"><img src="../../web-resource/images/uploadfolder/index/8.jpg"/></div>
+                                <div class="info">
+                                    <dl>
+                                        <dt><a href="javascript:">Eaeg Teawefr豹纹性…</a></dt>
+                                        <dd>颜色分类：豹纹（37码）头</dd>
+                                        <dd class="price">￥158.00</dd>
+                                    </dl>
+                                </div>
+                                <a href="javascript:" class="delete">x</a>
+                            </li>
+                            <li>
+                                <div class="pic"><img src="../../web-resource/images/uploadfolder/index/8.jpg"/></div>
+                                <div class="info">
+                                    <dl>
+                                        <dt><a href="javascript:">Eaeg Teawefr豹纹性…</a></dt>
+                                        <dd>颜色分类：豹纹（37码）头</dd>
+                                        <dd class="price">￥158.00</dd>
+                                    </dl>
+                                </div>
+                                <a href="javascript:" class="delete">x</a>
+                            </li>
+                        </ul>
+                        <p class="show-text">购物车里还有9件宝贝</p>
+                        <p class="check-cart"><a href="javascript:">查看我的购物车</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--头部 end-->
+    <!--面包屑-->
+    <div class="bread-wrap">
+        <div class="bread-crumbs">
+            <a href="javascript:">服装鞋包</a><a href="javascript:">母婴日用</a><a href="javascript:">日用百货</a>
+        </div>
+    </div>
+    <!--面包屑 end-->
+    <!--秒杀区块-->
+    <div class="spike-block">
+        <div class="hd"><h2>每日<em>10:00</em>点秒杀</h2></div>
+        <div class="bd cf">
+            <div class="spike-today">
+                <div class="tit">今日<b>秒</b>杀</div>
+                <div class="img"><img src="../../web-resource/images/uploadfolder/index/1.jpg" width="234" height="291" /></div>
+                <div class="main">
+                    <h3>ROLEX 18K切尼利石英男表</h3>
+                    <p>共<var>1</var>件</p>
+                    <p>距离秒杀开始还有</p>
+                    <p><span class="countdown" data-config="{
+                            'endTime':'2013-2-27 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>',
+                            'timeStampTow':true
+                          }"></span></p>
+                    <p class="quick">秒杀价：<var>￥1.00</var></p>
+                    <a href="javascript:" class="go-see">去看看</a>
+                </div>
+            </div>
+            <div class="spike-upcoming">
+                <ul>
+                    <li>
+                        <div class="main-info">
+                            <p class="forecast-time">周三<i></i>
+                                <span class="countdown"data-config="{
+                            'endTime':'2013-3-7 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }">1天05小时33分28秒</span>
+                            </p>
+                            <p class="img"><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/2.jpg" alt=""></a></p>
+                            <p class="price"><var class="vie">￥10.00</var>￥10.00</p>
+                        </div>
+                        <div class="tit"><a href="javascript:">HUAJIAN   花间公主个性女鞋...</a></div>
+                    </li>
+                    <li>
+                        <div class="main-info">
+                            <p class="forecast-time">周三<i></i>1天05小时33分28秒</p>
+                            <p class="img"><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/2.jpg" alt=""></a></p>
+                            <p class="price"><var class="vie">￥10.00</var>￥10.00</p>
+                        </div>
+                        <div class="tit"><a href="javascript:">HUAJIAN   花间公主个性女鞋...</a></div>
+                    </li>
+                    <li>
+                        <div class="main-info">
+                            <p class="forecast-time">周三<i></i>1天05小时33分28秒</p>
+                            <p class="img"><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/2.jpg" alt=""></a></p>
+                            <p class="price"><var class="vie">￥10.00</var>￥10.00</p>
+                        </div>
+                        <div class="tit"><a href="javascript:">HUAJIAN   花间公主个性女鞋...</a></div>
+                    </li>
+                    <li>
+                        <div class="main-info">
+                            <p class="forecast-time">周三<i></i>1天05小时33分28秒</p>
+                            <p class="img"><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/2.jpg" alt=""></a></p>
+                            <p class="price"><var class="vie">￥10.00</var>￥10.00</p>
+                        </div>
+                        <div class="tit"><a href="javascript:">HUAJIAN   花间公主个性女鞋...</a></div>
+                    </li>
+                    <li>
+                        <div class="main-info">
+                            <p class="forecast-time">周三<i></i>1天05小时33分28秒</p>
+                            <p class="img"><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/2.jpg" alt=""></a></p>
+                            <p class="price"><var class="vie">￥10.00</var>￥10.00</p>
+                        </div>
+                        <div class="tit"><a href="javascript:">HUAJIAN   花间公主个性女鞋...</a></div>
+                    </li>
+                    <li>
+                        <div class="main-info">
+                            <p class="forecast-time">周三<i></i>1天05小时33分28秒</p>
+                            <p class="img"><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/2.jpg" alt=""></a></p>
+                            <p class="price"><var class="vie">￥10.00</var>￥10.00</p>
+                        </div>
+                        <div class="tit"><a href="javascript:">HUAJIAN   花间公主个性女鞋...</a></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--秒杀区块 end-->
+    <!--商品区块-->
+    <div class="goods-block cf">
+        <!--新品发布区块-->
+        <div class="new-goods-issue">
+            <div class="hd cf">
+                <div class="data-frame"><input type="text" value="" data-default="输入您的邮箱订阅最新优惠活动" /><a href="javascript:">订 阅</a></div>
+                <h2>新品上线</h2><span>每日<em>10:00</em>点</span>
+            </div>
+            <div class="bd multi-product">
+                <ul class="tab-item" style="display: block;">
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="tab-item">
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="tab-item">
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                </ul>
+                <div class="pro-panel">
+                    <p class="popular"><a href="javascript:">最受欢迎品牌</a></p>
+                    <p class="latest"><a href="javascript:">最新上线品牌</a></p>
+                    <p class="discount"><a href="javascript:">最低折扣品牌</a></p>
+                </div>
+            </div>
+            <div class="bd upcom-product">
+                <ul>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pic">
+                            <span class="discount">
+                                <span><var>1.7</var>折起</span>
+                                <span>02月22日-02月26日</span>
+                            </span>
+                            <span class="brand-logo"><a href="#"><img src="../../web-resource/images/uploadfolder/index/10.jpg" alt=""></a></span>
+                            <span class="brand-img"><a href="#"><img src="../../web-resource/images/uploadfolder/index/11.jpg" alt=""></a></span>
+                        </div>
+                        <div class="bm-info">
+                            <i class="info-name">阿迪达斯adidas男装专场</i>
+                            <i class="info-time">剩余 <span class="countdown" data-config="{
+                            'endTime':'2013-3-1 17:27:00',
+                            'nowTime':'1361808000',
+                            'stopTips':'<span>活动结束谢谢参与！</span>'
+                          }"></span></i>
+                            <i class="info-story"><a href="javascript:">品牌介绍</a></i>
+                        </div>
+                    </li>
+                </ul>
+                <div class="pro-panel">
+                    <p class="popular"><a href="javascript:" class="cur">即将上线品牌</a></p>
+                </div>
+            </div>
+        </div>
+        <!--新品发布区块 end-->
+        <!--通告+广告区块-->
+        <div class="notice">
+            <div class="sale-notice">
+                <h2>开售通知</h2>
+                <div class="tab">
+                    <ul>
+                        <li class="cur">
+                            <span class="today">今天</span>
+                            <span>10:00</span>
+                        </li>
+                        <li>
+                            <span>明天</span>
+                            <span>02/23</span>
+                        </li>
+                        <li>
+                            <span>后天</span>
+                            <span>02/24</span>
+                        </li>
+                    </ul>
+                    <div class="content-wrap">
+                        <div class="tab-item" style="display: block;">
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont家居用品</a></p>
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont家居用品</a></p>
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont家居用品</a></p>
+                        </div>
+                        <div class="tab-item">
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont家用电器</a></p>
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont家用电器</a></p>
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont家用电器</a></p>
+                        </div>
+                        <div class="tab-item">
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont化妆品</a></p>
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont化妆品</a></p>
+                            <p><a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/4.jpg" alt="">It dupont化妆品</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="brand-appointment">
+                <h2>品牌预约</h2>
+                <div class="main cf">
+                    <ul>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="" data-default="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="" data-default="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="" data-default="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="" data-default="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="" data-default="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="" data-default="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/5.jpg" alt=""></a>
+                            <div class="sale-wrap">
+                                <div class="sale-pic"><a href="#"><img src="../../web-resource/images/uploadfolder/index/9.jpg" alt=""></a></div>
+                                <div class="sale-info">BULL家居专场</div>
+                                <div class="sale-book cf">
+                                    <div class="data-frame"><input type="text" value="" data-default="输入邮箱或手机号"><a href="javascript:">开售通知</a></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="post-us cf">
+                    <p>没有你想要的品牌？马上告诉我！</p>
+                    <div class="data-frame submit-brand"><input type="text" value="" data-default="输入您想购买的品牌" /><a href="javascript:" id="postBrandInfo">提 交</a></div>
+                </div>
+            </div>
+            <div class="ad-block">
+                <img src="../../web-resource/images/uploadfolder/index/6.jpg" alt="">
+            </div>
+            <div class="ad-block">
+                <a href="javascript:"><img src="../../web-resource/images/uploadfolder/index/7.jpg" alt=""></a>
+            </div>
+        </div>
+        <!--通告+广告区块 end-->
+    </div>
+    <!--商品区块 end-->
+    <!--返回顶部-->
+    <div class="rt-fixed-wrap">
+        <div class="go-top"><a href="#" title="返回顶部">返回顶部</a></div>
+    </div>
+    <!--返回顶部 end-->
+    <!--登录注册-->
+    <div id="log-reg-wrap">
+        <div class="log-reg-panel">
+            <ul class="tab">
+                <li>登录</li>
+                <li>注册</li>
+            </ul>
+        </div>
+        <div class="tab-item" style="display: block;">
+            <table>
+                <tr>
+                    <td class="tit">登录名</td><td><input type="text" value="" class="login-name" data-default="请输入您的邮箱/手机号码"><p></p></td>
+                </tr>
+                <tr>
+                    <td class="tit">密码</td><td><input type="text" value="" class="password" data-default="请输入6位以上数字、字母或符号"><p></p></td>
+                </tr>
+                <tr>
+                    <td valign="top" class="tit">
+                        验证码</td>
+                    <td><input type="text" value="" class="verific" data-default="验证码不分大小写"><img src="../../web-resource/images/uploadfolder/index/12.jpg" class="verific-img" alt="">
+                        <a href="#">看不清，换一张</a>
+                        <p class="line"><label for="safeLogin"><input type="checkbox" id="safeLogin" checked="checked">10天内免登陆</label></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a class="btn-a" href="#"><span>登录</span></a><a href="#" class="forget-password">忘记密码？</a></td>
+                </tr>
+            </table>
+            <div class="open-login">
+                <div class="open-tit">
+                    使用合作网站账号登录：
+                </div>
+                <div class="open-list cf">
+                    <ul>
+                        <li><a href="#" class="qq">QQ</a></li>
+                        <li><a href="#" class="sina">新浪</a></li>
+                        <li><a href="#" class="alipay">支付宝</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-item">
+            <table>
+                <tr>
+                    <td class="tit">登录名</td><td><input type="text" value="" class="login-name" data-default="请输入您的邮箱/手机号码"><p></p></td>
+                </tr>
+                <tr>
+                    <td class="tit">密码</td><td><input type="text" value="" class="password" data-default="请输入6位以上数字、字母或符号"><p></p></td>
+                </tr>
+                <tr>
+                    <td valign="top" class="tit">
+                        确认密码</td><td><input type="text" value="" class="password" data-default="请输入6位以上数字、字母或符号">
+                        <p class="line"><label for="readed"><input type="checkbox" id="readed">我已阅读并接受</label><a href="#">LOGO网服务条款</a></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a class="btn-a" href="#"><span>确认提交</span></a></td>
+                </tr>
+            </table>
+            <div class="open-login">
+                <div class="open-tit">
+                    使用合作网站账号登录：
+                </div>
+                <div class="open-list cf">
+                    <ul>
+                        <li><a href="#" class="qq">QQ</a></li>
+                        <li><a href="#" class="sina">新浪</a></li>
+                        <li><a href="#" class="alipay">支付宝</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--登录注册 end-->
+    <!--底部区块-->
+    <div class="footer">
+        <div class="footer-info cf">
+            <ul>
+                <li class="first">
+                    <dl>
+                        <dt>新手上路</dt>
+                        <dd><a href="javascript:">新用户注册</a></dd>
+                        <dd><a href="javascript:">如何订购</a></dd>
+                        <dd><a href="javascript:">如何修改订单</a></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>关于支付</dt>
+                        <dd><a href="javascript:">商务合作</a></dd>
+                        <dd><a href="javascript:">关于发票</a></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>关于配送</dt>
+                        <dd><a href="javascript:">订单查询</a></dd>
+                        <dd><a href="javascript:">配送信息跟踪</a></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>关于我们</dt>
+                        <dd><a href="javascript:">公司介绍</a></dd>
+                        <dd><a href="javascript:">合作品牌</a></dd>
+                        <dd><a href="javascript:">加入我们</a></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>联系方式</dt>
+                        <dd><a href="javascript:">商务合作</a></dd>
+                        <dd><a href="javascript:">商家入驻规则</a></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>售后服务</dt>
+                        <dd><a href="javascript:">正品保障</a></dd>
+                        <dd><a href="javascript:">退换货政策</a></dd>
+                        <dd><a href="javascript:">退货办理流程</a></dd>
+                        <dd><a href="javascript:">退款方式和实效</a></dd>
+                    </dl>
+                </li>
+                <li class="last">
+                    <dl>
+                        <dt>客服热线</dt>
+                        <dd>如果您遇到任何问题，欢迎拨打</dd>
+                        <dd><span class="telephone">400-800-8254</span><br />08:00-21:00</dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <div class="copyright">
+            <p>Copyright© 2000-2009 ALL rught reserved</p>
+            <p>上海圆通新龙电子商务有限公司：上海市徐汇区桂林路396号1号楼  联系电话：021-69777830</p>
+        </div>
+    </div>
+    <!--底部区块 end-->
+    <script type="text/javascript" src="../../web-resource/js/jquery/jquery.1.8.1.js"></script>
+    <script type="text/javascript" src="../../web-resource/js/plugin/plugin.js"></script>
+    <script type="text/javascript" src="../../web-resource/js/plugin/artdialog/jquery.artDialog.min.js"></script>
+    <script type="text/javascript" src="../../web-resource/js/plugin/formvalidator/formValidator-4.1.3.js"></script>
+    <script type="text/javascript">
+        //     顶部工具条
+        $(".topbar .follow").hover(function(){
+            $(this).toggleClass("hover").find(".follow-box").toggle();
+        });
+        //    返回顶部
+        $(".go-top").find("a").on("click",function(){
+            $('html, body').animate({scrollTop:0},400)
+        })
+        //    面包屑固定
+        var bread = $(".bread-wrap"),  //面包屑对象
+                breadHeight = bread.outerHeight(),  //面包屑高度
+                offset_bread = bread.offset(),  //面包屑在视窗的相对偏移
+                goTop =  $(".rt-fixed-wrap"),  //返回顶部对象
+                multiProduct = $(".multi-product"),   //新品上线
+                upcomProduct = $(".upcom-product"),   //即将上线
+                multiPanel = $(".multi-product .pro-panel"),  //商品多选项面板
+                offset_multiPanel = multiProduct.offset(),  //商品多选项面板在视窗的相对偏移
+                upcomPanel = $(".upcom-product .pro-panel"),  //即将上线商品面板
+                offset_upcomPanel =  upcomProduct.offset(),  //即将上线商品面板在视窗的相对偏移
+                topBread = parseInt(offset_bread.top),
+                topMulti = parseInt(offset_multiPanel.top),
+                topUpcom = parseInt(offset_upcomPanel.top);
+        //    非ie6浏览器执行
+        if($.browser.version != '6.0'){
+            goTop.hide();
+            $(window).scroll(function(){
+                var scrollTop = $(window).scrollTop();
+                if(scrollTop >= topBread && scrollTop < topMulti){
+                    bread.css({
+                        "position": "fixed",
+                        "top": 0,
+                        "left": 0,
+                        "width": "100%",
+                        "z-index": 10
+                    });
+                    goTop.show();
+                    multiPanel.removeClass("pro-fixed-m");
+                    upcomPanel.removeClass("pro-fixed-u");
+                }
+                else if(scrollTop >= topMulti && scrollTop < topUpcom){
+                    bread.css({
+                        "position": "fixed",
+                        "top": 0,
+                        "left": 0,
+                        "width": "100%",
+                        "z-index": 10
+                    });
+                    goTop.show();
+                    upcomPanel.removeClass("pro-fixed-u");
+                    multiPanel.addClass("pro-fixed-m");
+                }
+                else if(scrollTop >= topUpcom){
+                    bread.css({
+                        "position": "fixed",
+                        "top": 0,
+                        "left": 0,
+                        "width": "100%",
+                        "z-index": 10
+                    });
+                    goTop.show();
+                    multiPanel.removeClass("pro-fixed-m");
+                    upcomPanel.addClass("pro-fixed-u");
+                }
+                else if(scrollTop < topBread){
+                    bread.removeAttr("style");
+                    goTop.hide()
+                }
+
+            });
+        }
+        if($.browser.version == '6.0'){
+            $(".new-goods-issue li").hover(function(){
+                $(this).toggleClass("hover");
+            });
+        }
+        //    显示购物车list
+        $(".shopping-cart").hover(function(){
+            $(".shopping-box").toggle();
+        });
+        //    品牌预约
+        var barndApp = $(".brand-appointment .main").find("li");
+        barndApp.mouseenter(function(){
+            $(this).addClass("hover").find(".sale-wrap").fadeIn();
+        });
+        barndApp.mouseleave(function(){
+            $(this).removeClass("hover").find(".sale-wrap").hide();
+        });
+        //        倒计时
+        $(".countdown").each(function () {
+            var $this = $(this),
+                    data = $this.attr('data-config');
+            $this.Merlin({
+                "countDown": eval('(' + data + ')')
+            });
+        });
+        //      input焦点文本
+        $(".data-frame input").each(function(){
+            var $this = $(this);
+            $this.Merlin({
+                "inputFocus":{
+                    "setDefault": true
+                }
+            }).on("keyup",function(){
+                        var $this = $(this);
+                        if(parseInt($.trim($this.val()).length) > 0 ){
+                            $this.next().addClass("highlight");
+                        }
+                        else{
+                            $this.next().removeClass("highlight");
+                        }
+                    });
+        });
+        //    选项卡
+        $(".sale-notice .tab").Merlin({
+            "tabSwitcher":{
+                tabCls:"ul li",
+                trigger:"hover",
+                effect: true
+            }
+        });
+        //    最新上线左侧面板
+        $(".multi-product").Merlin({
+            "tabSwitcher":{
+                tabCls:".pro-panel a",
+                trigger:"click",
+                effect: true,
+                evt: function(){
+                    var ele = $(".pro-panel a.cur"),
+                            index = $(".pro-panel a").index(ele);
+                    multiPanel.css("background-position","-"+index*26+"px" + " -608px")
+                }
+            }
+        });
+        //    品牌预约提交
+        var poBrInf = $("#postBrandInfo");
+        poBrInf.click(function(){
+            $.dialog({
+                title: false,
+                follow: poBrInf.get(0),
+                content: "提交成功，谢谢！"
+            });
+            $(".d-close").hide();
+        })
+        //      注册登录
+        $("#log-reg-wrap").Merlin({
+            "tabSwitcher":{
+                tabCls:".log-reg-panel li",
+                trigger:"click",
+                effect: true
+            }
+        });
+        $(".login,.register").click(function(){
+            var $this = $(this);
+            var dialog = $.dialog({
+                title: false,
+                padding: "0",
+                content: $("#log-reg-wrap").get(0),
+                fixed: true,
+                lock: true
+            });
+            if ($this.hasClass('register')) {
+                $('#log-reg-wrap .log-reg-panel li:eq(1)').trigger('click');
+            } else if ($this.hasClass('login')) {
+                $('#log-reg-wrap .log-reg-panel li:eq(0)').trigger('click');
+            }
+        });
+        //    表格内效果
+        $(".tab-item input").each(function(){
+            var $this = $(this);
+            $this.Merlin({
+                "inputFocus":{
+                    "setDefault": true
+                }
+            })
+        });
+        //   验证
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="notice" extends="uhome-default" namespace="/admin/notice">
+		<action name="notice-*"
+			class="com.ytoxl.uhomemanage.web.action.notice.NoticeAction" method="{1}">
+			<result name="searchNoitce">/WEB-INF/pages/notice/searchNotice.jsp</result>
+			<result name="editNoitce">/WEB-INF/pages/notice/editNotice.jsp</result>
+			<result name="viewNoitce">/WEB-INF/pages/notice/viewNotice.jsp</result>
+			<result name="turnAction" type="redirectAction">${nextAction}</result>
+		</action>
+	</package>
+</struts>

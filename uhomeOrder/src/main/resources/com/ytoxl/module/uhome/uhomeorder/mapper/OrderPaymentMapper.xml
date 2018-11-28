@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderPaymentMapper">
+
+  <insert id="add" parameterType="OrderPayment" keyProperty="orderPaymentId" useGeneratedKeys="true">
+		INSERT INTO order_payment
+            (orderPaymentId,
+             orderId,
+             documentNo,
+             documentType,
+             status,
+             paymentAmount,
+             hasInvoice,
+             invoiceTitle,
+             account,
+             accountInfo,
+             payTime,
+             ipAddress,
+             returnReason,
+             createTime,
+             closingCostAmount)
+		VALUES (#{orderPaymentId},
+		        #{orderId},
+		        #{documentNo},
+		        #{documentType},
+		        #{status},
+		        #{paymentAmount},
+		        #{hasInvoice},
+		        #{invoiceTitle},
+		        #{account},
+		        #{accountInfo},
+		        #{payTime},
+		        #{ipAddress},
+		        #{returnReason},
+		        CURRENT_TIMESTAMP,
+		        #{closingCostAmount})                  
+  </insert>
+  
+  <!-- 根据删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_payment WHERE orderPaymentId = #{orderPaymentId}
+  </delete>
+  
+  <!-- 修改payment信息 -->
+  <update id="update" parameterType="OrderPayment">
+		UPDATE order_payment
+		SET 
+		  orderId = #{orderId},
+		  documentNo = #{documentNo},
+		  documentType = #{documentType},
+		  status = #{status},
+		  paymentAmount = #{paymentAmount},
+		  hasInvoice = #{hasInvoice},
+		  invoiceTitle = #{invoiceTitle},
+		  account = #{account},
+		  accountInfo = #{accountInfo},
+		  payTime = #{payTime},
+		  ipAddress = #{ipAddress},
+		  returnReason = #{returnReason},
+		  updateTime = CURRENT_TIMESTAMP,
+		  closingCostAmount = #{closingCostAmount}
+		WHERE orderPaymentId = #{orderPaymentId}
+  </update>
+  
+  <select id="get" parameterType="integer" resultType="OrderPayment">
+        SELECT
+		  orderPaymentId,
+		  orderId,
+		  documentNo,
+		  documentType,
+		  status,
+		  paymentAmount,
+		  hasInvoice,
+		  invoiceTitle,
+		  account,
+		  accountInfo,
+		  payTime,
+		  ipAddress,
+		  returnReason,
+		  updateTime,
+		  createTime,
+		  closingCostAmount
+		FROM order_payment 
+		WHERE orderPaymentId = #{orderPaymentId}
+  </select>
+  <!-- 根据订单id获取payment -->
+  <select id="getOrderPaymentByOrderId" parameterType="integer" resultType="OrderPayment">
+        SELECT
+		  orderPaymentId,
+		  orderId,
+		  documentNo,
+		  documentType,
+		  status,
+		  paymentAmount,
+		  hasInvoice,
+		  invoiceTitle,
+		  account,
+		  accountInfo,
+		  payTime,
+		  ipAddress,
+		  returnReason,
+		  updateTime,
+		  createTime,
+		  closingCostAmount
+		FROM order_payment 
+		WHERE orderId = #{orderId}
+  </select>
+  
+   <!-- 修改支付状态 -->
+  <update id="updateStatus" parameterType="OrderPayment">
+		UPDATE order_payment
+		SET 
+		  status = #{status},
+		  <if test="returnReason!='' and returnReason!=null">
+		 	 returnReason = #{returnReason},
+		  </if>
+		  updateTime = CURRENT_TIMESTAMP
+		WHERE orderPaymentId = #{orderPaymentId}
+  </update>
+  
+   <!-- 根据优惠卷平摊抵扣后更新实际支付金额 -->
+   <update id="updateOrderActualPayment" parameterType="OrderPayment">
+		UPDATE order_payment
+		SET 
+		  paymentAmount = #{paymentAmount},
+		  updateTime = CURRENT_TIMESTAMP
+		WHERE orderPaymentId = #{orderPaymentId}
+  </update>
+  
+  <select id="deleteOrderPaymentByOrderId" resultType="java.lang.Integer">
+  		delete from order_payment where orderId=#{orderId}
+  </select>
+</mapper>

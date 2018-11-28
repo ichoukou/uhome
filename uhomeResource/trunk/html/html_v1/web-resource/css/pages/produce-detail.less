@@ -1,0 +1,250 @@
+@charset "utf-8";
+/**
+ * Created by JetBrains PhpStorm.
+ * User: jVan
+ * Date: 13-3-7
+ * Time: 下午5:46
+ * Description: 
+ */
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../lib/global.less';
+@import '../lib/crumbs.less';
+.produce-top{
+  margin: 20px 0 60px;
+}
+//商品左侧小图
+.multizoom{
+  float: left;
+  display: inline;
+  width: 70px;
+  margin-right: 10px;
+  a{
+    display: block;
+    width: 60px;
+    border: 1px solid #cdcdcd;
+    padding: 2px;
+    margin-bottom: 25px;
+    &.cur{
+      border: 1px solid #f96619;
+      position: relative;
+      i{
+        position: absolute;
+        right: -7px;
+        top: 24px;
+        border-left: 6px solid #f96619;
+        border-top: 6px solid #ffffff;
+        border-bottom: 6px solid #ffffff;
+        width: 0;
+        height: 0;
+        line-height: 0;
+      }
+    }
+  }
+}
+//商品放大zoom
+.property{
+  overflow: hidden;
+  *zoom: 1;
+}
+.targetarea{
+  float: left;
+  display: inline;
+  width: 400px;
+  padding-right: 10px;
+  border-right: 1px solid #cdcdcd;
+  position: relative;
+  .surplus{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 400px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    color: #ffffff;
+    background:rgba(187,187,187,0.8);
+    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#ccbbbbbb,endColorstr=#ccbbbbbb)";
+    zoom:1;
+  }
+}
+:root .targetarea .surplus{filter:none\9;}/*for IE9*/
+.pro-details{
+  overflow: hidden;
+  *zoom: 1;
+  padding-left: 25px;
+  .goods-name{
+    padding-left: 10px;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: #1a1a1a;
+  }
+  .goods-price{
+    padding-left: 10px;
+    .g-val{
+      font-size: 30px;
+      font-family: "黑体";
+      color: #ad2a29;
+    }
+  }
+  .goods-org-item{
+    padding-bottom: 5px;
+    padding-left: 10px;
+    border-bottom: 1px solid #cdcdcd;
+    color: #1a1a1a;
+    td{
+      padding: 5px 0;
+    }
+    .g-val{
+      color: #a70504;
+    }
+  }
+  .goods-sort-list{
+    padding: 0 0 10px 10px;
+    li{
+       padding: 10px 0;
+      overflow: hidden;
+      *zoom: 1;
+    }
+    .tit{
+      float: left;
+      width: 65px;
+      line-height: 24px;
+      color: #1a1a1a;
+      text-align: right;
+    }
+    .info{
+      overflow: hidden;
+      *zoom: 1;
+      padding-left: 10px;
+      span{
+        float: left;
+        border: 1px solid #cdcdcd;
+        padding: 2px 5px;
+        margin-right: 10px;
+        cursor: pointer;
+        &.selected{
+          border: 1px solid #a40035;
+        }
+      }
+    }
+    .change-sum,.change-txt{
+      float: left;
+    }
+    .change-sum{
+      width: 83px;
+      input{
+        float: left;
+        width: 50px;
+        margin-right: 3px;
+        padding: 7px 5px;
+        border: 1px solid #cdcdcd;
+      }
+      .add,.reduce{
+        float: left;
+        width: 18px;
+        height: 14px;
+        background: url("../../images/add_sub.gif") no-repeat;
+      }
+      .add{
+        margin-bottom: 2px;
+      }
+      .reduce{
+        background-position: 0 -28px;
+      }
+    }
+    .change-txt{
+      margin: 4px 0 0 10px;
+    }
+  }
+  .surplus{
+    padding-left: 10px;
+  }
+  .goods-btn{
+    margin: 5px 0 15px;
+    padding-left: 10px;
+    .btn-c{
+      margin-right: 30px;
+    }
+  }
+}
+//大图层
+.magnifyarea{
+  margin-top: 0!important;
+  border: 1px solid #cdcdcd;
+}
+//左侧静态模板
+.static-mod{
+  float: left;
+  display: inline;
+  width: 220px;
+  margin-right: 18px;
+  border: 1px solid #d2d2d2;
+  .hd{
+    height: 27px;
+    line-height: 27px;
+    font-size: 14px;
+    color: #000000;
+    padding-left: 15px;
+    background-color: #f2f2f2;
+  }
+  .bd{
+    padding: 10px;
+  }
+  dl{
+    overflow: hidden;
+    *zoom: 1;
+    margin-bottom: 20px;
+  }
+  dt{
+    float: left;
+    width: 76px;
+    height: 76px;
+    display: inline;
+    margin-right: 8px;
+  }
+  dd{
+    float: left;
+    width: 116px;
+    &.link{
+      height: 56px;
+      overflow: hidden;
+    }
+  }
+}
+.pro-main{
+  float: left;
+  width: 740px;
+}
+//绿色tab选项卡
+.tab-gn{
+  ul{
+    height: 32px;
+    border-bottom: 2px solid #88cbcd;
+  }
+  li{
+    float: left;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 22px;
+    color: #1a1a1a;
+    font-size: 14px;
+    cursor: pointer;
+    &.cur{
+      color: #ffffff;
+      background-color: #88cbcd;
+      position: relative;
+      b{
+        position: absolute;
+        border-top: 6px solid #88cbcd;
+        border-left: 6px solid #ffffff;
+        border-right: 6px solid #ffffff;
+        line-height: 0;
+        width: 0;
+        height: 0;
+        bottom: -8px;
+        left: 45px;
+      }
+    }
+  }
+}

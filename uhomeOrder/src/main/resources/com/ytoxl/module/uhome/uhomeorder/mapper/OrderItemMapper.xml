@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomeorder.mapper.OrderItemMapper">
+
+  <insert id="add" parameterType="OrderItem" keyProperty="orderItemId" useGeneratedKeys="true">
+		INSERT INTO order_item
+            (orderItemId,orderId,sellerId,productSkuId,orderSource,num,closingCost,marketPrice,productName,rebatePrice)
+		VALUES ( #{orderItemId},
+		         #{orderId},
+		         #{sellerId},
+		         #{productSkuId},
+		         #{orderSource},
+		         #{num},
+		         #{closingCost},
+		         #{marketPrice},
+		         #{productName},
+		         #{rebatePrice})               
+  </insert>
+  
+
+  <!-- 删除一条数据 -->
+  <delete id="del" parameterType="java.lang.Integer">
+		DELETE FROM order_item WHERE orderItemId = #{orderItemId}
+  </delete>
+  
+  <!-- 根据址库编码修改地址库信息 -->
+  <update id="update" parameterType="OrderItem">
+		UPDATE order_item
+		SET 
+		  orderId = #{orderId},
+		  sellerId = #{sellerId},
+		  productSkuId = #{productSkuId},
+		  orderSource = #{orderSource},
+		  num = #{num},
+		  closingCost = #{closingCost},
+		  marketPrice = #{marketPrice},
+		  productName = #{productName},
+		  rebatePrice = #{rebatePrice}
+		WHERE orderItemId = #{orderItemId}
+  </update>
+
+  <select id="get" parameterType="integer" resultType="OrderItem">
+        SELECT
+		  orderItemId,
+		  orderId,
+		  sellerId,
+		  productSkuId,
+		  orderSource,
+		  num,
+		  closingCost,
+		  marketPrice,
+		  productName,
+		  rebatePrice
+		FROM order_item
+		where orderItemId = #{orderItemId}
+  </select>
+  <!--根据订单id获取订单明细  -->
+  <select id="listOrderItemsByOrderId" parameterType="integer" resultType="OrderItem">
+         SELECT
+		  oi.orderItemId,
+		  orderId,
+		  oi.sellerId,
+		  productSkuId,
+		  orderSource,
+		  oi.num,
+		  closingCost,
+		  marketPrice,
+		  productName,
+		  s.contactName				as `seller.contactName`,
+		  s.email					as `seller.email`,
+		  s.mobile					as `seller.mobile`,
+		  s.companyAddress			as `seller.companyAddress`,
+		  s.companyRegionId			as `seller.companyRegionId`				
+		FROM order_item oi LEFT JOIN order_return_item ori on oi.orderItemId=ori.orderItemId
+			inner join seller s on s.sellerId=oi.sellerId
+		where orderId = #{orderId}
+  </select>
+  
+  <!--根据订单id获取订单明细前台使用，后台绕边，禁止修改  -->
+  <select id="listOrderItemsByOrderId4Front" parameterType="integer" resultType="OrderItem">
+         SELECT
+		  oi.orderItemId,
+		  orderId,
+		  oi.sellerId,
+		  productSkuId,
+		  orderSource,
+		  oi.num,
+		  closingCost,
+		  marketPrice,
+		  productName,
+		  s.contactName				as `seller.contactName`,
+		  s.email					as `seller.email`,
+		  s.mobile					as `seller.mobile`,
+		  s.companyAddress			as `seller.companyAddress`,
+		  s.companyRegionId			as `seller.companyRegionId`				
+		FROM order_item oi inner join seller s on s.sellerId=oi.sellerId
+		where orderId = #{orderId}
+  </select>
+  
+  <!--根据订单明细id获取订单明细  -->
+  <select id="listOrderItemsByIds" resultType="OrderItem">
+        SELECT * FROM order_item oi WHERE oi.orderId=#{orderId}  
+		<if test="orderItemIds!=null and orderItemIds.size()>0 ">
+				AND oi.orderItemId IN 
+		  <foreach collection="orderItemIds" item="orderItemId"  open="(" separator="," close=")"> 
+          		#{orderItemId}  
+          </foreach>
+	   </if>
+  </select>
+
+ <!--根据订单id获取可以退货的订单明细  -->
+  <select id="listItemsOrderId" parameterType="integer" resultType="OrderItem">
+         select * from order_item where orderId =#{orderId}
+  </select>
+
+ <!--根据订单orderid获取订单项目 和订单具体值  -->
+  <select id="getItemOrderReturn" parameterType="integer" resultType="OrderItem">
+         select * from order_item where orderId =#{orderId}
+  </select>
+
+<!--根据订单orderid获取订单项目 和退货订单具体值  -->
+  <select id="getItemOrderReturnByOrderId" parameterType="integer" resultType="OrderItem">
+         select * from order_item where orderId =#{orderId}
+  </select>
+  
+<!--根据订单明细Idid获取订单可退货数量  -->
+  <select id="getOrderItemReturnNumById" parameterType="integer" resultType="Integer">
+        SELECT (IFNULL(oi.num,0)-IFNULL(SUM(ori.num),0)) 
+		FROM order_item oi LEFT JOIN order_return_item ori
+		ON oi.orderItemId=ori.orderItemId 
+		where oi.orderItemId=#{orderItemId}
+  </select>
+  
+  <!-- 通过orderId获取订单明细  导出 -->
+  <select id="getOrderItemByOrderId" resultType="OrderItem" parameterType="java.lang.Integer">
+  		<include refid="selectOrderItemByOrderId"/>
+		 where head.orderId=#{orderId}
+		 <!-- group by head.orderNo, ps.productSkuId	 -->
+  </select>
+  <!-- 通过orderId获取订单明细  导出 -->
+  <select id="getOrderItemByItemId" resultType="OrderItem" parameterType="java.lang.Integer">
+  		<include refid="selectOrderItemByOrderId"/>
+		 where item.orderItemId=#{itemId}
+		<!-- group by head.orderNo, ps.productSkuId	 -->
+  </select>
+  <sql id="selectOrderItemByOrderId">
+  	<!-- select 
+			head.orderNo					as `orderNo`,
+			item.productName,
+			item.num,
+			item.closingCost,
+			head.status						as `orderStatus`,
+			ps.skuCode						as `skuCode`,
+			ps.internationalCode	as `internationalCode`,
+			ps.productSkuId,
+			item.orderItemId
+		from order_item item 
+		 left join order_head head on item.orderId=head.orderId
+		 left join product_sku ps on ps.productSkuId=item.productSkuId	 -->
+		 select 
+			head.orderNo					as `orderNo`,
+			item.productName,
+			item.num,
+			item.closingCost,
+			item.rebatePrice,
+			head.status						as `orderStatus`,
+			ps.skuCode						as `skuCode`,
+			ps.internationalCode			as `internationalCode`,
+			<!-- GROUP_CONCAT(IFNULL(psov.overrideSkuOptionValue,sov.skuOptionValue)) productProperty, -->
+			item.orderItemId,
+			u.username						as `sellerName`,
+			b.name							as `brandName`,
+			head.createTime					as `orderCreateTime`
+		 from order_item item 
+			 left join order_head head on item.orderId=head.orderId
+			 left join product_sku ps on ps.productSkuId=item.productSkuId
+			<!-- 		 
+			 left join product_sku_option_value psov on ps.productSkuId=psov.productSkuId
+			 left join sku_option_value sov on sov.skuOptionValueId=psov.skuOptionValueId 
+			-->
+			 left join seller s on s.sellerId=item.sellerId
+			 left join user u on u.userId=s.userId
+			 left join product pro on ps.productId=pro.productId
+			 left join brand b on b.brandId=pro.brandId		
+  </sql>
+  <!-- 更新每条订单明细中折扣后的总金额 -->
+  <update id="updateOrderItemReducedPrice" parameterType="OrderItem">
+		UPDATE order_item
+		SET 
+		  rebatePrice = #{rebatePrice}
+		WHERE orderItemId = #{orderItemId}
+  </update>
+   <!-- 验证该orderitemid是否合法 -->
+  <select id="checkOrderItem" resultType="Integer" parameterType="OrderItem">
+		 select item.orderItemId
+		 from order_head head 
+			 inner join order_item item on item.orderId=head.orderId
+		 where item.orderItemId=#{orderItemId} and head.userId = #{userId} and (head.status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED} 
+		or head.status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_RETURN}
+		or head.status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND}
+		)
+  </select>
+  
+  <select id="deleteOrderItemByOrderId" resultType="java.lang.Integer">
+  		delete from order_item where orderId=#{orderId}
+  </select>
+  
+  <!-- 根据orderId查询订单详情 -->
+  <select id="getOrderItemByOrderIdForPush" parameterType="java.lang.Integer" resultType="OrderItem">
+		SELECT
+			  closingCost,
+			  productSkuId,
+			  num,
+			  productName,
+			  productSkuId,
+			  rebatePrice
+		FROM order_item
+		WHERE orderId=#{orderId}
+  </select>
+</mapper>

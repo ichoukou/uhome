@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ytoxl.module.uhome.uhomereport.mapper.BrandSellPlanReportMapper">
+	<!-- 按排期查询商家信息 -->
+	<sql id="getSellerByPlan">
+		SELECT pl.planId,p.sellerId,s.companyName AS sellerName,
+		pl.brandId ,b.`name` AS brandName,
+		pc.`name` AS categoryName,pl.startTime,pl.endTime,
+		COUNT(ps.productSkuId) AS onlineSkuNum
+		FROM plan pl
+		JOIN plan_product pp ON pp.planId = pl.planId
+		JOIN product p ON pp.productId = p.productId
+		JOIN product_sku ps ON p.productId = ps.productId
+		JOIN brand b ON pl.brandId = b.brandId
+		JOIN product_category pc ON pl.productCategoryId = pc.productCategoryId
+		JOIN seller s ON p.sellerId = s.sellerId
+	</sql>
+	
+	<!-- 按排期查询商家信息查询条件 -->
+	<sql id="sellerWhere">
+		WHERE pl.`status`=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@STATUS_RELEASE} 
+		AND pl.type=${@com.ytoxl.module.uhome.uhomebase.dataobject.Plan@TYPE_SPECIAL_SELLER}
+		<if test="sellerId!='' and sellerId!=null">
+			AND p.sellerId = #{sellerId}
+		</if>
+		<if test="brandId!='' and brandId!=null">
+			AND pl.brandId = #{brandId}
+		</if>
+		<if test="time!=null and time!=''">
+			AND (DATE_FORMAT(pl.startTime,'%Y-%m') =#{time} OR DATE_FORMAT(pl.endTime,'%Y-%m') =#{time})
+		</if>
+	</sql>
+	
+	<!-- 按排期查询商家信息分组 -->
+	<sql id="sellerGroupBy">
+		GROUP BY pl.planId,p.sellerId
+	</sql>
+	
+	<!-- 按排期查询商家信息排序 -->
+	<sql id="sellerOrderBy">
+		ORDER BY pl.startTime,pl.endTime,p.sellerId
+	</sql>
+	
+	
+	<!-- 按排期分页查询商家信息总记录数 -->
+	<select id="searchSellerCountByPlan" parameterType="map" resultType="integer">
+		SELECT COUNT(*) FROM (
+		<include refid="getSellerByPlan" />
+		<include refid="sellerWhere"/>
+		<include refid="sellerGroupBy"/>
+		) sell
+	</select>
+
+	<!-- 按排期分页查询商家信息-->
+	<select id="searchSellerByPlan" parameterType="map"
+		resultType="BrandSellPlanReport">
+		SELECT sell.* FROM (
+		<include refid="getSellerByPlan" />
+		<include refid="sellerWhere"/>
+		<include refid="sellerGroupBy"/>
+		<include refid="sellerOrderBy"/>
+		) sell 
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<!-- 报表导出 -->
+	<select id="listSellerByPlan" parameterType="map" resultType="BrandSellPlanReport">
+		<include refid="getSellerByPlan" />
+		<include refid="sellerWhere"/>
+		<include refid="sellerGroupBy"/>
+		<include refid="sellerOrderBy"/>
+	</select>
+	
+	<select id="getSellerOtherCount" parameterType="map" resultType="BrandSellPlanReport">
+		SELECT 
+		COUNT(DISTINCT ps.productSkuId) AS skuSellNum,
+		SUM(oi.num) AS sellNum,
+		SUM(IFNULL(oi.rebatePrice,oi.closingCost*oi.num)) AS sellAmount 
+		FROM product p 
+		JOIN plan_product pp ON p.productId = pp.productId
+		JOIN plan pl ON pp.planId = pl.planId AND pl.planId=#{planId}
+		JOIN product_sku ps ON p.productId = ps.productId
+		JOIN order_item oi ON ps.productSkuId = oi.productSkuId
+		JOIN order_head oh ON oh.orderId = oi.orderId
+		WHERE p.brandId = #{brandId} 
+		AND p.sellerId = #{sellerId} 
+		AND oh.`status` IN(${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_WAITSEND},
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_SEND},
+		${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderHead@STATUS_FINISHED})
+		<if test="stime!=null and stime!=''">
+			AND oh.createTime &gt;= #{stime}
+		</if>
+		<if test="etime!=null and etime!=''">
+			AND oh.createTime &lt;= #{etime}
+		</if>
+	</select>
+	
+</mapper>

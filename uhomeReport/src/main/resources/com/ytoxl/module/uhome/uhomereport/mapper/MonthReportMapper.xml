@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomereport.mapper.MonthReportMapper">
+	
+	<!-- 查询成功订单数量及总额 -->
+	<select id="getTotalPrice" parameterType="map" resultType="MonthReport">
+		SELECT IFNULL(SUM(pay.paymentAmount), 0) sellOrderAmount,
+				COUNT(pay.orderId) sellOrderCount 
+		FROM order_payment pay
+		WHERE pay.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_PAYED} 
+		and pay.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+		<if test="sellerId!='' and sellerId!=null">
+			AND pay.orderId IN (SELECT orderId FROM order_item WHERE sellerId = #{sellerId})
+		</if>
+		<if test="brandId!='' and brandId!=null">
+			AND pay.orderId IN (
+				SELECT a.orderId
+				FROM order_item a, product_sku b, product c
+				WHERE a.productSkuId = b.productSkuId
+					AND b.productId = c.productId
+					AND c.brandId = #{brandId}
+			)
+		</if>
+		<if test="time!=null and time!=''">AND DATE_FORMAT(pay.payTime, '%Y-%m') = #{time}</if>
+	</select>
+	
+	<!-- 查询退货订单数及总额-->
+	<select id="getTotalReturnPrice" parameterType="map" resultType="MonthReport">
+		SELECT IFNULL(SUM(pay.paymentAmount), 0) returnOrderAmount,
+				COUNT(pay.orderReturnId) returnOrderCount 
+			FROM order_return_payment pay
+		WHERE pay.status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}
+		<if test="sellerId!='' and sellerId!=null">
+			AND pay.orderReturnId IN (
+				SELECT DISTINCT a.orderReturnId 
+					FROM order_return_item a, order_item b
+				WHERE a.orderItemId = b.orderItemId
+					AND b.sellerId = #{sellerId}
+			)
+		</if>
+		<if test="brandId != '' and brandId!=null">
+			AND pay.orderReturnId IN (
+				SELECT DISTINCT a.orderReturnId 
+					FROM order_return_item a, order_item b, product_sku c, product d
+				WHERE a.orderItemId = b.orderItemId
+					AND b.productSkuId = c.productSkuId
+					AND c.productId = d.productId
+					AND d.brandId = #{brandId}
+			)
+		 </if>
+		 <if test="time!=null and time!=''">AND DATE_FORMAT(pay.payTime, '%Y-%m') = #{time}</if>
+  </select>
+  
+  <sql id="selectOrders">
+	(SELECT 	head.orderId, head.orderNo, 1 AS type, pay.payTime,
+			bra.brandId, bra.`name` AS brandName, pro.`name` AS productName,
+			item.sellerId, item.closingCost, item.num, 
+			IF(item.rebatePrice IS NULL, 0, item.closingCost * item.num - item.rebatePrice) AS allowance,
+			IFNULL(item.rebatePrice, item.closingCost * item.num) AS totalPrice
+	FROM order_item item
+		INNER JOIN order_head head ON item.orderId = head.orderId
+		INNER JOIN product_sku sku ON item.productSkuId = sku.productSkuId
+		INNER JOIN product pro ON sku.productId = pro.productId
+		INNER JOIN brand bra ON pro.brandId = bra.brandId
+		INNER JOIN order_payment pay ON item.orderId = pay.orderId
+	WHERE pay.status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_PAYED}
+	UNION ALL
+	SELECT 	head.orderId, head.orderNo, 0 AS type, pay.payTime,
+			bra.brandId, bra.`name` AS brandName, pro.`name` AS productName,
+			item.sellerId, item.closingCost, retItem.num,
+			IF(pay.paymentAmount = item.closingCost * retItem.num, 0, item.closingCost * retItem.num - pay.paymentAmount) AS allowance,
+			pay.paymentAmount AS totalPrice 
+	FROM order_return_item retItem
+		INNER JOIN order_return ret ON retItem.orderReturnId = ret.orderReturnId
+		INNER JOIN order_head head ON ret.orderId = head.orderId
+		INNER JOIN order_item item ON retItem.orderItemId = item.orderItemId
+		INNER JOIN product_sku sku ON item.productSkuId = sku.productSkuId
+		INNER JOIN product pro ON sku.productId = pro.productId
+		INNER JOIN brand bra ON pro.brandId = bra.brandId
+		INNER JOIN order_return_payment pay ON retItem.orderReturnId = pay.orderReturnId
+	WHERE pay.status = ${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderReturnPayment@STATUS_REFUND}) t
+  </sql>
+  
+  <sql id="where">
+ 	<where>
+	  	<if test="sellerId!='' and sellerId!=null">t.sellerId = #{sellerId}</if>
+		<if test="brandId!='' and brandId!=null">AND t.brandId = #{brandId}</if>
+		<if test="time!=null and time!=''">AND DATE_FORMAT(t.payTime,'%Y-%m') = #{time}</if>
+	</where>
+  </sql>
+  
+  <sql id="orderBy">
+	  <if test="sort != null and sort != ''">
+			ORDER BY ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+			</if>
+		</if>
+  </sql>
+  
+  <!-- 报表列表 -->
+  <select id="searchMonthReports" parameterType="map" resultType="MonthReport">
+  	SELECT * 
+  		FROM <include refid="selectOrders"/>
+  	<include refid="where"/>
+  	<include refid="orderBy"/>
+  	LIMIT #{start},#{limit}
+  
+  		<!-- SELECT * FROM (SELECT
+			order_return.orderId,
+			order_head.orderNo,
+			order_return_item.num,
+			order_item.closingCost,
+			order_item.sellerId,
+			payment.updateTime,
+			productName,
+			b.name as brandName ,
+			b.brandId brandId,
+			order_return_item.num *order_item.closingCost totalPrice,
+			0 as type
+			FROM
+			order_return_item
+			INNER JOIN order_return ON order_return.orderReturnId =
+			order_return_item.orderReturnId
+			INNER JOIN order_item ON order_return_item.orderItemId =
+			order_item.orderItemId
+			INNER JOIN order_head on order_head.orderId=order_return.orderId
+			INNER JOIN order_payment payment on payment.orderId=order_head.orderId
+			LEFT JOIN product_sku ps on order_item.productSkuId=ps.productSkuId
+			LEFT JOIN product p on ps.productId=p.productId
+			LEFT JOIN brand b on p.brandId=b.brandId
+			where payment.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_REFUND} and
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_REFUND}
+			UNION
+			SELECT
+			order_head.orderId,
+			order_head.orderNo,
+			(order_item.num-IFNULL(ori.num,0)) num,
+			order_item.closingCost,
+			order_item.sellerId,
+			payment.updateTime,
+			productName,
+			b.name as brandName ,
+			b.brandId brandId,
+			(order_item.num-IFNULL(ori.num,0)) *order_item.closingCost totalPrice,
+			1 as type
+			FROM
+			order_head
+			INNER JOIN order_payment payment ON payment.orderId=order_head.orderId
+			LEFT JOIN order_item ON order_head.orderId = order_item.orderId
+			LEFT JOIN product_sku ps on order_item.productSkuId=ps.productSkuId
+			LEFT JOIN product p on ps.productId=p.productId
+			LEFT JOIN brand b on p.brandId=b.brandId
+			LEFT JOIN order_return_item ori on order_item.orderItemId=ori.orderItemId
+			where payment.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_PAYED} and
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			) 
+		month_report where 1=1
+		<if test="sellerId!='' and sellerId!=null">
+			and orderId in(
+			SELECT
+			order_item.orderId
+			FROM
+			order_item
+			WHERE
+			order_item.sellerId=#{sellerId}
+			)
+		</if>
+		<if test="brandId != '' and brandId!=null">
+			and orderId in(
+			SELECT
+			order_item.orderId
+			FROM
+			order_item
+			INNER JOIN
+			product_sku ON order_item.productSkuId =
+			product_sku.productSkuId
+			INNER JOIN product ON product_sku.productId =
+			product.productId
+			INNER
+			JOIN brand ON product.brandId = brand.brandId
+			WHERE
+			brand.brandId=#{brandId}
+			)
+		 </if>
+		<if test="time!=null and time!=''">
+			and
+			DATE_FORMAT(updateTime,'%Y-%m')=#{time} 
+		 </if>
+		 <if test="sort != null and sort != ''">
+			order by ${sort}
+			<if test="dir != null and dir != ''">
+				${dir}	
+				</if>
+		 </if>
+		 <if test="sort != null || sort != ''">
+			order by updateTime desc	
+		 </if>
+		limit #{start},#{limit} -->
+  </select>
+   <!-- 报表列表 -->
+  <select id="searchMonthReportsCount" parameterType="map" resultType="integer">
+	  SELECT COUNT(*) 
+	  		FROM <include refid="selectOrders"/>
+	  	<include refid="where"/>
+  		<include refid="orderBy"/>
+	  	
+  		<!-- SELECT count(*) FROM (SELECT
+			order_return.orderId,
+			order_head.orderNo,
+			order_return_item.num,
+			order_item.closingCost,
+			order_item.sellerId,
+			payment.updateTime,
+			productName,
+			b.name as brandName ,
+			b.brandId brandId,
+			order_return_item.num *order_item.closingCost totalPrice,
+			0 as type
+			FROM
+			order_return_item
+			INNER JOIN order_return ON order_return.orderReturnId =
+			order_return_item.orderReturnId
+			INNER JOIN order_item ON order_return_item.orderItemId =
+			order_item.orderItemId
+			INNER JOIN order_head on order_head.orderId=order_return.orderId
+			INNER JOIN order_payment payment ON payment.orderId=order_head.orderId
+			LEFT JOIN product_sku ps on order_item.productSkuId=ps.productSkuId
+			LEFT JOIN product p on ps.productId=p.productId
+			LEFT JOIN brand b on p.brandId=b.brandId
+			where payment.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_REFUND} and
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_REFUND}
+			UNION
+			SELECT
+			order_head.orderId,
+			order_head.orderNo,
+			(order_item.num-IFNULL(ori.num,0)) num,
+			order_item.closingCost,
+			order_item.sellerId,
+			payment.updateTime,
+			productName,
+			b.name as brandName ,
+			b.brandId brandId,
+			(order_item.num-IFNULL(ori.num,0)) *order_item.closingCost totalPrice,
+			1 as type
+			FROM
+			order_head
+			INNER JOIN order_payment payment ON payment.orderId=order_head.orderId
+			LEFT JOIN order_item ON order_head.orderId = order_item.orderId
+			LEFT JOIN product_sku ps on order_item.productSkuId=ps.productSkuId
+			LEFT JOIN product p on ps.productId=p.productId
+			LEFT JOIN brand b on p.brandId=b.brandId
+			LEFT JOIN order_return_item ori on order_item.orderItemId=ori.orderItemId
+			where payment.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_PAYED} and
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			) 
+		month_report where 1=1
+		<if test="sellerId!='' and sellerId!=null">
+			and orderId in(
+			SELECT
+			order_item.orderId
+			FROM
+			order_item
+			WHERE
+			order_item.sellerId=#{sellerId}
+			)
+		</if>
+		<if test="brandId != '' and brandId!=null">
+			and orderId in(
+			SELECT
+			order_item.orderId
+			FROM
+			order_item
+			INNER JOIN
+			product_sku ON order_item.productSkuId =
+			product_sku.productSkuId
+			INNER JOIN product ON product_sku.productId =
+			product.productId
+			INNER
+			JOIN brand ON product.brandId = brand.brandId
+			WHERE
+			brand.brandId=#{brandId}
+			)
+		 </if>
+		<if test="time!=null and time!=''">
+			and
+			DATE_FORMAT(updateTime,'%Y-%m')=#{time} 
+		 </if> -->
+  </select>
+  
+  <!-- 报表导出列表 -->
+  <select id="listMonthReports" parameterType="map" resultType="MonthReport">
+   		SELECT * 
+	  		FROM <include refid="selectOrders"/>
+	  	<include refid="where"/>
+  		<include refid="orderBy"/>
+	  	
+	  	
+  		<!-- SELECT * FROM (SELECT
+				order_return.orderId,
+				order_head.orderNo,
+				order_return_item.num,
+				order_item.closingCost,
+				order_item.sellerId,
+				payment.updateTime,
+				productName,
+				b.name as brandName ,
+				b.brandId brandId,
+				order_return_item.num *order_item.closingCost totalPrice,
+				0 as type
+			FROM order_return_item
+			INNER JOIN order_return ON order_return.orderReturnId = order_return_item.orderReturnId
+			INNER JOIN order_item ON order_return_item.orderItemId = order_item.orderItemId
+			INNER JOIN order_head on order_head.orderId=order_return.orderId
+			INNER JOIN order_payment payment ON payment.orderId=order_head.orderId
+			LEFT JOIN product_sku ps on order_item.productSkuId=ps.productSkuId
+			LEFT JOIN product p on ps.productId=p.productId
+			LEFT JOIN brand b on p.brandId=b.brandId
+			where payment.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_REFUND} and
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_REFUND}
+			UNION
+			SELECT
+			order_head.orderId,
+			order_head.orderNo,
+			(order_item.num-IFNULL(ori.num,0)) num,
+			order_item.closingCost,
+			order_item.sellerId,
+			payment.updateTime,
+			productName,
+			b.name as brandName ,
+			b.brandId brandId,
+			(order_item.num-IFNULL(ori.num,0)) *order_item.closingCost totalPrice,
+			1 as type
+			FROM
+			order_head
+			INNER JOIN order_payment payment ON payment.orderId=order_head.orderId
+			LEFT JOIN order_item ON order_head.orderId = order_item.orderId
+			LEFT JOIN product_sku ps on order_item.productSkuId=ps.productSkuId
+			LEFT JOIN product p on ps.productId=p.productId
+			LEFT JOIN brand b on p.brandId=b.brandId
+			LEFT JOIN order_return_item ori on order_item.orderItemId=ori.orderItemId
+			where payment.status=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@STATUS_PAYED} and
+			payment.documentType=${@com.ytoxl.module.uhome.uhomeorder.dataobject.OrderPayment@DOCUMENTTYPE_RECEIPT}
+			) 
+		month_report where 1=1
+		<if test="sellerId!='' and sellerId!=null">
+			and orderId in(
+			SELECT
+			order_item.orderId
+			FROM
+			order_item
+			WHERE
+			order_item.sellerId=#{sellerId}
+			)
+		</if>
+		<if test="brandId != '' and brandId!=null">
+			and orderId in(
+			SELECT
+			order_item.orderId
+			FROM
+			order_item
+			INNER JOIN
+			product_sku ON order_item.productSkuId =
+			product_sku.productSkuId
+			INNER JOIN product ON product_sku.productId =
+			product.productId
+			INNER
+			JOIN brand ON product.brandId = brand.brandId
+			WHERE
+			brand.brandId=#{brandId}
+			)
+		 </if>
+		<if test="time!=null and time!=''">
+			and
+			DATE_FORMAT(updateTime,'%Y-%m')=#{time} 
+		 </if> -->
+  </select>
+</mapper>

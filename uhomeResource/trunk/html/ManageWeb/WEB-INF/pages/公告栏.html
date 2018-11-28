@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>公告栏</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js/pages/index.js"></script>
+</head>
+<body>
+<!--start header-->
+<!--end header-->
+<!--start body-->
+<div class="body m-w980p">
+	<div class="body-nav">
+    <ul class="m-clear">
+      <li><a>广告页面</a></li>
+      <li><a>站内信</a></li>
+      <li><a>网站地图</a></li>
+      <li><a>SEO信息</a></li>
+      <li><a>友情链接</a></li>
+      <li><a class="current-chose">公告栏</a></li>
+      <li><a>专题模板</a></li>
+    </ul>
+  </div>
+  <form class="m-clear m-mt10p">
+    <div class="m-fl">
+    	<span>标题：</span>
+    	<input type="text" class="txt-input" />
+    	<span>类型：</span>
+    	<select class="m-sel">
+    		<option>请选择</option>
+    		<option>活动资讯</option>
+    		<option>网站公告</option>
+    	</select>
+    	<span>状态：</span>
+    	<select class="m-sel">
+    		<option>请选择</option>
+    		<option>已审核</option>
+    		<option>未审核</option>
+    	</select>
+    	<input type="button" class="m-btn" value="查询" />
+    	<input type="button" class="m-btn J-editAd" value="添加公告" />
+    </div>
+    <!--右侧显示分页控件 start-->
+    <div class="m-fr curr-num">
+      <label>当前显示： </label>
+      <select class="m-sel">
+          <option>20条</option>
+          <option>50条</option>
+          <option>100条</option>
+          <option>200条</option>
+          <option>500条</option>
+      </select>
+    </div>
+    <!--右侧显示分页控件 end-->
+	</form>
+	<!--100%表格样式-->
+	<div class="m-mt10p">
+		<table id="tab" class="tab-control">
+      <thead>
+        <tr>
+        	<th with="7%"><input type="checkbox" name="checkAll" /> ID</th>
+          <th width="30%">标题</th>
+          <th width="15%">公告类型</th>
+          <th width="20%">发布时间</th>
+          <th width="10%">状态</th>
+          <th width="18%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 01</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>活动资讯</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">未审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">取消置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 02</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>网站公告</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">已审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">取消置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 03</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>活动资讯</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">未审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">取消置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 04</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>网站公告</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">已审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 05</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>活动资讯</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">未审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 06</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>网站公告</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">已审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 07</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>活动资讯</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">未审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 08</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>网站公告</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">已审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 09</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>活动资讯</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">未审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">置顶</a>
+      		</td>
+      	</tr>
+      	<tr class="list-tr">
+      		<td><input type="checkbox" name="checkSub" /> 10</td>
+      		<td><a href="#" class="c-blue" title="新龙直销上线了" >新龙直销上线了</a></td>
+      		<td>网站公告</td>
+      		<td>2013-11-8 14:46:09</td>
+      		<td><span class="c-green">已审核</span></td>
+      		<td>
+      			<a class="c-blue" href="javascript:;" href="">查询</a>
+      			<a class="c-blue" href="javascript:;" href="">修改</a>
+      			<a class="c-blue" href="javascript:;" href="">删除</a>
+      			<a class="c-blue" href="javascript:;" href="">置顶</a>
+      		</td>
+      	</tr>
+      </tbody>
+    </table>
+    <div class="m-mt10p">
+    	<input type="button" class="m-btn" value="通过审核" />
+    	<input type="button" class="m-btn" value="删除" />
+    </div>
+	</div>
+	<!--分页插件 start -->
+	<div class="pagination pagination-right">
+	    共<span class="items-all">36</span>条
+	    第<span class="page-all">10</span>页
+	    <a href="#"><span class="disable alldis"></span></a>
+	    <a href="#"><span class="current">1</span></a>
+	    <a href="#"><span>2</span></a>
+	    <a href="#"><span>3</span></a>
+	    <a href="#"><span>4</span></a>
+	    <span class="etc">...</span>
+	    <a href="#"><span>10</span></a>
+	    <a href="#" ><span class="next"></span></a>
+	    <span>共<i>1</i>页<i>1</i>条 到
+	    	<input type="text" class="goto-num" value="1" onfocus="this.value='';" />页
+	    </span>
+	    <span class="goto">转到</span>
+	</div>
+	<!--分页插件 end -->
+</div>
+<!--end body-->
+<script>
+$(function(){
+	$('.tab-control').Merlin({
+			// 全选
+	    "checkAll": {
+	      "eType":'on', // 事件类型
+        "checkAll":'input[name="checkAll"]', // 全选按钮
+        "checkSub":'input[name="checkSub"]' // 子选择按钮
+	    }
+    });
+});
+</script>
+</html>

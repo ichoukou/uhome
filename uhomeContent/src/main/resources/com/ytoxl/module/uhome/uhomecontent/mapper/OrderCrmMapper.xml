@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomecontent.mapper.OrderCrmMapper">
+	
+  <insert id="add" parameterType="OrderCrm" keyProperty="orderCrmId" useGeneratedKeys="true">
+		insert into order_crm(orderId,userId,userName,remark,recordTime) 
+		values (#{orderId},#{userId},#{userName},#{remark},CURRENT_TIMESTAMP);                     
+  </insert>
+  
+  <!--根据订单Id查询所有客服信息  -->
+  <select id="listOrderCrmByOrderId" parameterType="integer" resultType="OrderCrm">
+		select * from order_crm where orderId = #{orderId}	
+  </select>
+   
+</mapper>

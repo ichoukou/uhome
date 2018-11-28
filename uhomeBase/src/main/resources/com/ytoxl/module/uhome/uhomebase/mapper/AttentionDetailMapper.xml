@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytoxl.module.uhome.uhomebase.mapper.AttentionDetailMapper">
+	<!-- 添加一条数据  -->
+	<insert id="add" useGeneratedKeys="true" keyProperty="attentionDeailId" parameterType="AttentionDetail">
+		insert into attention_detail (brandId,userId) 
+		values (#{brandId},#{userId})
+	</insert>
+	
+	
+	<!-- 删除一条数据 -->
+	<delete id="del" parameterType="java.lang.Integer">
+		delete from attention_detail where attentionDetailId=#{id}
+	</delete>
+	
+	<!-- 更新一条数据 -->
+	<update id="update" parameterType="AttentionDetail">
+		update attention_detail 
+		set 
+			brandId=#{brandId},
+			userId=#{userId}
+		where attentionDetailId=#{attentionDetailId}
+	</update>
+	
+	<!-- 根据id查询一条数据 -->
+	<select id="get" parameterType="AttentionDetail" resultType="AttentionDetail">
+		select * from where attentionDetailId=#{attentionDetailId}
+	</select>
+	
+	<!-- 根据品牌查询品牌有多少人喜欢 -->
+	<select id="getAttentionCountByBrand" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(*) 
+		from attention_detail 
+		where brandId=#{brandId}
+	</select>
+	
+	<!-- 根据用户id查询此用户喜欢那些品牌 -->
+	<select id="getAttentionBrandByUserId" parameterType="java.lang.Integer" resultType="Brand">
+		select b.*
+		from brand b,attention_detail ad
+		where userId=#{userId} and ad.brandId=b.brandId
+	</select>
+</mapper>

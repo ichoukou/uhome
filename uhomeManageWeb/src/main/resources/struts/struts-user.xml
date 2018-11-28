@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="user" extends="uhome-default" namespace="/admin/user">
+    	<action name="user-*" class="com.ytoxl.uhomemanage.web.action.user.UserAction" 
+    		method="{1}">
+    	   <result name="searchSellers">/WEB-INF/pages/user/searchSellers.jsp</result>
+    	   <result name="searchBuyers">/WEB-INF/pages/user/searchBuyers.jsp</result>
+    	    <result name="sellerDetailSingle">/WEB-INF/pages/user/sellerDetailManager.jsp</result>
+    	      <result name="sellerDetailSingleWord">/WEB-INF/pages/user/editPasswordSeller.jsp</result>
+    	   <result name="redirectSellers" type="redirectAction">${nextAction}</result>
+    	   <result name="seller">/WEB-INF/pages/user/seller.jsp</result>
+    	   <result name="sellerWildcard">/WEB-INF/pages/user/{1}.jsp</result>
+    	   <result name="excel" type="stream">  
+                    <param name="contentType">  
+                        application/vnd.ms-excel  
+                    </param>  
+                    <param name="inputName">excelStream</param>  
+                    <param name="contentDisposition">  
+                        filename=${fileName}seller.xls
+                    </param>  
+                    <param name="bufferSize">1024</param>  
+                </result>  
+    	</action>
+	</package>
+</struts>

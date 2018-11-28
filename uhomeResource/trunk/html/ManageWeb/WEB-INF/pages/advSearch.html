@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shopping header</title>
+    <link href="../../web-resource/css/common.css" rel="stylesheet" />
+    <link href="../../web-resource/css/pages/advertise.css" rel="stylesheet" />
+    <script src="../../web-resource/js/jquery/jquery.1.8.1.js"  language="javascript"></script>
+    <script src="../../web-resource/js/plugin/plugin.js"  language="javascript"></script>
+    <script src="../../web-resource/js_build/pages/index.js"></script>
+</head>
+
+<body>
+    <!--start header-->
+    <!--end header-->
+    <!--start body-->
+    <div class="body m-w980p">
+    <div class="body-nav arr-nav">
+        <ul class="layout">
+            <li><a>广告页面</a></li>
+            <li><a class="current-chose">热搜词管理</a></li>
+            <li><a>站内信</a></li>
+            <li><a>网站地图</a></li>
+        </ul>
+    </div>
+    <div class="search-cont layout">
+        <ul>
+            <li>显示的热搜索词：</li>
+            <li>
+                <div class="search-edit">
+                    <i class="up"></i>
+                    <label>羽绒服</label>
+                    <i class="edit"></i>
+                    <i class="del"></i>
+                    <i class="down"></i>
+                </div>
+            </li>
+            <li>
+                <div class="search-edit">
+                    <i class="up"></i>
+                    <label>羽绒服1</label>
+                    <i class="edit"></i>
+                    <i class="del"></i>
+                    <i class="down"></i>
+                </div>
+            </li>
+            <li>
+                <div class="search-edit">
+                    <i class="up"></i>
+                    <label>羽绒服2</label>
+                    <i class="edit"></i>
+                    <i class="del"></i>
+                    <i class="down"></i>
+                </div>
+            </li>
+            <li>
+                <div class="search-edit">
+                    <i class="up"></i>
+                    <label>羽绒服3羽绒服3</label>
+                    <i class="edit"></i>
+                    <i class="del"></i>
+                    <i class="down"></i>
+                </div>
+            </li>
+            <li>
+                <div class="search-edit">
+                    <i class="up"></i>
+                    <label>羽绒服4羽绒服4</label>
+                    <i class="edit"></i>
+                    <i class="del"></i>
+                    <i class="down"></i>
+                </div>
+            </li>
+            <li>
+                <div class="search-edit">
+                    <i class="up"></i>
+                    <label>羽绒服5羽绒服5</label>
+                    <i class="edit"></i>
+                    <i class="del"></i>
+                    <i class="down"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+        <!--start form-->
+        <form class="sub-form layout">
+            <div class="m-fl">
+                <ul class="layout">
+                    <li>
+                        <input type="text" data-default="添加热搜索词" class="txt-Keywords input-marks" id="txtKeywords"/>
+                    </li>
+                    <li>
+                        <input type="button" id="addKeyword" class="btn btn-danger btn-big" value="添  加"/>
+                    </li>
+                </ul>
+            </div>
+        </form>
+        <!--end form-->
+    </div>
+    <!--end body-->
+    <!--start footer-->
+    <!--end footer-->
+    <script>
+    	$(document).ready(function(){
+    		//添加关键词
+    		$("#addKeyword").click(function(){
+    			var key_words = $("#txtKeywords").val();
+    			if(key_words != "添加热搜索词"){
+    				var add_html = "<li><div class=\"search-edit\"><i class=\"up\"></i><label>"+key_words+"</label><i class=\"edit\"></i><i class=\"del\"></i><i class=\"down\"></i></div></li>";
+    				$(".search-cont li:last").after(add_html);
+    				$("#txtKeywords").val("")
+    			}
+    		});
+    		//关键词向前排序
+    		$(".up").live("click",function(){
+    			var this_temp = $(this).parents("li");
+    			var prev_temp = $(this_temp).prev("li").not($(".search-cont li:eq(0)"));
+    			if(prev_temp){
+    				$(prev_temp).before(this_temp);
+    			}
+    		});
+    		//关键词向后排序
+    		$(".down").live("click",function(){
+    			var this_temp = $(this).parents("li");
+    			var next_temp = $(this_temp).next("li");
+    			if(next_temp){
+    				$(next_temp).after(this_temp);
+    			}
+    		});
+    		//删除关键词
+    		$(".del").live("click",function(){
+    			$(this).parents("li").remove();
+    		});
+    		//编辑关键词
+    		$(".edit").live("click",function(){
+    			var text_temp = $(this).prev("label").text();
+    			var edit_input = "<input type=\"text\" class=\"eidt-text-input\" value="+text_temp+" />";
+    			$(this).prev("label").hide().after(edit_input);
+    			$(".eidt-text-input").focus();
+    			$(".eidt-text-input").blur(function(){
+	    			var text_temp = $(this).val();
+	    			$(this).prev("label").show().text(text_temp);
+	    			$(this).remove();
+	    		});
+	    		document.onkeydown = function(e){ 
+				    var ev = document.all ? window.event : e;
+				    if(ev.keyCode==13) {
+				    	$(".eidt-text-input").blur();
+				     }
+					}
+    		});
+    	});
+    </script>
+</body>
+</html>

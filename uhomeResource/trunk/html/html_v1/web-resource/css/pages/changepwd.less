@@ -1,0 +1,137 @@
+/**
+ * Created by JetBrains PhpStorm.
+ * User: admin
+ * Date: 13-3-6
+ * Time: 下午5:30
+ * To change this template use File | Settings | File Templates.
+ */
+@import '../lib/global.less';
+@import '../lib/header.less';
+@import '../lib/footer.less';
+@import '../common.less';
+@import '../lib/crumbs.less';
+.pwd-wrap{
+  .step-status{
+    margin-left: 60px;
+  }
+}
+//状态条
+.step-status{
+  margin: 15px 0 10px;
+  color: #191814;
+  text-align: center;
+  span{
+    float: left;
+    width: 197px;
+    height: 32px;
+    line-height: 32px;
+    background-color: #f2f2f2;
+    &.step-1,&.step-2,&.step-3{
+      color: #ffffff;
+      background-image: url("../../images/crumbs/crumbs.gif");
+      background-repeat: no-repeat;
+      background-position: right top;
+      background-color: #78bcbd;
+      text-align: center;
+    }
+    &.step-4{
+      color: #ffffff;
+      background-color: #78bcbd;
+    }
+    &.original{
+      background-position: right -32px;
+    }
+  }
+}
+/*找回密码*所有样式*/
+.pwd-reset {
+    width: 720px;
+    height: 290px;
+    background-color: #ddf2f3;
+    border: solid 1px #78bcbd;
+    margin: 40px auto 0;
+}
+.pwd-dir {
+    position: absolute;
+    border-bottom: 10px solid #78bcbd;
+    border-left: 10px solid #ffffff;
+    border-right: 10px solid #ffffff;
+    width: 0px;
+    height: 0px;
+    line-height: 0;
+    overflow: hidden;
+    margin-left: 50px;
+    margin-top: -10px;
+}
+.pwd-one {
+    margin-left: 30px;
+}
+.pwd-two {
+    margin-left: 210px;
+}
+.pwd-three {
+    margin-left: 420px;
+}
+.pwd-four {
+    margin-left: 600px;
+}
+.pwd-tab {
+    margin: 40px auto;
+    .pwd-name {
+        font-size: 18px;
+        color: #1a1a1a;
+        text-align: right;
+    }
+    .cor-hui {
+        color: #898989;
+    }
+.pwd-yzname {
+    font-size: 18px;
+    color: #1a1a1a;
+    text-align: left;
+}
+.cor-red {
+    color: #e60012;
+    line-height: 30px;
+    font-weight: normal;
+    display: inline-block;
+}
+}
+.pwd-cont {
+    height:50px;
+    text-alige:left;
+    input {
+        width: 290px;
+        border: solid 1px #78bcbd;
+        padding: 10px 5px;
+        color: #898989;
+    }
+a.pwd-changev {
+    color: #ec6820;
+    text-decoration: underline;
+    margin-left: 5px;
+}
+.btn-c {
+    margin: 0px 10px;
+}
+}
+.pwd-validate {
+  input {
+      width:135px;
+      float: left;
+  }
+ .cor-hui {
+     float: left;
+     line-height: 30px;
+ }
+}
+.btn-c {
+    margin-top: 15px;
+     span {
+         font-size: 14px;
+     }
+}
+/*验证身份的单独tab*/
+.yz-tab {
+    margin:60px 0px 0 200px;
+}
